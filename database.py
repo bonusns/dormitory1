@@ -72,30 +72,31 @@ def edit_student():
     pass
 
 
-def delete_student(fio):
+def delete_student_by_fio(fio):
     '''удаление студента'''
     db = init_firebase()
-    searched_mas = search_student(fio)
 
 
-
-def search_student(fio):
+def search_student_by_fio(fio):
+    """отдает массив формата [(РоманенкоВЮ, {все данные}),(РоманенкоВЮ, {все данные})]"""
     db = init_firebase()
-    '''отдает pyrebase obj к нему применять each()'''
-    name_mas = fio.split()
-    name = name_mas[0] + name_mas[1][0] + name_mas[2][0]
+    searched_student_mas = []
 
     searched_names = db.child('clients').order_by_child('ФИО').equal_to(fio).get()
-    return searched_names
 
-
-
-
+    for student in searched_names.each():
+        searched_student_mas.append((student.key(), student.val()))
+    return searched_student_mas
 
 
 def list_off_all_students():
-    '''список список студентов по всем обежитиям'''
-    pass
+    """отдает массив формата [(РоманенкоВЮ, {все данные}),(Заусайлов, {все данные})]"""
+    students_mas = []
+    db = init_firebase()
+    students_data = db.child("clients").get()
+    for student in students_data.each():
+        students_mas.append((student.key(),student.val()))
+    return students_mas
 
 
 
@@ -103,70 +104,7 @@ def list_off_all_students():
 # функции договора
 
 
-# # инициализирование бд
-# # Данные договора
-# contractData = {'number': 'ОБ1'}
-#
-# # Данные студента
-# studentData = {'lastname': 'Романенко', 'name': 'Владимир', 'contract': contractData}
-# residentsData = {studentData['lastname'] + studentData['name'][0]: studentData}
-#
-# # Данные комнаты
-# roomData = {'number': 315, 'capacity': 3, 'occupied': 0, 'status':'свободна', 'residents': residentsData}
-# roomsData = {roomData['number']: roomData}
-#
-# # Данные общежития
-# dormitoryData = {'number': 1, 'Rooms': roomsData, 'name': 'Общежитие 1'}
-# dormitorysData = {'dormitory' + str(dormitoryData['number']): dormitoryData}
-#
-# db.set(dormitorysData)
-
-# создаю комнаты
-
-# for number in range(100,106):
-#     dormitory = 2
-#     capacity = random.randint(2,3)
-#     add_room(dormitory,number,capacity)
-#
-# for number in range(200,206):
-#     dormitory = 2
-#     capacity = random.randint(2, 3)
-#     add_room(dormitory,number,capacity)
-#
-# for number in range(300,306):
-#     dormitory = 2
-#     capacity = random.randint(2, 3)
-#     add_room(dormitory,number,capacity)
-#
-# for number in range(400,406):
-#     dormitory = 2
-#     capacity = random.randint(2, 3)
-#     add_room(dormitory,number,capacity)
-#
-# for number in range(500,506):
-#     dormitory = 2
-#     capacity = random.randint(2, 3)
-#     add_room(dormitory,number,capacity)
-
-# добавляю жителей
 
 if __name__ == '__main__':
-    # a = {'ab':{'e':'f'}, 'c':{'j':'h'}}
-    #
-    # for r in a.keys():
-    #     print(a[r])
-    # add_student('Romanenko V Y','88005553535','324343234','Москва','бюджет','мужской',1)
     db = init_firebase()
-    print(search_student('Романенко Владимир Юрьевич'))
-    for elem in search_student('Романенко Владимир Юрьевич').each():
-        print(elem.val())
-
-
-
-
-    # for each in searched_mas.each():
-    #     if 'Residents' in each.val().keys():
-    #         if name in each.val()['Residents'].keys():
-    #             print(each.val()['Residents'][name])
-    #         else:
-    #             print('Не найдено')
+    print(list_off_all_students())
