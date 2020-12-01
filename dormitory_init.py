@@ -1,4 +1,4 @@
-from dormitory.database import *
+from database import *
 
 
 def init_room():
@@ -34,7 +34,7 @@ def init_room():
             db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
 if __name__ == '__main__':
-    db = init_firebase(firebaseConfig)
+    db = init_firebase()
     number = 'queue'
     room_data = {number: {'capacity': 0, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
                           'residents':{}}}
