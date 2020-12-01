@@ -29,7 +29,7 @@ def add_dormitory(number, address):
 
 
 def list_of_dormitories():
-    '''отдает массив с общагами формат – '''
+    """отдает массив формата [(dormitory$, {все данные}),(dormitory$, {все данные})]"""
     dormitory_mas = []
     db = init_firebase()
     dormitories_data = db.child("dormitories").get()
@@ -39,6 +39,7 @@ def list_of_dormitories():
 
 
 def update_number_of_rooms(dormitory = "all"):
+    """обновляет поле количество комнат в общежитии"""
     db = init_firebase()
     if dormitory != "all":
         pass
@@ -56,27 +57,55 @@ def add_room(dormitory, number, capacity):
     db = init_firebase()
     roomData = {'number': number, 'capacity': capacity, 'occupied': 0, 'status': 'Свободна'}
     db.child('dormitory' + str(dormitory)).child('Rooms').child(roomData['number']).set(roomData)
-    update_number_of_rooms()
+    update_number_of_rooms(str(dormitory))
 
 
-def list_of_all_rooms(dormirory):
-    """список комнат формата"""
+def list_of_all_rooms(dormitory = "all"):
+    """
+    если при вызове ничего не указывать вернет вообще все
+    отдает массив формата [(общага, номер комнаты, {все данные}),(общага, номер комнаты, {все данные})]
+    """
+    room_mas = []
     db = init_firebase()
-    if dormirory != "all":
-        pass
+    if dormitory != "all":
+        rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
+        for room in rooms.each():
+            room_mas.append((dormitory, room.key(), room.val()))
     else:
-        pass
+        for dormitory in range(1, 4):
+            rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
+            for room in rooms.each():
+                room_mas.append((dormitory, room.key(), room.val()))
+    return room_mas
 
-def list_of_empty_rooms(dormirory):
+
+def list_of_empty_rooms(dormitory = "all"):
+    """отдает список свободных комнат
+    если при вызове ничего не указывать вернет вообще все
+    отдает массив формата [(общага, номер комнаты, {все данные}),(общага, номер комнаты, {все данные})]
+    """
+    room_mas = []
     db = init_firebase()
-    if dormirory != "all":
-        pass
+    if dormitory != "all":
+        rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
+        for room in rooms.each():
+            if room.val()["status"] == "свободна":
+                room_mas.append((dormitory, room.key(), room.val()))
     else:
+        for dormitory in range(1, 4):
+            rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
+            for room in rooms.each():
+                if room.val()["status"] == "свободна":
+                    room_mas.append((dormitory, room.key(), room.val()))
+    return room_mas
+
+
+def update_rooms_status(dormitory = "all", room_number = 0):
+    """обновляет статус комнаты"""
+    room_mas = []
+    db = init_firebase()
+    if dormitory != "all":
         pass
-
-
-def update_rooms_status(dormirory = "all", room_number = 0):
-    pass
 
 
 # функции студента
@@ -91,11 +120,13 @@ def add_student(fio, phone, passport, address, educ_form, gender, dormitory):
 
     # добавление в бд клиентов
     db.child('clients').push(student_data)
+
     # добавление заметки в комнату
+    # добавить в бомжатник
     """подумать как селить в комнаты"""
     # db.child("dormitories").child("dormitory"+dormitory).child("queue").update({'members':})
 
-    # добавить в бомжатник
+
 
 
 def edit_student(student_id):
@@ -148,3 +179,5 @@ if __name__ == '__main__':
     # add_student("Романенко Владимир Юрьевич","94239423","423423","fdgfdgdf","mgkfdg","male","1")
     # delete_student("-MNV8YOZ6F6Rqrwj5JRa")
     # update_number_of_rooms()
+    # print(list_of_all_rooms())
+    # print(list_of_empty_rooms())
