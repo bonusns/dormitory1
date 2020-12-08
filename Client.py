@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import Add_Client, red_client, del_client, list_client
 
+
 class Ui_Client(object):
 
     def openAdd(self):

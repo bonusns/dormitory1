@@ -434,8 +434,6 @@ class Ui_Main(object):
         self.exit_btn.setText(_translate("Main", "Выход"))
 
 
-
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
