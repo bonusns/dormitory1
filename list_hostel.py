@@ -18,6 +18,7 @@ class Ui_list_hostel(object):
         mas = dbd.list_of_dormitories()
         print(mas)
         i = 1
+
         for person in mas:
             print(person[1]['name'])
             #Допилить чутка
