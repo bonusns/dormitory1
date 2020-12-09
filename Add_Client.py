@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-# from dormitory import database
+
+import add_contract
+import database
+import test
 
 
 class Ui_add_client(object):
@@ -31,13 +34,34 @@ class Ui_add_client(object):
 
 
     def add_client(self):
-        fio = self.FIO_line.text()
+        c = 1
+
+        while c != 0:
+            fio = self.FIO_line.text()
+            print(fio)
+            c= test.try_get_fio(fio)
+            if c == 1:
+                self.FIO_line.clear()
+                print("ОшибОЧКА")
+
+                break
+
+
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
-        database.add_student(fio, phone, passport, address, educ_form, sex, 301, 1)
+        if c == 0:
+            database.add_student(fio,phone,passport,address,educ_form,sex,1)
+        else:
+            from error import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+
         self.FIO_line.clear()
         self.serial_line.clear()
         self.number_line.clear()
@@ -187,6 +211,7 @@ class Ui_add_client(object):
         self.serial_line.setFont(font)
         self.serial_line.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.serial_line.setObjectName("serial_line")
+
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(60, 200, 130, 30))
         font = QtGui.QFont()
@@ -511,6 +536,7 @@ class Ui_add_client(object):
         self.add_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_client_btn.setObjectName("add_client_btn")
 
+
         self.add_client_btn.clicked.connect(self.add_client)
 
 
@@ -687,6 +713,11 @@ class Ui_add_client(object):
         _translate = QtCore.QCoreApplication.translate
         add_client.setWindowTitle(_translate("add_client", "Добавление клиента"))
         self.label.setText(_translate("add_client", "ФИО"))
+        self.serial_line.setInputMask(_translate("add_client", "0000"))
+        self.serial_line.setCursorPosition(0)
+        self.number_line.setInputMask(_translate("add_client", "000000"))
+        self.phone_line.setInputMask(_translate("add_client", "+7-(000)-000-00-00"))
+
         self.label_2.setText(_translate("add_client", "Паспорт серия"))
         self.label_3.setText(_translate("add_client", "Паспорт номер"))
         self.label_4.setText(_translate("add_client", "Адрес прописки"))
@@ -712,3 +743,4 @@ if __name__ == "__main__":
     ui.setupUi(add_client)
     add_client.show()
     sys.exit(app.exec_())
+

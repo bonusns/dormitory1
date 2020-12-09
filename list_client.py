@@ -17,13 +17,14 @@ class Ui_list_client(object):
     def fill_list(self):
         '''заполняет список'''
 
-        mas = dbd.list_student()
-
+        mas = dbd.list_off_all_students()
+        i = 1
         for person in mas:
-            self.Client_info.addItem('ФИО: ' + person[3]['ФИО'] + '\n' \
-                                     + 'Общежитие: ' + person[1] + ', Комната: ' + person[2] + '\n' \
-                                     + 'Пол: ' + person[3]['Пол'])
-
+            self.Client_info.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n' \
+                                     + 'Комната: ' + str(person[1]['Комната']) + '\n' \
+                                     + 'Пол: ' + person[1]['Пол'] + '\n')
+            i = i + 1
 
     def openClient(self):
         from Client import Ui_Client

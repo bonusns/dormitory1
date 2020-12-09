@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from dormitory import database
+import database
 
 
 class Ui_add_hostel(object):

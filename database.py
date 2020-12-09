@@ -247,10 +247,10 @@ def check_phone_number(phone_number):
 if __name__ == '__main__':
     db = init_firebase()
     # add_student("Романенко Владимир Юрьевич","94239423","423423","fdgfdgdf","mgkfdg","male","1")
-
+    print(list_off_all_students())
     # st = db.child("clients").order_by_key().equal_to("-MO2ZXoFYxIRHsaST1G6").get()
     # print(st.val())
-    add_contract("-MO2ZXoFYxIRHsaST1G6","11.12.2018","11.12.2020",301,500,"муж")
+    # add_contract("-MO2ZXoFYxIRHsaST1G6","11.12.2018","11.12.2020",301,500,"муж")
     # print(search_student_by_id("-MO2ZXoFYxIRHsaST1G6"))
     # delete_student("-MNV8YOZ6F6Rqrwj5JRa")
     # update_number_of_rooms()
