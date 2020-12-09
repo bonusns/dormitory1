@@ -9,9 +9,18 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_list_hostel(object):
+    def fill_list(self):
+        '''заполняет список'''
+
+        mas = dbd.list_of_dormitories()
+        print(mas)
+        i = 1
+        for person in mas:
+            print(person[1]['name'])
+
 
     def openHostel(self):
         from hostel import Ui_hostel
@@ -153,6 +162,7 @@ class Ui_list_hostel(object):
 
         self.retranslateUi(list_hostel)
         QtCore.QMetaObject.connectSlotsByName(list_hostel)
+        self.fill_list()
 
     def retranslateUi(self, list_hostel):
         _translate = QtCore.QCoreApplication.translate
@@ -161,10 +171,6 @@ class Ui_list_hostel(object):
         self.back_to_hostel_btn.setText(_translate("list_hostel", "Вернуться в меню общежитий"))
         __sortingEnabled = self.hostel_info.isSortingEnabled()
         self.hostel_info.setSortingEnabled(False)
-        item = self.hostel_info.item(0)
-        item.setText(_translate("list_hostel", "addawd"))
-        item = self.hostel_info.item(1)
-        item.setText(_translate("list_hostel", "dtyjhn"))
         self.hostel_info.setSortingEnabled(__sortingEnabled)
 
 

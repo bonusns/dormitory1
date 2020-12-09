@@ -25,6 +25,8 @@ class Ui_add_hostel(object):
         number = self.Number_line.text()
         address = self.Addres_line.text()
         database.add_dormitory(number, address)
+        self.Addres_line.clear()
+        self.Number_line.clear()
 
     def setupUi(self, add_hostel):
         add_hostel.setObjectName("add_hostel")

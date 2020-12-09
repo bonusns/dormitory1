@@ -25,7 +25,7 @@ def init_firebase():
 def add_dormitory(number, address):
     db = init_firebase()
     dormitoryData = {'number': number, 'Rooms': {0: ''}, 'name': 'Общежитие ' + str(number), 'Адрес': address}
-    db.child('dormitory' + str(number)).set(dormitoryData)
+    db.child("dormitories").child('dormitory' + str(number)).set(dormitoryData)
 
 
 def list_of_dormitories():
