@@ -20,7 +20,7 @@ class Ui_list_hostel(object):
         i = 1
         for person in mas:
             print(person[1]['name'])
-
+            #Допилить чутка
 
     def openHostel(self):
         from hostel import Ui_hostel
