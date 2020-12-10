@@ -16,11 +16,11 @@ class Ui_list_hostel(object):
         '''заполняет список'''
 
         mas = dbd.list_of_dormitories()
-        print(mas)
         i = 1
         for person in mas:
-            print(person[1]['name'])
-            #Допилить чутка
+            self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
+                                     + 'Адрес: ' + person[1]['Адрес'] + '\n')
+            i = i + 1
 
     def openHostel(self):
         from hostel import Ui_hostel
@@ -151,10 +151,7 @@ class Ui_list_hostel(object):
         self.hostel_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "selection-color: rgb(85, 170, 255);")
         self.hostel_info.setObjectName("hostel_info")
-        item = QtWidgets.QListWidgetItem()
-        self.hostel_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.hostel_info.addItem(item)
+
         list_hostel.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(list_hostel)
         self.statusbar.setObjectName("statusbar")

@@ -21,6 +21,7 @@ class Ui_list_client(object):
         i = 1
         for person in mas:
             self.Client_info.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                      + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n' \
                                      + 'Комната: ' + str(person[1]['Комната']) + '\n' \
                                      + 'Пол: ' + person[1]['Пол'] + '\n')

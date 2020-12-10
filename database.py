@@ -24,7 +24,7 @@ def init_firebase():
 # функции общежития
 def add_dormitory(number, address):
     db = init_firebase()
-    dormitoryData = {'number': number, 'Rooms': {0: ''}, 'name': 'Общежитие ' + str(number), 'Адрес': address}
+    dormitoryData = {'number': number, 'rooms': {0: ''}, 'name': 'Общежитие ' + str(number), 'Адрес': address}
     db.child("dormitories").child('dormitory' + str(number)).set(dormitoryData)
 
 
@@ -120,12 +120,24 @@ def list_of_empty_rooms_by_sex(sex,dormitory = "all"):
     return room_mas
 
 
-def update_rooms_status(dormitory = "all", room_number = 0):
+def update_rooms_status(dormitory,room):
     """обновляет статус комнаты"""
     room_mas = []
     db = init_firebase()
-    if dormitory != "all":
-        pass
+    room_data = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).get()
+    if room_data.val()["occupied"] == room_data.val()["capacity"]:
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).update({"status":"занята"})
+    else:
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).update(
+            {"status": "свободна"})
+
+def update_room_occupied(dormitory,room):
+    db = init_firebase()
+    room_mas = []
+    room_data = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(int(room)).get()
+    current_occupied = len(room_data.val()["members"])
+    db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(int(room)).update({"occupied":current_occupied})
+    update_rooms_status(dormitory,room)
 
 def update_room_gender(dormitory,room,sex):
     db = init_firebase()
@@ -144,20 +156,48 @@ def add_student(fio, phone, passport, address, educ_form, gender, dormitory = 0)
     key = db.generate_key()
     db.child('clients').child(key).set(student_data)
 
-    if dormitory == 0:
+    if dormitory == '':
         db.child("dormitories").child("queue").child(key).set({"ФИО":fio})
+    elif dormitory == -1:
+        db.child("dormitories").child("buffer").child(key).set(student_data)
     else:
-        db.child("dormitories").child("dormitory"+str(dormitory)).child("queue").child(key).set({"ФИО":fio})
+        db.child("dormitories").child("dormitory"+str(dormitory)).child("rooms").child("queue").child(key).set({"ФИО":fio})
+    return key
+
+def add_student_buffer(student_id,fio, phone, passport, address, educ_form, gender, dormitory):
+    """Все поля строки"""
+    db = init_firebase()
+    '''добавление студента'''
+    student_data = {'ФИО': fio, 'Телефон': phone, 'Паспорт': passport, 'Адрес регистрации': address,
+                    'Форма обучения': educ_form, 'Пол': gender, 'Комната': 'queue', 'Общежитие': dormitory}
+
+    # добавление в бд клиентов
+    db.child("dormitories").child("buffer").child(student_id).set(student_data)
 
 
-def edit_student(student_id):
-    pass
+def edit_student(student_id,room, fio = None, phone = None, passport = None, address = None, educ_form = None, gender = None):
+    """Ecли какой-то параметр меняется его передаешь в формате fio = изменения, если нет то не указываешь"""
+    db = init_firebase()
+    if fio:
+        db.child("clients").child(student_id).update({"ФИО":fio})
+        db.child("dormitories").child().update({"ФИО":fio})
+    if phone:
+        db.child("clients").child(student_id).update({"Телефон":phone})
+    if passport:
+        db.child("clients").child(student_id).update({"Паспорт":passport})
+    if address:
+        db.child("clients").child(student_id).update({"Адрес регистрации":address})
+    if educ_form:
+        db.child("clients").child(student_id).update({"Форма обучения":educ_form})
+    if gender:
+        db.child("clients").child(student_id).update({"пол":gender})
 
 
-def delete_student(student_id):
+def delete_student(student_id, room):
     '''удаление студента'''
     db = init_firebase()
     db.child("clients").child(student_id).remove()
+    db.child("dormitories").child(room).remove()
     # добавить удаление из комнаты
 
 
@@ -194,11 +234,10 @@ def remove_student_from_queue(student_id):
     db = init_firebase()
     student = search_student_by_id(student_id)
     dormitory = student[1]["Общежитие"]
-    print(dormitory)
     if dormitory == 0:
         db.child("dormitories").child("queue").child(student_id).remove()
     else:
-        db.child("dormitories").child("dormitory"+str(dormitory)).child("queue").child(student_id).remove()
+        db.child("dormitories").child("dormitory"+str(dormitory)).child("rooms").child("queue").child(student_id).remove()
 
 
 """Функции договора"""
@@ -217,8 +256,9 @@ def add_contract(student_id,date_start,date_end,room,cost,sex):
 
     #Обновляем комнаты
     db.child("clients").child(student_id).update({"Комната":room})
-    db.child("dormitories").child("dormitory"+str(dormitory)).child("rooms").child(room).update({"members":{student_id:True}})
+    db.child("dormitories").child("dormitory"+str(dormitory)).child("rooms").child(room).child("members").child(student_id).set(True)
 
+    update_room_occupied(dormitory,room)
     update_room_gender(dormitory,room,sex)
     update_last_contract_num(last_num+1)
 
@@ -233,7 +273,6 @@ def update_last_contract_num(num):
     db.update({"last_contract_num":num})
 
 
-# проверка на дурака
 
 def check_fio(fio):
     pass
@@ -241,13 +280,60 @@ def check_fio(fio):
 def check_phone_number(phone_number):
     pass
 
-#и т.д. уточнить у моситовцев, как пиздато сделать проверку на дурака
+def buffer():
+    # буфер, от сюда собственно и происходит закачка в red_client_2
+    buffer_mas = []
+    db = init_firebase()
+    students_data = db.child("dormitories").child("buffer").get()
+    for student in students_data.each():
+        buffer_mas.append((student.key(), student.val()))
+    return buffer_mas
+
+def delete_buffer():
+    db = init_firebase()
+    db.child("dormitories").child("buffer").remove()
+
+
+def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
+    db = init_firebase()
+    contract = search_contract_by_code(code)
+    student_id = contract[0]
+    dormitory = contract[1]
+    student = search_student_by_id(student_id)
+    room_old = student[1]["Комната"]
+    sex = student[1]["Пол"]
+
+    if date_start:
+        db.child("clients").child(student_id).child(code).update({"Дата начала": date_start})
+    if date_end:
+        db.child("clients").child(student_id).child(code).update({"Дата конца": date_end})
+    if room:
+        db.child("clients").child(student_id).update({"Комната": room})
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child(
+            "members").child(student_id).remove()
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
+            student_id).set(True)
+        update_room_occupied(dormitory, room)
+        update_room_gender(dormitory, room, sex)
+    if cost:
+        db.child("clients").child(student_id).child(code).update({"Дата начала": cost})
+
+
+def search_contract_by_code(code):
+    """возвращает данные формата (id_студента, номер общаги, {данные договора}"""
+    db = init_firebase()
+    students = db.child("clients").get()
+
+    for student in students.each():
+        if code in student.val():
+            student_mas = (student.key(), student.val()["Общежитие"], student.val()[code])
+    return student_mas
+
 
 
 if __name__ == '__main__':
     db = init_firebase()
     # add_student("Романенко Владимир Юрьевич","94239423","423423","fdgfdgdf","mgkfdg","male","1")
-    print(list_off_all_students())
     # st = db.child("clients").order_by_key().equal_to("-MO2ZXoFYxIRHsaST1G6").get()
     # print(st.val())
     # add_contract("-MO2ZXoFYxIRHsaST1G6","11.12.2018","11.12.2020",301,500,"муж")

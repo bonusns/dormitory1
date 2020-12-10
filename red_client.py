@@ -9,10 +9,44 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import database as dbd
 import red_client_2
 
-
 class Ui_red_client(object):
+
+    def fill_list(self):
+        '''заполняет список'''
+        self.Client_list.clear()
+        fio = self.FIO_line.text()
+        mas = dbd.search_student_by_fio(fio)
+        i = 1
+        for person in mas:
+            self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n'  \
+                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                     + 'Комната: ' + str(person[1]['Комната']) \
+                                     + '    Пол: ' + str(person[1]['Пол']) + '\n')
+
+    def redaction(self):
+        # добавляет в буфер студента, который будет редактироваться, в red_client_2 из буфера забираются данные и буфер удаляется
+        fio = self.FIO_line.text()
+        mas = dbd.search_student_by_fio(fio)
+        n = self.Client_list.currentRow()
+        i = -1
+        for person in mas:
+            if i == n - 1:
+                dic = person[0]
+                hostel = str(person[1]['Общежитие'])
+                fio = str(person[1]['ФИО'])
+                phone = person[1]['Телефон']
+                passport = person[1]['Паспорт']
+                address = person[1]['Адрес регистрации']
+                educ_form = person[1]['Форма обучения']
+                sex = person[1]['Пол']
+            i = i + 1
+        dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex, hostel)
+        self.FIO_line.clear()
+        self.Client_list.clear()
 
     def openClient(self):
         from Client import Ui_Client
@@ -220,6 +254,9 @@ class Ui_red_client(object):
         self.find_client_btn.setFont(font)
         self.find_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.find_client_btn.setObjectName("find_client_btn")
+
+        self.find_client_btn.clicked.connect(self.fill_list)
+
         self.horizontalLayout.addWidget(self.find_client_btn)
         self.back_to_client_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_client_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -283,7 +320,7 @@ class Ui_red_client(object):
         self.label_FIO_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_FIO_2.setObjectName("label_FIO_2")
         self.red_client_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.red_client_btn.setGeometry(QtCore.QRect(480, 210, 195, 40))
+        self.red_client_btn.setGeometry(QtCore.QRect(500, 220, 175, 40))
         self.red_client_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
@@ -331,20 +368,22 @@ class Ui_red_client(object):
         self.red_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_client_btn.setObjectName("red_client_btn")
 
+        self.red_client_btn.clicked.connect(self.redaction)
         self.red_client_btn.clicked.connect(self.openRed_client_2)
         self.red_client_btn.clicked.connect(red_client.close)
 
+
         self.Client_list = QtWidgets.QListWidget(self.centralwidget)
-        self.Client_list.setGeometry(QtCore.QRect(60, 200, 400, 60))
+        self.Client_list.setGeometry(QtCore.QRect(60, 200, 420, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Client_list.sizePolicy().hasHeightForWidth())
         self.Client_list.setSizePolicy(sizePolicy)
-        self.Client_list.setMinimumSize(QtCore.QSize(400, 30))
-        self.Client_list.setMaximumSize(QtCore.QSize(400, 60))
-        self.Client_list.setSizeIncrement(QtCore.QSize(0, 30))
-        self.Client_list.setBaseSize(QtCore.QSize(0, 30))
+        self.Client_list.setMinimumSize(QtCore.QSize(420, 80))
+        self.Client_list.setMaximumSize(QtCore.QSize(420, 80))
+        self.Client_list.setSizeIncrement(QtCore.QSize(0, 80))
+        self.Client_list.setBaseSize(QtCore.QSize(0, 80))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)

@@ -9,9 +9,28 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_add_contract(object):
+    def set_code(self):
+        num = dbd.get_last_contract_num()
+        print(num)
+        self.code_line.setText("ОБ-" + str(num+1))
+
+    def del_buff(self):
+        dbd.delete_buffer()
+
+    def take_student_id(self):
+        # Вытаскивает из буфера и заполняет поля данными
+        mas = dbd.buffer()
+        for person in mas:
+            key = person[0]
+            date_start = self.start_date_line.text()
+            date_end =  self.end_date_line.text()
+            room = self.RoomBox.currentText()
+            cost = self.CostBox.currentText()
+            sex = str(person[1]['Пол'])
+        dbd.add_contract(key, date_start, date_end, room, cost, sex)
 
     def openAdd_Client(self):
         from Add_Client import Ui_add_client
@@ -350,6 +369,10 @@ class Ui_add_contract(object):
         self.add_contract_btn.setFont(font)
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
+
+        self.add_contract_btn.clicked.connect(self.take_student_id)
+        self.add_contract_btn.clicked.connect(self.del_buff)
+
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_add_client_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_add_client_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -467,21 +490,24 @@ class Ui_add_contract(object):
         self.RoomBox.setCurrentIndex(0)
         self.CostBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(add_contract)
+        self.set_code()
 
     def retranslateUi(self, add_contract):
         _translate = QtCore.QCoreApplication.translate
         add_contract.setWindowTitle(_translate("add_contract", "Добавление договора"))
         self.label.setText(_translate("add_contract", "Шифр договора"))
+        self.start_date_line.setInputMask(_translate("add_contract", "00.00.0000"))
+        self.end_date_line.setInputMask(_translate("add_contract", "00.00.0000"))
         self.label_2.setText(_translate("add_contract", "Дата начала"))
         self.label_3.setText(_translate("add_contract", "Дата окончания"))
         self.label_6.setText(_translate("add_contract", "Комната"))
         self.label_7.setText(_translate("add_contract", "Стоимость"))
-        self.RoomBox.setItemText(0, _translate("add_contract", "Бюджет"))
-        self.RoomBox.setItemText(1, _translate("add_contract", "Платное обучение"))
+        self.RoomBox.setItemText(0, _translate("add_contract", "303"))
+        self.RoomBox.setItemText(1, _translate("add_contract", "302"))
         self.add_contract_btn.setText(_translate("add_contract", "Добавить"))
         self.back_to_add_client_btn.setText(_translate("add_contract", "Вернуться к добавлению клиента"))
-        self.CostBox.setItemText(0, _translate("add_contract", "Бюджет"))
-        self.CostBox.setItemText(1, _translate("add_contract", "Платное обучение"))
+        self.CostBox.setItemText(0, _translate("add_contract", "500"))
+        self.CostBox.setItemText(1, _translate("add_contract", "300"))
 
 
 if __name__ == "__main__":

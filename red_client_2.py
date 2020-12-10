@@ -9,9 +9,66 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import red_contract_2
-
+import database as dbd
+import time
+import test
 
 class Ui_red_client_2(object):
+
+    def red(self):
+        # Вытаскивает из буфера и заполняет поля данными
+        mas = dbd.buffer()
+        for person in mas:
+            self.FIO_line.setText(person[1]["ФИО"])
+            self.serial_line.setText(person[1]["Паспорт"][:4])
+            self.number_line.setText(person[1]["Паспорт"][4:])
+            self.addres_line.setText(person[1]["Адрес регистрации"])
+            self.phone_line.setText(person[1]["Телефон"])
+            self.Form_box.setCurrentText(person[1]["Форма обучения"])
+            self.SexBox.setCurrentText(person[1]["Пол"])
+
+    def edit(self):
+        # Мне тоже больно что addres с двумя d, но исправлять больнее
+        # Функция редактирования
+        mas = dbd.buffer()
+        for person in mas:
+            с = person[1]['Общежитие']
+            d = 1
+            serial_n = self.serial_line.text()
+            number_n = self.number_line.text()
+            addres_n = self.addres_line.text()
+            phone_n = self.phone_line.text()
+            educ_form_n = self.Form_box.currentText()
+            sex_n = self.SexBox.currentText()
+            while d != 0:
+                fio_n = self.FIO_line.text()
+                d = test.try_get_fio(fio_n)
+                if d == 1:
+                    self.FIO_line.clear()
+                    print("ОшибОЧКА")
+
+                    break
+            if с != '0':
+                way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(person[1]['Комната'] + "/" + person[0])
+
+            else:
+                way = "queue" + "/" + person[0]
+
+            break
+        if d == 0:
+            print("hola")
+            dbd.edit_student(person[0],way, fio=fio_n,phone = phone_n, passport = serial_n + number_n, address = addres_n, educ_form = educ_form_n, gender = sex_n)
+        else:
+            from error import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+    def red_client(self):
+        dbd.delete_buffer()
+
+
 
     def openRedContract(self):
         from red_contract_2 import Ui_red_contract_2
@@ -489,6 +546,10 @@ class Ui_red_client_2(object):
         self.red_client_btn.setFont(font)
         self.red_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_client_btn.setObjectName("red_client_btn")
+        self.red_client_btn.clicked.connect(self.edit)
+        self.red_client_btn.clicked.connect(self.red_client)
+
+
         self.horizontalLayout.addWidget(self.red_client_btn)
         self.red_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.red_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -540,6 +601,7 @@ class Ui_red_client_2(object):
 
         self.red_contract_btn.clicked.connect(self.openRedContract)
         self.red_contract_btn.clicked.connect(red_client_2.close)
+
 
         self.horizontalLayout.addWidget(self.red_contract_btn)
         self.back_to_red_btn = QtWidgets.QPushButton(self.layoutWidget)
@@ -660,10 +722,19 @@ class Ui_red_client_2(object):
         self.SexBox.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(red_client_2)
 
+        self.red()
+
+
+
+
     def retranslateUi(self, red_client_2):
         _translate = QtCore.QCoreApplication.translate
         red_client_2.setWindowTitle(_translate("red_client_2", "Выбранный клиент"))
         self.label.setText(_translate("red_client_2", "ФИО"))
+        self.serial_line.setInputMask(_translate("add_client", "0000"))
+        self.phone_line.setInputMask(_translate("add_client", "+7-(000)-000-00-00"))
+        self.number_line.setInputMask(_translate("add_client", "000000"))
+
         self.label_2.setText(_translate("red_client_2", "Паспорт серия"))
         self.label_3.setText(_translate("red_client_2", "Паспорт номер"))
         self.label_4.setText(_translate("red_client_2", "Адрес прописки"))

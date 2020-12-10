@@ -23,27 +23,34 @@ class Ui_del_client(object):
 
     def fill_list(self):
         '''заполняет список'''
+        self.Client_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student(fio)
-
+        mas = dbd.search_student_by_fio(fio)
+        i = 1
         for person in mas:
-            self.Client_list.addItem('ФИО: ' + person[3]['ФИО'] + '\n' \
-                                     + 'Общежитие: ' + person[1] + ', Комната: ' + person[2] + '\n' \
-                                     + 'Пол: ' + person[3]['Пол'])
+            self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n'  \
+                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                     + 'Комната: ' + str(person[1]['Комната']) \
+                                     + '    Пол: ' + str(person[1]['Пол']) + '\n')
+            i = i + 1
 
 
     def delete_one(self):
         fio = self.FIO_line.text()
-        mas = dbd.list_student()
+        mas = dbd.search_student_by_fio(fio)
         n = self.Client_list.currentRow()
-        print(n)
         i = -1
         for person in mas:
-            if i == n:
-                dic = 'dormitory' + person[1] + '/Rooms/' + person[2] + '/Residents'
+            if i == n-1:
+                dic = person[0]
+                if person[1]['Общежитие'] != 0:
+                    way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + person[0])
+                else:
+                    way = "queue"+"/" + person[0]
                 break
             i = i+1
-        name = dbd.delete_student(fio,dic)
+        dbd.delete_student(dic, way)
         self.FIO_line.clear()
         self.Client_list.clear()
 
@@ -308,7 +315,7 @@ class Ui_del_client(object):
         self.label_FIO_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_FIO_2.setObjectName("label_FIO_2")
         self.red_client_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.red_client_btn.setGeometry(QtCore.QRect(480, 210, 195, 40))
+        self.red_client_btn.setGeometry(QtCore.QRect(500, 220, 175, 40))
         self.red_client_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
@@ -359,16 +366,16 @@ class Ui_del_client(object):
 
         self.red_client_btn.clicked.connect(self.delete_one)
 
-        self.Client_list.setGeometry(QtCore.QRect(60, 200, 400, 60))
+        self.Client_list.setGeometry(QtCore.QRect(60, 200, 420, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Client_list.sizePolicy().hasHeightForWidth())
         self.Client_list.setSizePolicy(sizePolicy)
-        self.Client_list.setMinimumSize(QtCore.QSize(400, 30))
-        self.Client_list.setMaximumSize(QtCore.QSize(400, 60))
-        self.Client_list.setSizeIncrement(QtCore.QSize(0, 30))
-        self.Client_list.setBaseSize(QtCore.QSize(0, 30))
+        self.Client_list.setMinimumSize(QtCore.QSize(420, 80))
+        self.Client_list.setMaximumSize(QtCore.QSize(420, 80))
+        self.Client_list.setSizeIncrement(QtCore.QSize(0, 80))
+        self.Client_list.setBaseSize(QtCore.QSize(0, 80))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)

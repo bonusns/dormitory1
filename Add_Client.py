@@ -17,6 +17,11 @@ import test
 
 class Ui_add_client(object):
 
+    def del_buff(self):
+        database.delete_buffer()
+
+
+
     def openAdd_contract(self):
         from add_contract import Ui_add_contract
         self.window = QtWidgets.QMainWindow()
@@ -38,22 +43,22 @@ class Ui_add_client(object):
 
         while c != 0:
             fio = self.FIO_line.text()
-            print(fio)
             c= test.try_get_fio(fio)
             if c == 1:
                 self.FIO_line.clear()
-                print("ОшибОЧКА")
 
                 break
-
 
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
+        hostel = self.hostel_line.text()
         if c == 0:
-            database.add_student(fio,phone,passport,address,educ_form,sex,1)
+            key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
+            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex, hostel)
+
         else:
             from error import Ui_Error
             self.window = QtWidgets.QMainWindow()
@@ -75,9 +80,9 @@ class Ui_add_client(object):
 
     def setupUi(self, add_client):
         add_client.setObjectName("add_client")
-        add_client.resize(680, 500)
-        add_client.setMinimumSize(QtCore.QSize(680, 500))
-        add_client.setMaximumSize(QtCore.QSize(680, 500))
+        add_client.resize(680, 560)
+        add_client.setMinimumSize(QtCore.QSize(680, 560))
+        add_client.setMaximumSize(QtCore.QSize(680, 560))
         self.centralwidget = QtWidgets.QWidget(add_client)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -211,6 +216,72 @@ class Ui_add_client(object):
         self.serial_line.setFont(font)
         self.serial_line.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.serial_line.setObjectName("serial_line")
+
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(60, 500, 130, 30))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_9.setFont(font)
+        self.label_9.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.label_9.setObjectName("label_9")
+        self.hostel_line = QtWidgets.QLineEdit(self.centralwidget)
+        self.hostel_line.setGeometry(QtCore.QRect(220, 500, 400, 30))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        self.hostel_line.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.hostel_line.setFont(font)
+        self.hostel_line.setStyleSheet("background-color: rgb(135, 206, 235);")
+        self.hostel_line.setObjectName("number_line")
 
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(60, 200, 130, 30))
@@ -538,6 +609,7 @@ class Ui_add_client(object):
 
 
         self.add_client_btn.clicked.connect(self.add_client)
+        self.add_client_btn.clicked.connect(self.del_buff)
 
 
 
@@ -591,8 +663,10 @@ class Ui_add_client(object):
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
 
-        self.add_contract_btn.clicked.connect(self.openAdd_contract)
         self.add_contract_btn.clicked.connect(add_client.close)
+        self.add_contract_btn.clicked.connect(self.add_client)
+
+        self.add_contract_btn.clicked.connect(self.openAdd_contract)
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_client_btn = QtWidgets.QPushButton(self.layoutWidget)
@@ -724,6 +798,7 @@ class Ui_add_client(object):
         self.label_5.setText(_translate("add_client", "Телефон"))
         self.label_6.setText(_translate("add_client", "Форма обучения"))
         self.label_7.setText(_translate("add_client", "Пол"))
+        self.label_9.setText(_translate("add_client", "Общежитие"))
         self.FormBox.setCurrentText(_translate("add_client", ""))
         self.FormBox.setItemText(0, _translate("add_client", "Бюджет"))
         self.FormBox.setItemText(1, _translate("add_client", "Платное обучение"))
