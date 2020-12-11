@@ -14,7 +14,7 @@ import database as dbd
 class Ui_red_contract_3(object):
 
     def del_buff(self):
-        dbd.delete_buffer()
+        dbd.delete_contract_buffer()
 
     def red(self):
         # Вытаскивает из буфера и заполняет поля данными

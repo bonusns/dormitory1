@@ -301,14 +301,21 @@ def add_contract(student_id, date_start, date_end, room, cost, sex, code= None):
 
     dormitory = search_student_by_id(student_id)[1]["Общежитие"]
 
-    # удаляем человека из очереди
-    remove_student_from_queue(student_id)
-
+    # удаляем человека из очереди или старой комнаты
+    student = search_student_by_id(student_id)
+    room_old = student[1]["Комната"]
+    if room_old == "queue":
+        # удаляем человека из очереди
+        remove_student_from_queue(student_id)
+    else:
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child(
+            "members").child(student_id).remove()
     # Обновляем комнаты
     db.child("clients").child(student_id).update({"Комната": room})
     db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
         student_id).set(True)
-
+    if room_old !="queue":
+        update_room_occupied(dormitory, room_old)
     update_room_occupied(dormitory, room)
     update_room_gender(dormitory, room, sex)
     print(code[5:])
@@ -367,6 +374,10 @@ def contract_buffer():
 def delete_buffer():
     db = init_firebase()
     db.child("dormitories").child("buffer").remove()
+
+def delete_contract_buffer():
+    db = init_firebase()
+    db.child("dormitories").child("contract_buffer").remove()
 
 
 def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
