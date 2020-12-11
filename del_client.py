@@ -44,7 +44,8 @@ class Ui_del_client(object):
         for person in mas:
             if i == n-1:
                 dic = person[0]
-                if person[1]['Общежитие'] != 0:
+                print('dadad',person[1]['Общежитие'])
+                if person[1]['Общежитие'] != "":
                     way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + person[0])
                 else:
                     way = "queue"+"/" + person[0]

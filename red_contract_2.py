@@ -14,24 +14,29 @@ import database as dbd
 class Ui_red_contract_2(object):
 
     def set_code(self):
-        num = dbd.get_last_contract_num()
-        print(num)
-        self.code_line.setText("ОБ-" + str(num+1))
+        mas = dbd.buffer()
+        for person in mas:
+            key = person[0]
+            print(key)
+            self.code_line.setText(dbd.get_students_contract_num(key))
 
     def del_buff(self):
+        print("hey")
         dbd.delete_buffer()
+        print("hola")
 
     def take_student_id(self):
         # Вытаскивает из буфера и заполняет поля данными
         mas = dbd.buffer()
         for person in mas:
             key = person[0]
+            code_n = self.code_line.text()
             date_start = self.start_date_line.text()
             date_end =  self.end_date_line.text()
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
             sex = str(person[1]['Пол'])
-        dbd.add_contract(key, date_start, date_end, room, cost, sex)
+        dbd.add_contract(key, date_start, date_end, room, cost, sex,code=code_n)
 
     def openRed_client_2(self):
         from red_client_2 import Ui_red_client_2
@@ -372,7 +377,7 @@ class Ui_red_contract_2(object):
         self.red_contract_btn.setObjectName("red_contract_btn")
 
         self.red_contract_btn.clicked.connect(self.take_student_id)
-        self.red_contract_btn.clicked.connect(self.del_buff)
+        #self.red_contract_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.red_contract_btn)
         self.back_to_red_client_btn = QtWidgets.QPushButton(self.layoutWidget)
