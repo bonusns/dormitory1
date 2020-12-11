@@ -9,9 +9,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import database as dbd
 
 
 class Ui_add_facility(object):
+
+    def add_facility(self):
+        name = self.Name_line.text()
+        cost = self.discount_line.text()
+        dbd.add_facility(name,cost)
+
 
     def openHelp(self):
         from facilities import Ui_Facilities
@@ -213,6 +220,9 @@ class Ui_add_facility(object):
         self.add_facility_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_facility_btn.setObjectName("add_facility_btn")
         self.horizontalLayout.addWidget(self.add_facility_btn)
+
+        self.add_facility_btn.clicked.connect(self.add_facility)
+
         self.back_to_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_facilities_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
@@ -274,7 +284,7 @@ class Ui_add_facility(object):
         _translate = QtCore.QCoreApplication.translate
         add_facility.setWindowTitle(_translate("add_facility", "Добавление льготы"))
         self.label.setText(_translate("add_facility", "Название льготы"))
-        self.label_2.setText(_translate("add_facility", "Размер скидки"))
+        self.label_2.setText(_translate("add_facility", "Стоимость"))
         self.add_facility_btn.setText(_translate("add_facility", "Добавить"))
         self.back_to_facilities_btn.setText(_translate("add_facility", "Вернуться в меню льгот"))
 

@@ -9,9 +9,18 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_list_facilities(object):
+
+    def fill_facility_list(self):
+        fac_mas = dbd.list_of_facilities()
+        i = 0
+        for fac in fac_mas:
+            item = self.Facilities_info.item(i)
+            item.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
+            i += 1
+
 
     def openHelp(self):
         from facilities import Ui_Facilities
@@ -153,9 +162,9 @@ class Ui_list_facilities(object):
         item = QtWidgets.QListWidgetItem()
         self.Facilities_info.addItem(item)
         list_facilities.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(list_facilities)
         QtCore.QMetaObject.connectSlotsByName(list_facilities)
+        self.fill_facility_list()
 
     def retranslateUi(self, list_facilities):
         _translate = QtCore.QCoreApplication.translate
@@ -164,16 +173,16 @@ class Ui_list_facilities(object):
         self.back_to_facilities_btn.setText(_translate("list_facilities", "Вернуться в меню льгот"))
         __sortingEnabled = self.Facilities_info.isSortingEnabled()
         self.Facilities_info.setSortingEnabled(False)
-        item = self.Facilities_info.item(0)
-        item.setText(_translate("list_facilities", "Наименование: Без льгот; Размер скидки: 0%"))
-        item = self.Facilities_info.item(1)
-        item.setText(_translate("list_facilities", "Наименование: Инвалид; Размер скидки: 100%"))
-        item = self.Facilities_info.item(2)
-        item.setText(_translate("list_facilities", "Наименование: Сирота; Размер скидки: 100%"))
-        item = self.Facilities_info.item(3)
-        item.setText(_translate("list_facilities", "Наименование: ЧАЭС; Размер скидки: 100%"))
-        item = self.Facilities_info.item(4)
-        item.setText(_translate("list_facilities", "Наименование: Потеря кормильца; Размер скидки: 50%"))
+        # item = self.Facilities_info.item(0)
+        # item.setText(_translate("list_facilities", "Наименование: Без льгот; Размер скидки: 0%"))
+        # item = self.Facilities_info.item(1)
+        # item.setText(_translate("list_facilities", "Наименование: Инвалид; Размер скидки: 100%"))
+        # item = self.Facilities_info.item(2)
+        # item.setText(_translate("list_facilities", "Наименование: Сирота; Размер скидки: 100%"))
+        # item = self.Facilities_info.item(3)
+        # item.setText(_translate("list_facilities", "Наименование: ЧАЭС; Размер скидки: 100%"))
+        # item = self.Facilities_info.item(4)
+        # item.setText(_translate("list_facilities", "Наименование: Потеря кормильца; Размер скидки: 50%"))
         self.Facilities_info.setSortingEnabled(__sortingEnabled)
 
 

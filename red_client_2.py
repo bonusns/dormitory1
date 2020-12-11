@@ -48,14 +48,15 @@ class Ui_red_client_2(object):
                 d = test.try_get_fio(fio_n)
                 if d == 1:
                     self.FIO_line.clear()
-                    print("ОшибОЧКА")
 
                     break
             if с != '0' and '':
-                way = "dormitory" + str(hostel_n) + "/" + "rooms" + "/" + str(person[1]['Комната'] + "/" + person[0])
-
+                way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
+                    person[1]['Комната'] + "/" + "members" + "/" + person[0])
+                print(way)
             else:
                 way = "queue" + "/" + person[0]
+                print(way)
 
             break
         if d == 0:

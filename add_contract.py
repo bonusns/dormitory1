@@ -14,8 +14,7 @@ import database as dbd
 class Ui_add_contract(object):
     def set_code(self):
         num = dbd.get_last_contract_num()
-        print(num)
-        self.code_line.setText("ОБ-" + str(num+1))
+        self.code_line.setText("ОБ - " + str(num+1))
 
     def del_buff(self):
         dbd.delete_buffer()
@@ -372,7 +371,7 @@ class Ui_add_contract(object):
         self.add_contract_btn.setObjectName("add_contract_btn")
 
         self.add_contract_btn.clicked.connect(self.take_student_id)
-        self.add_contract_btn.clicked.connect(self.del_buff)
+       # self.add_contract_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_add_client_btn = QtWidgets.QPushButton(self.layoutWidget)

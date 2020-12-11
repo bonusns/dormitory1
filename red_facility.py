@@ -10,11 +10,22 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import red_facility_2
+import database as dbd
 
 class Ui_red_facility(object):
 
+    def add_to_buffer(self):
+        db = dbd.init_firebase()
+        fac_mas = dbd.list_of_facilities()
+        item = self.NameBox.currentIndex()
+        name = fac_mas[item][0]
+        cost = fac_mas[item][1]
+        db.child("facilities").child("buffer").child(name).set({name:cost})
+
+
     def openRed(self):
         from red_facility_2 import Ui_red_facility_2
+        self.add_to_buffer()
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_red_facility_2()
         self.ui.setupUi(self.window)
@@ -203,12 +214,10 @@ class Ui_red_facility(object):
         self.NameBox.setStatusTip("")
         self.NameBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.NameBox.setEditable(False)
-        self.NameBox.setMaxCount(2)
+        self.NameBox.setMaxCount(10)
         self.NameBox.setIconSize(QtCore.QSize(16, 16))
         self.NameBox.setModelColumn(0)
         self.NameBox.setObjectName("NameBox")
-        self.NameBox.addItem("")
-        self.NameBox.addItem("")
         red_facility.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(red_facility)
@@ -221,8 +230,10 @@ class Ui_red_facility(object):
         self.label.setText(_translate("red_facility", "Название льготы"))
         self.red_facility_btn.setText(_translate("red_facility", "Редактирование"))
         self.back_to_facilities_btn.setText(_translate("red_facility", "Вернуться в меню льгот"))
-        self.NameBox.setItemText(0, _translate("red_facility", "Бюджет"))
-        self.NameBox.setItemText(1, _translate("red_facility", "Платное обучение"))
+        fac_mas = dbd.list_of_facilities()
+        i = 0
+        for fac in fac_mas:
+            self.NameBox.addItem(f"{fac[0]} – {fac[1]}")
 
 
 if __name__ == "__main__":

@@ -17,13 +17,12 @@ class Ui_red_contract_2(object):
         mas = dbd.buffer()
         for person in mas:
             key = person[0]
-            print(key)
             self.code_line.setText(dbd.get_students_contract_num(key))
 
+
+
     def del_buff(self):
-        print("hey")
         dbd.delete_buffer()
-        print("hola")
 
     def take_student_id(self):
         # Вытаскивает из буфера и заполняет поля данными
@@ -32,11 +31,13 @@ class Ui_red_contract_2(object):
             key = person[0]
             code_n = self.code_line.text()
             date_start = self.start_date_line.text()
-            date_end =  self.end_date_line.text()
+            date_end = self.end_date_line.text()
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
             sex = str(person[1]['Пол'])
         dbd.add_contract(key, date_start, date_end, room, cost, sex,code=code_n)
+
+
 
     def openRed_client_2(self):
         from red_client_2 import Ui_red_client_2
@@ -430,6 +431,8 @@ class Ui_red_contract_2(object):
 
         self.back_to_red_client_btn.clicked.connect(self.openRed_client_2)
         self.back_to_red_client_btn.clicked.connect(red_contract_2.close)
+        self.back_to_red_client_btn.clicked.connect(self.del_buff)
+
 
         self.horizontalLayout.addWidget(self.back_to_red_client_btn)
         self.CostBox = QtWidgets.QComboBox(self.centralwidget)
@@ -497,6 +500,7 @@ class Ui_red_contract_2(object):
         self.CostBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(red_contract_2)
         self.set_code()
+
 
     def retranslateUi(self, red_contract_2):
         _translate = QtCore.QCoreApplication.translate

@@ -10,9 +10,46 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import red_contract_3
-
+import database as dbd
 
 class Ui_red_contract(object):
+
+    def fill_list(self):
+        '''заполняет список'''
+        self.Contract_list.clear()
+        fio = self.FIO_line.text()
+        mas = dbd.search_student_by_fio(fio)
+        i = 1
+        for person in mas:
+            print(person)
+            print(person[1]['Договор']['Шифр'])
+            self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
+                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                     + 'Комната: ' + str(person[1]['Комната']) \
+                                     + '    Пол: ' + str(person[1]['Пол']) + '\n')
+
+    def redaction(self):
+        # добавляет в буфер студента, который будет редактироваться, в red_contract_3 из буфера забираются данные и буфер удаляется
+        fio = self.FIO_line.text()
+        mas = dbd.search_student_by_fio(fio)
+        n = self.Contract_list.currentRow()
+        i = -1
+        for person in mas:
+            if i == n - 1:
+                dic = person[0]
+                fio = str(person[1]['ФИО'])
+                code = str(person[1]['Договор']['Шифр'])
+                start_date = str(person[1]['Договор']['Дата начала'])
+                end_date = str(person[1]['Договор']['Дата_конца'])
+                cost = str(person[1]['Договор']['Стоимость'])
+                room = str(person[1]['Комната'])
+                print(fio)
+
+            i = i + 1
+        dbd.add_contract_buffer(dic,fio,start_date,end_date,room,cost, code)
+        self.FIO_line.clear()
+        self.Contract_list.clear()
 
     def openRedContract(self):
         from red_contract_3 import Ui_red_contract_3
@@ -221,6 +258,9 @@ class Ui_red_contract(object):
         self.find_contract_btn.setFont(font)
         self.find_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.find_contract_btn.setObjectName("find_contract_btn")
+
+        self.find_contract_btn.clicked.connect(self.fill_list)
+
         self.horizontalLayout.addWidget(self.find_contract_btn)
         self.back_to_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -284,7 +324,7 @@ class Ui_red_contract(object):
         self.label_FIO_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_FIO_2.setObjectName("label_FIO_2")
         self.red_contract_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.red_contract_btn.setGeometry(QtCore.QRect(480, 210, 195, 40))
+        self.red_contract_btn.setGeometry(QtCore.QRect(500, 220, 175, 40))
         self.red_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
@@ -332,20 +372,21 @@ class Ui_red_contract(object):
         self.red_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_contract_btn.setObjectName("red_contract_btn")
 
+        self.red_contract_btn.clicked.connect(self.redaction)
         self.red_contract_btn.clicked.connect(self.openRedContract)
         self.red_contract_btn.clicked.connect(red_contract.close)
 
         self.Contract_list = QtWidgets.QListWidget(self.centralwidget)
-        self.Contract_list.setGeometry(QtCore.QRect(60, 200, 400, 60))
+        self.Contract_list.setGeometry(QtCore.QRect(60, 200, 420, 80))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Contract_list.sizePolicy().hasHeightForWidth())
         self.Contract_list.setSizePolicy(sizePolicy)
-        self.Contract_list.setMinimumSize(QtCore.QSize(400, 30))
-        self.Contract_list.setMaximumSize(QtCore.QSize(400, 60))
-        self.Contract_list.setSizeIncrement(QtCore.QSize(0, 30))
-        self.Contract_list.setBaseSize(QtCore.QSize(0, 30))
+        self.Contract_list.setMinimumSize(QtCore.QSize(420, 30))
+        self.Contract_list.setMaximumSize(QtCore.QSize(420, 80))
+        self.Contract_list.setSizeIncrement(QtCore.QSize(0, 80))
+        self.Contract_list.setBaseSize(QtCore.QSize(0, 80))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)

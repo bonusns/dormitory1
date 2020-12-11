@@ -9,9 +9,26 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_del_facility(object):
+
+    def del_facility(self):
+        item = self.NameBox.currentText()
+        n = self.NameBox.currentIndex()
+        print(n)
+        dbd.remove_facility(item)
+       #self.NameBox.
+
+
+    def fill_list(self):
+        fac_mas = dbd.list_of_facilities()
+        i = 0
+        for fac in fac_mas:
+            print(fac)
+            self.NameBox.setItemText(i,f"{fac[0]} – {fac[1]}")
+            i += 1
+
 
     def openHelp(self):
         from facilities import Ui_Facilities
@@ -91,6 +108,7 @@ class Ui_del_facility(object):
         self.del_facility_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.del_facility_btn.setObjectName("del_facility_btn")
         self.horizontalLayout.addWidget(self.del_facility_btn)
+        self.del_facility_btn.clicked.connect(self.del_facility)
         self.back_to_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_facilities_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
@@ -192,17 +210,16 @@ class Ui_del_facility(object):
         self.NameBox.setStatusTip("")
         self.NameBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.NameBox.setEditable(False)
-        self.NameBox.setMaxCount(2)
+        self.NameBox.setMaxCount(10)
         self.NameBox.setIconSize(QtCore.QSize(16, 16))
         self.NameBox.setModelColumn(0)
         self.NameBox.setObjectName("NameBox")
-        self.NameBox.addItem("")
-        self.NameBox.addItem("")
         del_facility.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(del_facility)
         self.NameBox.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(del_facility)
+
 
     def retranslateUi(self, del_facility):
         _translate = QtCore.QCoreApplication.translate
@@ -210,8 +227,13 @@ class Ui_del_facility(object):
         self.label.setText(_translate("del_facility", "Название льготы"))
         self.del_facility_btn.setText(_translate("del_facility", "Удалить"))
         self.back_to_facilities_btn.setText(_translate("del_facility", "Вернуться в меню льгот"))
-        self.NameBox.setItemText(0, _translate("del_facility", "Бюджет"))
-        self.NameBox.setItemText(1, _translate("del_facility", "Платное обучение"))
+        fac_mas = dbd.list_of_facilities()
+        i = 0
+        for fac in fac_mas:
+            self.NameBox.addItem(f"{fac[0]}")
+            # self.NameBox.setItemText(i, _translate("del_facility", f"{fac[0]} – {fac[1]}"))
+            i += 1
+
 
 
 if __name__ == "__main__":
