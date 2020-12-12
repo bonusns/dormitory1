@@ -17,7 +17,8 @@ class Ui_del_facility(object):
         item = self.NameBox.currentText()
         n = self.NameBox.currentIndex()
         print(n)
-        dbd.remove_facility(item)
+        print(item.split(" -"))
+        dbd.remove_facility(item.split(" -")[0])
        #self.NameBox.
 
 
@@ -229,10 +230,11 @@ class Ui_del_facility(object):
         self.back_to_facilities_btn.setText(_translate("del_facility", "Вернуться в меню"))
         fac_mas = dbd.list_of_facilities()
         i = 0
-        for fac in fac_mas:
-            self.NameBox.addItem(f"{fac[0]}")
+        for i in range(dbd.list_of_facilities()[1]):
+            print(fac_mas[0][i][0])
+            self.NameBox.addItem(f"{fac_mas[0][i][0]} - {fac_mas[0][i][1]}")
             # self.NameBox.setItemText(i, _translate("del_facility", f"{fac[0]} – {fac[1]}"))
-            i += 1
+
 
 
 

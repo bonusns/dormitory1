@@ -50,17 +50,21 @@ class Ui_red_client_2(object):
                     self.FIO_line.clear()
 
                     break
-            if с != '0' and '':
-                way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
-                    person[1]['Комната'] + "/" + "members" + "/" + person[0])
-                print(way)
+            if person[1]['Общежитие'] != '':
+                if person[1]['Комната'] != '':
+                    way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
+                        person[1]['Комната']) + "/" + "members"
+                    print(way)
+                else:
+                    way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + "queue"
+                    print(way)
             else:
-                way = "queue" + "/" + person[0]
+                way = "queue"
                 print(way)
 
             break
         if d == 0:
-            dbd.edit_student(person[0],way, fio=fio_n,phone = phone_n, passport = serial_n + number_n, address = addres_n, educ_form = educ_form_n, gender = sex_n, hostel = str(hostel_n))
+            dbd.edit_student(person[0],way,fio_n,phone_n,serial_n + number_n,addres_n,educ_form_n,sex_n, str(hostel_n))
         else:
             from error import Ui_Error
             self.window = QtWidgets.QMainWindow()

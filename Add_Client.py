@@ -24,10 +24,21 @@ class Ui_add_client(object):
 
     def openAdd_contract(self):
         from add_contract import Ui_add_contract
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_add_contract()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        if self.hostel_line.text() !='':
+            self.add_client()
+            add_client.close()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_add_contract()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+        else:
+            from error_hostel import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
 
     def openClient(self):
         from Client import Ui_Client
@@ -48,13 +59,13 @@ class Ui_add_client(object):
                 self.FIO_line.clear()
 
                 break
-
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
         hostel = self.hostel_line.text()
+
         if c == 0:
             key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
             database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex, hostel)
@@ -72,6 +83,7 @@ class Ui_add_client(object):
         self.number_line.clear()
         self.addres_line.clear()
         self.phone_line.clear()
+        self.hostel_line.clear()
         self.FormBox.setCurrentIndex(-1)
         self.SexBox.setCurrentIndex(-1)
 
@@ -719,10 +731,9 @@ class Ui_add_client(object):
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
 
-        self.add_contract_btn.clicked.connect(add_client.close)
-        self.add_contract_btn.clicked.connect(self.add_client)
-
         self.add_contract_btn.clicked.connect(self.openAdd_contract)
+
+
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_client_btn = QtWidgets.QPushButton(self.layoutWidget)

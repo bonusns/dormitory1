@@ -232,8 +232,9 @@ class Ui_red_facility(object):
         self.back_to_facilities_btn.setText(_translate("red_facility", "Вернуться в меню"))
         fac_mas = dbd.list_of_facilities()
         i = 0
-        for fac in fac_mas:
-            self.NameBox.addItem(f"{fac[0]} – {fac[1]}")
+        for i in range(dbd.list_of_facilities()[1]):
+            print(fac_mas[0][i][0])
+            self.NameBox.addItem(f"{fac_mas[0][i][0]} - {fac_mas[0][i][1]}")
 
 
 if __name__ == "__main__":
