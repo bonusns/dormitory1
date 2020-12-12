@@ -9,12 +9,30 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_red_facility_2(object):
 
+    def fill_data(self):
+        db = dbd.init_firebase()
+        data_fac = db.child("facilities").child("buffer").get()
+        for data in data_fac.each():
+
+            self.discount_line.setText(str(data.val()))
+            self.Name_line.setText(data.key())
+
+    def get_and_update(self):
+        cost = self.discount_line.text()
+        name = self.Name_line.text()
+        dbd.edit_facility(name,cost)
+
+    def del_buffer(self):
+        db = dbd.init_firebase()
+        db.child("facilities").child("buffer").remove()
+
     def openRed(self):
         from red_facility import Ui_red_facility
+        self.del_buffer()
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_red_facility()
         self.ui.setupUi(self.window)
@@ -212,6 +230,9 @@ class Ui_red_facility_2(object):
         self.red_facility_btn.setFont(font)
         self.red_facility_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_facility_btn.setObjectName("red_facility_btn")
+
+        self.red_facility_btn.clicked.connect(self.get_and_update)
+
         self.horizontalLayout.addWidget(self.red_facility_btn)
         self.back_to_red_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_red_facilities_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -262,21 +283,23 @@ class Ui_red_facility_2(object):
         self.back_to_red_facilities_btn.setObjectName("back_to_red_facilities_btn")
 
         self.back_to_red_facilities_btn.clicked.connect(self.openRed)
+        print('hola')
         self.back_to_red_facilities_btn.clicked.connect(red_facility_2.close)
-
+        print('qoq')
         self.horizontalLayout.addWidget(self.back_to_red_facilities_btn)
         red_facility_2.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(red_facility_2)
         QtCore.QMetaObject.connectSlotsByName(red_facility_2)
+        self.fill_data()
 
     def retranslateUi(self, red_facility_2):
         _translate = QtCore.QCoreApplication.translate
-        red_facility_2.setWindowTitle(_translate("red_facility_2", "Выбранная льгота"))
-        self.label.setText(_translate("red_facility_2", "Название льготы"))
-        self.label_2.setText(_translate("red_facility_2", "Размер скидки"))
+        red_facility_2.setWindowTitle(_translate("red_facility_2", "Выбранная стоимость/льгота"))
+        self.label.setText(_translate("red_facility_2", "Название \nстоимости/льготы"))
+        self.label_2.setText(_translate("red_facility_2", "Стоимость"))
         self.red_facility_btn.setText(_translate("red_facility_2", "Редактировать"))
-        self.back_to_red_facilities_btn.setText(_translate("red_facility_2", "Вернуться к выбору льготы"))
+        self.back_to_red_facilities_btn.setText(_translate("red_facility_2", "Вернуться к выбору"))
 
 
 if __name__ == "__main__":

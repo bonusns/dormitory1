@@ -223,10 +223,10 @@ class Ui_del_facility(object):
 
     def retranslateUi(self, del_facility):
         _translate = QtCore.QCoreApplication.translate
-        del_facility.setWindowTitle(_translate("del_facility", "Удаление льгот"))
-        self.label.setText(_translate("del_facility", "Название льготы"))
+        del_facility.setWindowTitle(_translate("del_facility", "Удаление стоимостей/льгот"))
+        self.label.setText(_translate("del_facility", "Название \nстоимости/льготы"))
         self.del_facility_btn.setText(_translate("del_facility", "Удалить"))
-        self.back_to_facilities_btn.setText(_translate("del_facility", "Вернуться в меню льгот"))
+        self.back_to_facilities_btn.setText(_translate("del_facility", "Вернуться в меню"))
         fac_mas = dbd.list_of_facilities()
         i = 0
         for fac in fac_mas:

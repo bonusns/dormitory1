@@ -22,7 +22,7 @@ class Ui_red_contract_2(object):
 
 
     def del_buff(self):
-        dbd.delete_buffer()
+        dbd.delete_contract_buffer()
 
     def take_student_id(self):
         # Вытаскивает из буфера и заполняет поля данными
@@ -320,8 +320,6 @@ class Ui_red_contract_2(object):
         self.RoomBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomBox.setModelColumn(0)
         self.RoomBox.setObjectName("RoomBox")
-        self.RoomBox.addItem("")
-        self.RoomBox.addItem("")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(120, 20, 431, 42))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -512,8 +510,12 @@ class Ui_red_contract_2(object):
         self.end_date_line.setInputMask(_translate("red_contract_2", "00.00.0000"))
         self.label_6.setText(_translate("red_contract_2", "Комната"))
         self.label_7.setText(_translate("red_contract_2", "Стоимость"))
-        self.RoomBox.setItemText(0, _translate("red_contract_2", "303"))
-        self.RoomBox.setItemText(1, _translate("red_contract_2", "302"))
+        mas = dbd.contract_buffer()
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
+        i = 0
+        for fac in room_mas:
+            self.RoomBox.addItem(f"{fac[1]}")
+            i += 1
         self.red_contract_btn.setText(_translate("red_contract_2", "Отредактировать"))
         self.back_to_red_client_btn.setText(_translate("red_contract_2", "Вернуться к поиску клиента"))
         self.CostBox.setItemText(0, _translate("red_contract_2", "500"))

@@ -144,15 +144,17 @@ def list_of_empty_rooms_by_sex(sex,dormitory = "all"):
     if dormitory != "all":
         rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
         for room in rooms.each():
-            if room.val()["status"] == "свободна" and (room.val()["gender"] == sex or room.val()["gender"] == ""):
-                room_mas.append((dormitory, room.key(), room.val()))
+            if room.key() != "queue":
+                if room.val()["status"] == "свободна" and (room.val()["gender"] == sex or room.val()["gender"] == ""):
+                    room_mas.append((dormitory, room.key(), room.val()))
 
     else:
         for dormitory in range(1, 4):
             rooms = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").get()
             for room in rooms.each():
-                if room.val()["status"] == "свободна" and (room.val()["gender"] == sex or room.val()["gender"] == ""):
-                    room_mas.append((dormitory, room.key(), room.val()))
+                if room.key() != "queue":
+                    if room.val()["status"] == "свободна" and (room.val()["gender"] == sex or room.val()["gender"] == ""):
+                        room_mas.append((dormitory, room.key(), room.val()))
     return room_mas
 
 
@@ -171,7 +173,10 @@ def update_room_occupied(dormitory,room):
     db = init_firebase()
     room_mas = []
     room_data = db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(int(room)).get()
-    current_occupied = len(room_data.val()["members"])
+    if "members" in room_data.val():
+        current_occupied = len(room_data.val()["members"])
+    else:
+        current_occupied = 0
     db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(int(room)).update({"occupied":current_occupied})
     update_rooms_status(dormitory,room)
 
@@ -248,6 +253,21 @@ def delete_student(student_id, room):
     db.child("dormitories").child(room).remove()
     # добавить удаление из комнаты
 
+def delite_contract(student_id):
+    '''удаление контракта'''
+    db = init_firebase()
+    db.child("clients").child(student_id).child("Договор").remove()
+    dormitory = search_student_by_id(student_id)[1]["Общежитие"]
+    room = search_student_by_id(student_id)[1]["Комната"]
+    print(room)
+    print(dormitory)
+    sex = search_student_by_id(student_id)[1]["Пол"]
+    db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(student_id).remove()
+    update_room_occupied(dormitory, room)
+    update_room_gender(dormitory, room, sex)
+
+
+    #db.child("dormitories").child(room).remove()
 
 def search_student_by_fio(fio):
     """отдает массив формата [(id, {все данные}),(id, {все данные})]"""
@@ -291,6 +311,16 @@ def remove_student_from_queue(student_id):
 
 """Функции договора"""
 
+def add_empty_contract(student_id):
+    db = init_firebase()
+    last_num = get_last_contract_num()
+    code = "ОБ - "+str(last_num + 1)
+    contract_data = {"Шифр": code}
+    db.child("clients").child(student_id).child("Договор").set(contract_data)
+    return code
+
+
+
 
 def add_contract(student_id, date_start, date_end, room, cost, sex, code= None):
     db = init_firebase()
@@ -322,12 +352,20 @@ def add_contract(student_id, date_start, date_end, room, cost, sex, code= None):
     if code[5:] == str(last_num+1):
         update_last_contract_num(last_num + 1)
 
-def add_contract_buffer(student_id,fio,date_start, date_end, room, cost, code):
+def add_contract_buffer(student_id,fio,date_start, date_end, room, cost, code = None):
     db = init_firebase()
     last_num = get_last_contract_num()
 
-    contract_data = {"ФИО": fio,"Шифр": code, "Дата начала": date_start, "Дата_конца": date_end, "Стоимость": cost,"Комната": room}
-    db.child("dormitories").child("contract_buffer").child(student_id).set(contract_data)
+    if code != '':
+
+        contract_data = {"ФИО": fio,"Шифр": code, "Дата начала": date_start, "Дата_конца": date_end, "Стоимость": cost,"Комната": room}
+        db.child("dormitories").child("contract_buffer").child(student_id).set(contract_data)
+    else:
+        code = add_empty_contract(student_id)
+        contract_data = {"ФИО": fio, "Шифр": code, "Дата начала": date_start, "Дата_конца": date_end, "Стоимость": cost,
+                         "Комната": room}
+        db.child("dormitories").child("contract_buffer").child(student_id).set(contract_data)
+
 
 
 
@@ -433,9 +471,10 @@ def list_of_contracts():
     """возвращает данные формата [(id_студента, номер общаги, {данные договора}),(id_студента, номер общаги, {данные договора})] """
     last_num = get_last_contract_num()
     contract_mas = []
-    for contract_num in range(last_num+1):
+    for contract_num in range(1, last_num+1):
         contract = search_contract_by_code("ОБ - " + str(contract_num))
         contract_mas.append(contract)
+
     return contract_mas
 
 """функции льгот/стоимостей"""
@@ -451,8 +490,16 @@ def remove_facility(name):
 
 def edit_facility(name, cost = None):
     db = init_firebase()
-    if cost:
-        db.child("facilities").child(name).update({"Стоимость":cost})
+    old_name = db.child("facilities").child("buffer").get()
+    for names in old_name.each():
+        old = names.key()
+        if cost:
+            db.child("facilities").child(name).update({"Стоимость":cost})
+        if name:
+            db.child("facilities").child(old).remove()
+            db.child("facilities").child(name).update({"Название":name})
+    return old_name
+
 
 def list_of_facilities():
     """возвращает список формата [('Без льгот', 550), ('Инвалид', 0), ('Сирота', 1), ('ЧАЭС', 0)]"""
@@ -476,4 +523,4 @@ if __name__ == '__main__':
     # delete_student("-MNV8YOZ6F6Rqrwj5JRa")
     # update_number_of_rooms()
     # print(list_of_all_rooms())
-    print(list_of_empty_rooms_by_sex("Мужской"))
+    delite_contract

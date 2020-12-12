@@ -282,11 +282,11 @@ class Ui_add_facility(object):
 
     def retranslateUi(self, add_facility):
         _translate = QtCore.QCoreApplication.translate
-        add_facility.setWindowTitle(_translate("add_facility", "Добавление льготы"))
-        self.label.setText(_translate("add_facility", "Название льготы"))
+        add_facility.setWindowTitle(_translate("add_facility", "Добавление стоимости/льготы"))
+        self.label.setText(_translate("add_facility", "Название \nстоимости/льготы"))
         self.label_2.setText(_translate("add_facility", "Стоимость"))
         self.add_facility_btn.setText(_translate("add_facility", "Добавить"))
-        self.back_to_facilities_btn.setText(_translate("add_facility", "Вернуться в меню льгот"))
+        self.back_to_facilities_btn.setText(_translate("add_facility", "Вернуться в меню"))
 
 
 if __name__ == "__main__":

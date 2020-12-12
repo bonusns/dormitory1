@@ -20,7 +20,7 @@ class Ui_red_facility(object):
         item = self.NameBox.currentIndex()
         name = fac_mas[item][0]
         cost = fac_mas[item][1]
-        db.child("facilities").child("buffer").child(name).set({name:cost})
+        db.child("facilities").child("buffer").set({name:cost})
 
 
     def openRed(self):
@@ -226,10 +226,10 @@ class Ui_red_facility(object):
 
     def retranslateUi(self, red_facility):
         _translate = QtCore.QCoreApplication.translate
-        red_facility.setWindowTitle(_translate("red_facility", "Редактирование льгот"))
-        self.label.setText(_translate("red_facility", "Название льготы"))
+        red_facility.setWindowTitle(_translate("red_facility", "Редактирование стоимостей/льгот"))
+        self.label.setText(_translate("red_facility", "Название \nстоимости/льготы"))
         self.red_facility_btn.setText(_translate("red_facility", "Редактирование"))
-        self.back_to_facilities_btn.setText(_translate("red_facility", "Вернуться в меню льгот"))
+        self.back_to_facilities_btn.setText(_translate("red_facility", "Вернуться в меню"))
         fac_mas = dbd.list_of_facilities()
         i = 0
         for fac in fac_mas:

@@ -37,7 +37,6 @@ class Ui_red_contract_3(object):
             date_end = self.end_date_line.text()
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
-            sex = "Женский"
         dbd.edit_contract(code_n, date_start=date_start, date_end=date_end, room=room, cost=cost)
 
 
@@ -508,10 +507,11 @@ class Ui_red_contract_3(object):
         self.label_3.setText(_translate("red_contract_3", "Дата окончания"))
         self.label_6.setText(_translate("red_contract_3", "Комната"))
         self.label_7.setText(_translate("red_contract_3", "Стоимость"))
-        room_mas = dbd.list_of_empty_rooms_by_sex("Мужской")
+        mas = dbd.contract_buffer()
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
+        print(room_mas)
         i = 0
         for fac in room_mas:
-            print(fac[1])
             self.RoomBox.addItem(f"{fac[1]}")
             i += 1
         self.red_contract_btn.setText(_translate("red_contract_3", "Отредактировать"))
