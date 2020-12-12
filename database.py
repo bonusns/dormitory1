@@ -249,10 +249,23 @@ def edit_student(student_id,room, fio = None, phone = None, passport = None, add
 
 def delete_student(student_id, room):
     '''удаление студента'''
+    print("hey")
     db = init_firebase()
+    room_old = search_student_by_id(student_id)[1]["Комната"]
+    dormitory = search_student_by_id(student_id)[1]["Общежитие"]
+    sex = search_student_by_id(student_id)[1]["Пол"]
+
     db.child("clients").child(student_id).remove()
     db.child("dormitories").child(room).remove()
     # добавить удаление из комнаты
+    print(room_old,'hey')
+    print(dormitory,'Lol')
+
+    db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child("members").child(
+        student_id).remove()
+    update_room_occupied(dormitory, room_old)
+    update_room_gender(dormitory, room_old, sex)
+
 
 def delite_contract(student_id):
     '''удаление контракта'''
@@ -292,7 +305,7 @@ def search_student_by_code(code):
     for student in students.each():
         if "Договор" in student.val():
             if code == student.val()["Договор"]["Шифр"]:
-                student_mas = (student.key(), student.val()["Общежитие"], student.val()["Договор"])
+                student_mas.append((student.key(), student.val(), student.val()["Договор"]["Шифр"]))
     return student_mas
 
 def search_student_by_id(student_id):
@@ -541,4 +554,4 @@ if __name__ == '__main__':
     # update_number_of_rooms()
     # print(list_of_all_rooms())
    # delite_contract
-   # search_student_by_code("Договор")
+   # print(search_student_by_code("ОБ - 1"))

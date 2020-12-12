@@ -25,20 +25,27 @@ class Ui_del_client(object):
         '''заполняет список'''
         self.Client_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
             self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
-                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n'  \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n' \
                                      + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                      + 'Комната: ' + str(person[1]['Комната']) \
                                      + '    Пол: ' + str(person[1]['Пол']) + '\n')
             i = i + 1
 
-
     def delete_one(self):
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Client_list.currentRow()
         i = -1
         for person in mas:
