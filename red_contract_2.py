@@ -316,7 +316,7 @@ class Ui_red_contract_2(object):
         self.RoomBox.setStatusTip("")
         self.RoomBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.RoomBox.setEditable(False)
-        self.RoomBox.setMaxCount(2)
+        self.RoomBox.setMaxCount(100)
         self.RoomBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomBox.setModelColumn(0)
         self.RoomBox.setObjectName("RoomBox")
@@ -482,12 +482,10 @@ class Ui_red_contract_2(object):
         self.CostBox.setStatusTip("")
         self.CostBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.CostBox.setEditable(False)
-        self.CostBox.setMaxCount(2)
+        self.CostBox.setMaxCount(100)
         self.CostBox.setIconSize(QtCore.QSize(16, 16))
         self.CostBox.setModelColumn(0)
         self.CostBox.setObjectName("CostBox")
-        self.CostBox.addItem("")
-        self.CostBox.addItem("")
         red_contract_2.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(red_contract_2)
         self.statusbar.setObjectName("statusbar")
@@ -510,16 +508,17 @@ class Ui_red_contract_2(object):
         self.end_date_line.setInputMask(_translate("red_contract_2", "00.00.0000"))
         self.label_6.setText(_translate("red_contract_2", "Комната"))
         self.label_7.setText(_translate("red_contract_2", "Стоимость"))
-        mas = dbd.contract_buffer()
-        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
+        mas = dbd.buffer()
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'], dbd.search_student_by_id(mas[0][0])[1]['Общежитие'])
         i = 0
         for fac in room_mas:
             self.RoomBox.addItem(f"{fac[1]}")
             i += 1
         self.red_contract_btn.setText(_translate("red_contract_2", "Отредактировать"))
         self.back_to_red_client_btn.setText(_translate("red_contract_2", "Вернуться к поиску клиента"))
-        self.CostBox.setItemText(0, _translate("red_contract_2", "500"))
-        self.CostBox.setItemText(1, _translate("red_contract_2", "300"))
+        i = dbd.list_of_facilities()[1]
+        for j in range(0, i):
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
 
 
 if __name__ == "__main__":

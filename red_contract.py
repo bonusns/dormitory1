@@ -15,7 +15,7 @@ import database as dbd
 class Ui_red_contract(object):
 
     def del_buff(self):
-        dbd.delete_buffer()
+        dbd.delete_contract_buffer()
 
     def fill_list(self):
         '''заполняет список'''
@@ -60,9 +60,13 @@ class Ui_red_contract(object):
                     print(cost)
                 else:
                     code = ''
+                    print(code)
                     start_date = ''
+                    print(start_date)
                     end_date = ''
+                    print(end_date)
                     cost = ''
+                    print(cost,'ЪыЪ')
                 room = str(person[1]['Комната'])
                 print(fio)
 

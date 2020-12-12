@@ -18,7 +18,11 @@ class Ui_red_client(object):
         '''заполняет список'''
         self.Client_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio !="":
+            mas = dbd.search_student_by_fio(fio)
+        if code !="":
+           # mas =
         i = 1
         for person in mas:
             self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \

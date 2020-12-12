@@ -22,7 +22,7 @@ class Ui_list_contract(object):
             key = dbd.search_student_by_id(person[0])
             self.Contract_info.addItem(str(i) + '. ФИО: ' + key[1]['ФИО'] +";" + '   Договор: ' +str(person[2]['Шифр']) +";" +'\n'
                                      + 'Дата начала: ' + str(person[2]['Дата начала']) +";" + \
-                                     '  Дата конца: ' + str(person[2]['Дата_конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
+                                     '  Дата конца: ' + str(person[2]['Дата конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
             i = i + 1
 
     def openContract(self):

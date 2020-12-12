@@ -14,7 +14,7 @@ import database as dbd
 class Ui_list_facilities(object):
 
     def fill_facility_list(self):
-        fac_mas = dbd.list_of_facilities()
+        fac_mas = dbd.list_of_facilities()[0]
         i = 0
         for fac in fac_mas:
             item = self.Facilities_info.item(i)

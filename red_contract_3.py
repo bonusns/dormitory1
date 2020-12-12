@@ -21,7 +21,7 @@ class Ui_red_contract_3(object):
         mas = dbd.contract_buffer()
         for person in mas:
             self.start_date_line.setText(person[1]['Дата начала'])
-            self.end_date_line.setText(person[1]['Дата_конца'])
+            self.end_date_line.setText(person[1]['Дата конца'])
             self.code_line.setText(person[1]['Шифр'])
             self.CostBox.setCurrentText(person[1]['Стоимость'])
             self.RoomBox.setCurrentText(person[1]['Комната'])
@@ -317,7 +317,7 @@ class Ui_red_contract_3(object):
         self.RoomBox.setStatusTip("")
         self.RoomBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.RoomBox.setEditable(False)
-        self.RoomBox.setMaxCount(30)
+        self.RoomBox.setMaxCount(100)
         self.RoomBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomBox.setModelColumn(0)
         self.RoomBox.setObjectName("RoomBox")
@@ -485,8 +485,6 @@ class Ui_red_contract_3(object):
         self.CostBox.setIconSize(QtCore.QSize(16, 16))
         self.CostBox.setModelColumn(0)
         self.CostBox.setObjectName("CostBox")
-        self.CostBox.addItem("")
-        self.CostBox.addItem("")
         red_contract_3.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(red_contract_3)
         self.statusbar.setObjectName("statusbar")
@@ -508,7 +506,7 @@ class Ui_red_contract_3(object):
         self.label_6.setText(_translate("red_contract_3", "Комната"))
         self.label_7.setText(_translate("red_contract_3", "Стоимость"))
         mas = dbd.contract_buffer()
-        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'], dbd.search_student_by_id(mas[0][0])[1]['Общежитие'])
         print(room_mas)
         i = 0
         for fac in room_mas:
@@ -516,9 +514,9 @@ class Ui_red_contract_3(object):
             i += 1
         self.red_contract_btn.setText(_translate("red_contract_3", "Отредактировать"))
         self.back_to_red_contract_btn.setText(_translate("red_contract_3", "Вернуться к поиску договора"))
-        self.CostBox.setItemText(0, _translate("red_contract_3", "500"))
-        self.CostBox.setItemText(1, _translate("red_contract_3", "300"))
-
+        i = dbd.list_of_facilities()[1]
+        for j in range(0, i):
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
 
 if __name__ == "__main__":
     import sys

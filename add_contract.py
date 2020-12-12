@@ -474,12 +474,11 @@ class Ui_add_contract(object):
         self.CostBox.setStatusTip("")
         self.CostBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.CostBox.setEditable(False)
-        self.CostBox.setMaxCount(2)
+        self.CostBox.setMaxCount(100)
         self.CostBox.setIconSize(QtCore.QSize(16, 16))
         self.CostBox.setModelColumn(0)
         self.CostBox.setObjectName("CostBox")
-        self.CostBox.addItem("")
-        self.CostBox.addItem("")
+
         add_contract.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(add_contract)
         self.statusbar.setObjectName("statusbar")
@@ -501,7 +500,7 @@ class Ui_add_contract(object):
         self.label_3.setText(_translate("add_contract", "Дата окончания"))
         self.label_6.setText(_translate("add_contract", "Комната"))
         self.label_7.setText(_translate("add_contract", "Стоимость"))
-        mas = dbd.contract_buffer()
+        mas = dbd.buffer()
         room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
         i = 0
         for fac in room_mas:
@@ -509,8 +508,16 @@ class Ui_add_contract(object):
             i += 1
         self.add_contract_btn.setText(_translate("add_contract", "Добавить"))
         self.back_to_add_client_btn.setText(_translate("add_contract", "Вернуться к добавлению клиента"))
-        self.CostBox.setItemText(0, _translate("add_contract", "500"))
-        self.CostBox.setItemText(1, _translate("add_contract", "300"))
+
+        i = dbd.list_of_facilities()[1]
+        for j in range(0, i):
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
+
+            # i = i + 1
+
+       # self.CostBox.setItemText(0, _translate("add_contract", "500"))
+       # self.CostBox.setItemText(1, _translate("add_contract", "300"))
+
 
 
 if __name__ == "__main__":
