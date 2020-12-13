@@ -10,15 +10,56 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import red_room_2
+import database as dbd
 
 class Ui_red_room(object):
 
-    def openRed(self):
-        from red_room_2 import Ui_red_room_2
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_red_room_2()
-        self.ui.setupUi(self.window)
-        self.window.show()
+    def fill_room_data(self,choose_dorm_number):
+        self.RoomNumber.clear()
+        room_mas = dbd.list_of_all_rooms()
+        i = 0
+        for room in room_mas:
+            dorm_num = room[0]
+            if str(dorm_num) == choose_dorm_number:
+                room_number = room[1]
+                self.RoomNumber.addItem("")
+                self.RoomNumber.setItemText(i, f"{room_number}")
+                i += 1
+
+    def fill_dorm_data(self):
+        dorm_mas = dbd.list_of_dormitories()
+        i = 0
+        for dorm in dorm_mas:
+            self.HostelNumber.addItem("")
+            self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
+            i += 1
+
+    def search_room(self):
+        room_number = self.RoomNumber.currentText()
+        dorm_number = self.HostelNumber.currentText()
+        room_data = dbd.search_room(dorm_number, room_number)
+
+        str_student_fio = ""
+        if "members" in room_data:
+            for student in room_data["members"]:
+                str_student_fio += dbd.get_fio_by_student_id(student) + "\n"
+        self.Room_list.addItem(
+            f"Общежитие: {dorm_number}; Комната: {room_number}\nВместимость: {room_data['capacity']}; Свободно: {int(room_data['capacity']) - int(room_data['occupied'])}\nЖильцы:\n{str_student_fio}")
+
+    def red_room(self):
+        db = dbd.init_firebase()
+        room_number = self.RoomNumber.currentText()
+        dorm_number = self.HostelNumber.currentText()
+        if self.Room_list.currentRow() != -1:
+            room_data = dbd.search_room(dorm_number, room_number)
+            room_mas = {"dorm":dorm_number,"number":int(room_number),"capacity":room_data["capacity"],"status":room_data["status"]}
+            db.child("dormitories").child("buffer_room").set(room_mas)
+            from red_room_2 import Ui_red_room_2
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_red_room_2()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
 
     def openRoom(self):
         from rooms import Ui_Rooms
@@ -217,8 +258,10 @@ class Ui_red_room(object):
         self.red_room_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_room_btn.setObjectName("red_room_btn")
 
-        self.red_room_btn.clicked.connect(self.openRed)
+        self.red_room_btn.clicked.connect(self.red_room)
+        self.find_room_btn.clicked.connect(self.search_room)
         self.red_room_btn.clicked.connect(red_room.close)
+
 
         self.Room_list = QtWidgets.QListWidget(self.centralwidget)
         self.Room_list.setGeometry(QtCore.QRect(60, 200, 240, 60))
@@ -239,67 +282,8 @@ class Ui_red_room(object):
         self.Room_list.setFont(font)
         self.Room_list.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.Room_list.setObjectName("Room_list")
-        self.RoomHostelNumber = QtWidgets.QComboBox(self.centralwidget)
-        self.RoomHostelNumber.setGeometry(QtCore.QRect(270, 140, 300, 30))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.RoomHostelNumber.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
-        self.RoomHostelNumber.setFont(font)
-        self.RoomHostelNumber.setToolTip("")
-        self.RoomHostelNumber.setStatusTip("")
-        self.RoomHostelNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
-"")
-        self.RoomHostelNumber.setEditable(False)
-        self.RoomHostelNumber.setMaxCount(10)
-        self.RoomHostelNumber.setIconSize(QtCore.QSize(16, 16))
-        self.RoomHostelNumber.setModelColumn(0)
-        self.RoomHostelNumber.setObjectName("RoomHostelNumber")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
         self.RoomNumber = QtWidgets.QComboBox(self.centralwidget)
-        self.RoomNumber.setGeometry(QtCore.QRect(270, 80, 300, 30))
+        self.RoomNumber.setGeometry(QtCore.QRect(270, 140, 300, 30))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -348,41 +332,97 @@ class Ui_red_room(object):
         self.RoomNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
 "")
         self.RoomNumber.setEditable(False)
-        self.RoomNumber.setMaxCount(10)
+        self.RoomNumber.setMaxCount(100)
         self.RoomNumber.setIconSize(QtCore.QSize(16, 16))
         self.RoomNumber.setModelColumn(0)
         self.RoomNumber.setObjectName("RoomNumber")
-        self.RoomNumber.addItem("")
-        self.RoomNumber.addItem("")
-        self.RoomNumber.addItem("")
-        self.RoomNumber.addItem("")
-        self.RoomNumber.addItem("")
+        self.HostelNumber = QtWidgets.QComboBox(self.centralwidget)
+        self.HostelNumber.setGeometry(QtCore.QRect(270, 80, 300, 30))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        self.HostelNumber.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.HostelNumber.setFont(font)
+        self.HostelNumber.setToolTip("")
+        self.HostelNumber.setStatusTip("")
+        self.HostelNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
+"")
+        self.HostelNumber.setEditable(False)
+        self.HostelNumber.setMaxCount(100)
+        self.HostelNumber.setIconSize(QtCore.QSize(16, 16))
+        self.HostelNumber.setModelColumn(0)
+        self.HostelNumber.setObjectName("HostelNumber")
+        # self.HostelNumber.addItem("")
+        # self.HostelNumber.addItem("")
+        # self.HostelNumber.addItem("")
+        # self.HostelNumber.addItem("")
+        # self.HostelNumber.addItem("")
         red_room.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(red_room)
-        self.RoomHostelNumber.setCurrentIndex(-1)
         self.RoomNumber.setCurrentIndex(-1)
+        self.HostelNumber.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(red_room)
+        self.HostelNumber.activated[str].connect(self.fill_room_data)
+        self.fill_dorm_data()
 
     def retranslateUi(self, red_room):
         _translate = QtCore.QCoreApplication.translate
         red_room.setWindowTitle(_translate("red_room", "Редактирование комнаты"))
-        self.label_room.setText(_translate("red_room", "Выберите комнату"))
-        self.label_hostel.setText(_translate("red_room", "Общежитие"))
+        self.label_room.setText(_translate("red_room", "Выберите общежитие"))
+        self.label_hostel.setText(_translate("red_room", "комнату"))
         self.find_room_btn.setText(_translate("red_room", "Найти"))
         self.back_to_rooms_btn.setText(_translate("red_room", "Вернуться в меню комнат"))
         self.label.setText(_translate("red_room", "и"))
         self.red_room_btn.setText(_translate("red_room", "Редактировать"))
-        self.RoomHostelNumber.setItemText(0, _translate("red_room", "1"))
-        self.RoomHostelNumber.setItemText(1, _translate("red_room", "2"))
-        self.RoomHostelNumber.setItemText(2, _translate("red_room", "3"))
-        self.RoomHostelNumber.setItemText(3, _translate("red_room", "4"))
-        self.RoomHostelNumber.setItemText(4, _translate("red_room", "5"))
-        self.RoomNumber.setItemText(0, _translate("red_room", "1"))
-        self.RoomNumber.setItemText(1, _translate("red_room", "2"))
-        self.RoomNumber.setItemText(2, _translate("red_room", "3"))
-        self.RoomNumber.setItemText(3, _translate("red_room", "4"))
-        self.RoomNumber.setItemText(4, _translate("red_room", "5"))
+        # self.RoomNumber.setItemText(0, _translate("red_room", "1"))
+        # self.RoomNumber.setItemText(1, _translate("red_room", "2"))
+        # self.RoomNumber.setItemText(2, _translate("red_room", "3"))
+        # self.RoomNumber.setItemText(3, _translate("red_room", "4"))
+        # self.RoomNumber.setItemText(4, _translate("red_room", "5"))
+        # self.HostelNumber.setItemText(0, _translate("red_room", "1"))
+        # self.HostelNumber.setItemText(1, _translate("red_room", "2"))
+        # self.HostelNumber.setItemText(2, _translate("red_room", "3"))
+        # self.HostelNumber.setItemText(3, _translate("red_room", "4"))
+        # self.HostelNumber.setItemText(4, _translate("red_room", "5"))
 
 
 if __name__ == "__main__":

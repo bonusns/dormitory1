@@ -56,10 +56,10 @@ class Ui_red_client(object):
                     room = person[1]['Комната']
                 else:
                     room = ''
-                print(room)
             i = i + 1
         dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex,room, hostel)
         self.FIO_line.clear()
+        self.Contract_number_line.clear()
         self.Client_list.clear()
 
     def openClient(self):

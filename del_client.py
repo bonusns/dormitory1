@@ -28,10 +28,8 @@ class Ui_del_client(object):
         code = self.Contract_number_line.text()
         if fio != "":
             mas = dbd.search_student_by_fio(fio)
-            print(mas)
         if code != "":
             mas = dbd.search_student_by_code(code)
-            print(mas)
         i = 1
         for person in mas:
             self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
@@ -52,22 +50,19 @@ class Ui_del_client(object):
         i = -1
         for person in mas:
             if i == n-1:
-                print(person)
                 dic = person[0]
                 if person[1]['Общежитие'] != '':
                     if person[1]['Комната'] != 'queue' and '':
                         way = "dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
-                        print(way)
                     else:
                         way = "dormitory"+str(person[1]['Общежитие']) + "/"+ "rooms"+"/" + "queue"+"/" + person[0]
-                        print(way)
                 else:
                     way = "queue"+"/" + person[0]
-                    print(way)
                 break
             i = i+1
         dbd.delete_student(dic, way)
         self.FIO_line.clear()
+        self.Contract_number_line.clear()
         self.Client_list.clear()
 
 

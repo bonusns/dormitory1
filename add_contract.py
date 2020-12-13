@@ -13,9 +13,8 @@ import database as dbd
 
 class Ui_add_contract(object):
     def set_code(self):
-        print("hola")
-        num = dbd.get_last_contract_num()
-        self.code_line.setText("ОБ - " + str(num+1))
+         num = dbd.get_last_contract_num()
+         self.code_line.setText("ОБ - " + str(num+1))
 
     def del_buff(self):
         dbd.delete_buffer()
@@ -28,10 +27,23 @@ class Ui_add_contract(object):
             code_n =self.code_line.text()
             date_start = self.start_date_line.text()
             date_end =  self.end_date_line.text()
+            day_start = date_start[:2]
+            month_start = date_start[3:5]
+            year_start = day_start[6:]
+            day_end = date_end[:2]
+            month_end = date_end[3:5]
+            year_end = date_end[6:]
+
+
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
             sex = str(person[1]['Пол'])
         dbd.add_contract(key, date_start, date_end, room, cost, sex,code= code_n)
+        from success import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def openAdd_Client(self):
         from Add_Client import Ui_add_client
@@ -113,6 +125,9 @@ class Ui_add_contract(object):
         self.code_line.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.code_line.setText("")
         self.code_line.setObjectName("code_line")
+
+        self.code_line.setReadOnly(True)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(60, 140, 130, 30))
         font = QtGui.QFont()
@@ -421,9 +436,10 @@ class Ui_add_contract(object):
         self.back_to_add_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_add_client_btn.setObjectName("back_to_add_client_btn")
 
-        self.back_to_add_client_btn.clicked.connect(self.del_buff)
+
         self.back_to_add_client_btn.clicked.connect(self.openAdd_Client)
         self.back_to_add_client_btn.clicked.connect(add_contract.close)
+        self.back_to_add_client_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.back_to_add_client_btn)
         self.CostBox = QtWidgets.QComboBox(self.centralwidget)
@@ -502,7 +518,8 @@ class Ui_add_contract(object):
         self.label_6.setText(_translate("add_contract", "Комната"))
         self.label_7.setText(_translate("add_contract", "Стоимость"))
         mas = dbd.buffer()
-        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'])
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'],
+                                                  dbd.search_student_by_id(mas[0][0])[1]['Общежитие'])
         i = 0
         for fac in room_mas:
             self.RoomBox.addItem(f"{fac[1]}")

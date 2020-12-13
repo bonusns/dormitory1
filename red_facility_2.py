@@ -46,7 +46,7 @@ class Ui_red_facility_2(object):
         self.centralwidget = QtWidgets.QWidget(red_facility_2)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(60, 80, 140, 30))
+        self.label.setGeometry(QtCore.QRect(60, 80, 146, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -283,9 +283,7 @@ class Ui_red_facility_2(object):
         self.back_to_red_facilities_btn.setObjectName("back_to_red_facilities_btn")
 
         self.back_to_red_facilities_btn.clicked.connect(self.openRed)
-        print('hola')
         self.back_to_red_facilities_btn.clicked.connect(red_facility_2.close)
-        print('qoq')
         self.horizontalLayout.addWidget(self.back_to_red_facilities_btn)
         red_facility_2.setCentralWidget(self.centralwidget)
 

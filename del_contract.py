@@ -17,7 +17,11 @@ class Ui_del_contract(object):
         '''заполняет список'''
         self.Contract_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
             if "Договор" in person[1].keys():
@@ -28,14 +32,18 @@ class Ui_del_contract(object):
                                      + '    Пол: ' + str(person[1]['Пол']) + '\n')
             else:
                 self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
-                                           + 'Общежитие: ' + str(person[1]['Общежитие']) + '    Договор: ' + str('Отсутствует') + \
+                                           + 'Общежитие: ' + str(person[1]['Общежитие']) + '    Договор: ' + str('') + \
                                            '\n' + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                            + 'Комната: ' + str(person[1]['Комната']) \
                                            + '    Пол: ' + str(person[1]['Пол']) + '\n')
 
     def delete_one(self):
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Contract_list.currentRow()
         i = -1
         for person in mas:
@@ -51,6 +59,7 @@ class Ui_del_contract(object):
          #   i = i+1
         dbd.delite_contract(dic)
         self.FIO_line.clear()
+        self.Contract_number_line.clear()
         self.Contract_list.clear()
 
     def openContract(self):

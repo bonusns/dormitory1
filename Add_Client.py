@@ -26,7 +26,6 @@ class Ui_add_client(object):
         if self.hostel_line.text() !='':
             from add_contract import Ui_add_contract
             self.add_client()
-            add_client.close()
             self.window = QtWidgets.QMainWindow()
             self.ui = Ui_add_contract()
             self.ui.setupUi(self.window)
@@ -69,8 +68,7 @@ class Ui_add_client(object):
 
         if c == 0:
             key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
-            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,  hostel)
-            print('hei')
+            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,hostel)
 
         else:
             from error import Ui_Error
@@ -734,8 +732,7 @@ class Ui_add_client(object):
         self.add_contract_btn.setObjectName("add_contract_btn")
 
         self.add_contract_btn.clicked.connect(self.openAdd_contract)
-
-
+        self.add_contract_btn.clicked.connect(add_client.close)
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_client_btn = QtWidgets.QPushButton(self.layoutWidget)

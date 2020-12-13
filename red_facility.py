@@ -18,14 +18,14 @@ class Ui_red_facility(object):
         db = dbd.init_firebase()
         fac_mas = dbd.list_of_facilities()
         item = self.NameBox.currentIndex()
-        name = fac_mas[item][0]
-        cost = fac_mas[item][1]
+        name = fac_mas[0][item][0]
+        cost = fac_mas[0][item][1]
         db.child("facilities").child("buffer").set({name:cost})
 
 
     def openRed(self):
-        from red_facility_2 import Ui_red_facility_2
         self.add_to_buffer()
+        from red_facility_2 import Ui_red_facility_2
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_red_facility_2()
         self.ui.setupUi(self.window)
@@ -46,7 +46,7 @@ class Ui_red_facility(object):
         self.centralwidget = QtWidgets.QWidget(red_facility)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(60, 80, 140, 30))
+        self.label.setGeometry(QtCore.QRect(60, 80, 146, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -233,7 +233,6 @@ class Ui_red_facility(object):
         fac_mas = dbd.list_of_facilities()
         i = 0
         for i in range(dbd.list_of_facilities()[1]):
-            print(fac_mas[0][i][0])
             self.NameBox.addItem(f"{fac_mas[0][i][0]} - {fac_mas[0][i][1]}")
 
 

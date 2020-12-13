@@ -10,10 +10,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
-
+import red_client_2
 class Ui_red_contract_2(object):
 
     def set_code(self):
+
         mas = dbd.buffer()
         for person in mas:
             key = person[0]
@@ -21,8 +22,8 @@ class Ui_red_contract_2(object):
 
 
 
-    def del_buff(self):
-        dbd.delete_contract_buffer()
+    #def del_buff(self):
+        #dbd.delete_contract_buffer()
 
     def take_student_id(self):
         # Вытаскивает из буфера и заполняет поля данными
@@ -36,6 +37,11 @@ class Ui_red_contract_2(object):
             cost = self.CostBox.currentText()
             sex = str(person[1]['Пол'])
         dbd.add_contract(key, date_start, date_end, room, cost, sex,code=code_n)
+        from success import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
 
@@ -119,6 +125,9 @@ class Ui_red_contract_2(object):
         self.code_line.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.code_line.setText("")
         self.code_line.setObjectName("code_line")
+
+        self.code_line.setReadOnly(True)
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(60, 140, 130, 30))
         font = QtGui.QFont()
@@ -429,7 +438,7 @@ class Ui_red_contract_2(object):
 
         self.back_to_red_client_btn.clicked.connect(self.openRed_client_2)
         self.back_to_red_client_btn.clicked.connect(red_contract_2.close)
-        self.back_to_red_client_btn.clicked.connect(self.del_buff)
+       # self.back_to_red_client_btn.clicked.connect(self.del_buff)
 
 
         self.horizontalLayout.addWidget(self.back_to_red_client_btn)
@@ -519,6 +528,13 @@ class Ui_red_contract_2(object):
         i = dbd.list_of_facilities()[1]
         for j in range(0, i):
             self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":

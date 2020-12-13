@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import red_contract_3
 import database as dbd
 
 class Ui_red_contract(object):
@@ -21,11 +20,14 @@ class Ui_red_contract(object):
         '''заполняет список'''
         self.Contract_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
             if "Договор" in person[1].keys():
-                print(person[1]['Договор']['Шифр'])
                 self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
                                         + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
                                         + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
@@ -41,7 +43,11 @@ class Ui_red_contract(object):
     def redaction(self):
         # добавляет в буфер студента, который будет редактироваться, в red_contract_3 из буфера забираются данные и буфер удаляется
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Contract_list.currentRow()
         i = -1
         for person in mas:
@@ -49,26 +55,16 @@ class Ui_red_contract(object):
                 dic = person[0]
                 fio = str(person[1]['ФИО'])
                 if "Договор" in person[1].keys():
-                    print(person)
                     code = str(person[1]['Договор']['Шифр'])
-                    print(code)
                     start_date = str(person[1]['Договор']['Дата начала'])
-                    print(start_date)
                     end_date = str(person[1]['Договор']['Дата конца'])
-                    print(end_date)
                     cost = str(person[1]['Договор']['Стоимость'])
-                    print(cost)
                 else:
                     code = ''
-                    print(code)
                     start_date = ''
-                    print(start_date)
                     end_date = ''
-                    print(end_date)
                     cost = ''
-                    print(cost,'ЪыЪ')
                 room = str(person[1]['Комната'])
-                print(fio)
 
             i = i + 1
         dbd.add_contract_buffer(dic,fio,start_date,end_date,room,cost, code)

@@ -9,9 +9,27 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_add_room(object):
+
+    def add_room(self):
+        room_number = self.room_number_line.text()
+        dorm_number = int(self.RoomHostelNumber.currentText())
+        capacity = int(self.RoomPlacesBox.currentText())
+        room_list = dbd.list_of_room_num(dorm_number)
+        if str(room_number) not in room_list:
+            dbd.add_room(dorm_number,room_number,capacity)
+        else:
+            print("Ошибочка")
+
+    def fill_dorm_data(self):
+        dorm_mas = dbd.list_of_dormitories()
+        i = 0
+        for dorm in dorm_mas:
+            self.RoomHostelNumber.addItem("")
+            self.RoomHostelNumber.setItemText(i, f"{dorm[1]['number']}")
+            i += 1
 
     def openRoom(self):
         from rooms import Ui_Rooms
@@ -22,9 +40,9 @@ class Ui_add_room(object):
 
     def setupUi(self, add_room):
         add_room.setObjectName("add_room")
-        add_room.resize(580, 330)
-        add_room.setMinimumSize(QtCore.QSize(580, 330))
-        add_room.setMaximumSize(QtCore.QSize(580, 330))
+        add_room.resize(580, 280)
+        add_room.setMinimumSize(QtCore.QSize(580, 280))
+        add_room.setMaximumSize(QtCore.QSize(580, 280))
         self.centralwidget = QtWidgets.QWidget(add_room)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -45,15 +63,10 @@ class Ui_add_room(object):
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(60, 260, 130, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.label_3.setFont(font)
-        self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(80, 20, 431, 42))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -158,11 +171,10 @@ class Ui_add_room(object):
         self.back_to_rooms_btn.setObjectName("back_to_rooms_btn")
 
         self.back_to_rooms_btn.clicked.connect(self.openRoom)
+        self.add_room_btn.clicked.connect(self.add_room)
         self.back_to_rooms_btn.clicked.connect(add_room.close)
 
         self.horizontalLayout.addWidget(self.back_to_rooms_btn)
-        self.RoomTipeBox = QtWidgets.QComboBox(self.centralwidget)
-        self.RoomTipeBox.setGeometry(QtCore.QRect(220, 260, 300, 30))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -200,24 +212,10 @@ class Ui_add_room(object):
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.RoomTipeBox.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.RoomTipeBox.setFont(font)
-        self.RoomTipeBox.setToolTip("")
-        self.RoomTipeBox.setStatusTip("")
-        self.RoomTipeBox.setStyleSheet("background-color: rgb(135, 206, 235);")
-        self.RoomTipeBox.setEditable(False)
-        self.RoomTipeBox.setCurrentText("")
-        self.RoomTipeBox.setMaxCount(3)
-        self.RoomTipeBox.setIconSize(QtCore.QSize(16, 16))
-        self.RoomTipeBox.setModelColumn(0)
-        self.RoomTipeBox.setObjectName("RoomTipeBox")
-        self.RoomTipeBox.addItem("")
-        self.RoomTipeBox.addItem("")
-        self.RoomTipeBox.addItem("")
         self.RoomPlacesBox = QtWidgets.QComboBox(self.centralwidget)
         self.RoomPlacesBox.setGeometry(QtCore.QRect(220, 200, 300, 30))
         palette = QtGui.QPalette()
@@ -271,8 +269,6 @@ class Ui_add_room(object):
         self.RoomPlacesBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomPlacesBox.setModelColumn(0)
         self.RoomPlacesBox.setObjectName("RoomPlacesBox")
-        self.RoomPlacesBox.addItem("")
-        self.RoomPlacesBox.addItem("")
         self.RoomPlacesBox.addItem("")
         self.RoomPlacesBox.addItem("")
         self.RoomPlacesBox.addItem("")
@@ -395,45 +391,29 @@ class Ui_add_room(object):
         self.RoomHostelNumber.setIconSize(QtCore.QSize(16, 16))
         self.RoomHostelNumber.setModelColumn(0)
         self.RoomHostelNumber.setObjectName("RoomHostelNumber")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
-        self.RoomHostelNumber.addItem("")
         add_room.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(add_room)
         self.statusbar.setObjectName("statusbar")
         add_room.setStatusBar(self.statusbar)
 
         self.retranslateUi(add_room)
-        self.RoomTipeBox.setCurrentIndex(-1)
         self.RoomPlacesBox.setCurrentIndex(-1)
         self.RoomHostelNumber.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(add_room)
+        self.fill_dorm_data()
 
     def retranslateUi(self, add_room):
         _translate = QtCore.QCoreApplication.translate
         add_room.setWindowTitle(_translate("add_room", "Добавление комнаты"))
         self.label.setText(_translate("add_room", "Номер общежития"))
         self.label_2.setText(_translate("add_room", "Число мест"))
-        self.label_3.setText(_translate("add_room", "Тип комнаты"))
         self.add_room_btn.setText(_translate("add_room", "Добавить"))
         self.back_to_rooms_btn.setText(_translate("add_room", "Вернуться в меню комнат"))
-        self.RoomTipeBox.setItemText(0, _translate("add_room", "Студенческая"))
-        self.RoomTipeBox.setItemText(1, _translate("add_room", "Преподавательская"))
-        self.RoomTipeBox.setItemText(2, _translate("add_room", "Семейная"))
         self.RoomPlacesBox.setItemText(0, _translate("add_room", "1"))
         self.RoomPlacesBox.setItemText(1, _translate("add_room", "2"))
         self.RoomPlacesBox.setItemText(2, _translate("add_room", "3"))
-        self.RoomPlacesBox.setItemText(3, _translate("add_room", "4"))
-        self.RoomPlacesBox.setItemText(4, _translate("add_room", "5"))
         self.room_number_line.setInputMask(_translate("add_room", "000"))
         self.label_4.setText(_translate("add_room", "Номер комнаты"))
-        self.RoomHostelNumber.setItemText(0, _translate("add_room", "1"))
-        self.RoomHostelNumber.setItemText(1, _translate("add_room", "2"))
-        self.RoomHostelNumber.setItemText(2, _translate("add_room", "3"))
-        self.RoomHostelNumber.setItemText(3, _translate("add_room", "4"))
-        self.RoomHostelNumber.setItemText(4, _translate("add_room", "5"))
 
 
 if __name__ == "__main__":
