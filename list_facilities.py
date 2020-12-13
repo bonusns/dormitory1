@@ -14,11 +14,14 @@ import database as dbd
 class Ui_list_facilities(object):
 
     def fill_facility_list(self):
-        fac_mas = dbd.list_of_facilities()[0]
+        fac_mas = dbd.list_of_facilities()
         i = 0
+        fac_mas =fac_mas[0]
         for fac in fac_mas:
-            item = self.Facilities_info.item(i)
-            item.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
+            item = QtWidgets.QListWidgetItem()
+            self.Facilities_info.addItem(item)
+            pole = self.Facilities_info.item(i)
+            pole.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
             i += 1
 
 
@@ -151,16 +154,16 @@ class Ui_list_facilities(object):
         self.Facilities_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "selection-color: rgb(85, 170, 255);")
         self.Facilities_info.setObjectName("Facilities_info")
-        item = QtWidgets.QListWidgetItem()
-        self.Facilities_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Facilities_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Facilities_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Facilities_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Facilities_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Facilities_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Facilities_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Facilities_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Facilities_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Facilities_info.addItem(item)
         list_facilities.setCentralWidget(self.centralwidget)
         self.retranslateUi(list_facilities)
         QtCore.QMetaObject.connectSlotsByName(list_facilities)

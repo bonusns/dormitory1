@@ -50,13 +50,16 @@ class Ui_red_client_2(object):
                     self.FIO_line.clear()
 
                     break
+            print(person[1]['Общежитие'])
             if person[1]['Общежитие'] != '':
-                if person[1]['Комната'] != '':
-                    way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
-                        person[1]['Комната']) + "/" + "members"
-                    print(way)
+                if person[1]['Комната'] != '' and person[1]['Комната'] != 'queue':
+                    way=''
+                    #way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
+                     #   person[1]['Комната']) + "/" + "members"
+                    print(way,"qqwd")
                 else:
                     way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + "queue"
+
                     print(way)
             else:
                 way = "queue"
@@ -78,11 +81,23 @@ class Ui_red_client_2(object):
 
 
     def openRedContract(self):
-        from red_contract_2 import Ui_red_contract_2
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_red_contract_2()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        if self.hostel_line.text() !='':
+
+            self.edit()
+            time.sleep(3)
+            red_client_2.close()
+            from red_contract_2 import Ui_red_contract_2
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_red_contract_2()
+            self.ui.setupUi(self.window)
+            self.window.show()
+        else:
+            from error_hostel import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
 
     def openRed_Client(self):
         from red_client import Ui_red_client
@@ -735,9 +750,9 @@ class Ui_red_client_2(object):
         self.red_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_contract_btn.setObjectName("red_contract_btn")
 
-        self.red_contract_btn.clicked.connect(self.edit)
+        #self.red_contract_btn.clicked.connect(self.edit)
         self.red_contract_btn.clicked.connect(self.openRedContract)
-        self.red_contract_btn.clicked.connect(red_client_2.close)
+        #self.red_contract_btn.clicked.connect(red_client_2.close)
 
         self.horizontalLayout.addWidget(self.red_contract_btn)
         self.back_to_red_btn = QtWidgets.QPushButton(self.layoutWidget)

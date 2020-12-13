@@ -52,8 +52,13 @@ class Ui_red_client(object):
                 address = person[1]['Адрес регистрации']
                 educ_form = person[1]['Форма обучения']
                 sex = person[1]['Пол']
+                if 'Комната' in person[1]:
+                    room = person[1]['Комната']
+                else:
+                    room = ''
+                print(room)
             i = i + 1
-        dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex, hostel)
+        dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex,room, hostel)
         self.FIO_line.clear()
         self.Client_list.clear()
 

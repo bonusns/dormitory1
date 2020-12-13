@@ -9,9 +9,22 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import database as dbd
 
 
 class Ui_list_rooms(object):
+
+    def fill_list(self):
+        room_mas = dbd.list_of_all_rooms()
+        i = 0
+        for room in room_mas:
+            room_data = room[2]
+            if "capacity" in room_data:
+                item = QtWidgets.QListWidgetItem()
+                self.Rooms_info.addItem(item)
+                pole = self.Rooms_info.item(i)
+                pole.setText(f"Общежитие: {room[0]}; Номер: {room[1]}\nВместимость: {room_data['capacity']}\nЗанято: {room_data['occupied']}\nСтатус – {room_data['status']}\n")
+                i += 1
 
     def openRoom(self):
         from rooms import Ui_Rooms
@@ -142,14 +155,15 @@ class Ui_list_rooms(object):
         self.Rooms_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "selection-color: rgb(85, 170, 255);")
         self.Rooms_info.setObjectName("Rooms_info")
-        item = QtWidgets.QListWidgetItem()
-        self.Rooms_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Rooms_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Rooms_info.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # self.Rooms_info.addItem(item)
         list_rooms.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(list_rooms)
         QtCore.QMetaObject.connectSlotsByName(list_rooms)
+        self.fill_list()
 
     def retranslateUi(self, list_rooms):
         _translate = QtCore.QCoreApplication.translate
@@ -158,10 +172,10 @@ class Ui_list_rooms(object):
         self.back_to_rooms_btn.setText(_translate("list_rooms", "Вернуться в меню комнат"))
         __sortingEnabled = self.Rooms_info.isSortingEnabled()
         self.Rooms_info.setSortingEnabled(False)
-        item = self.Rooms_info.item(0)
-        item.setText(_translate("list_rooms", "addawd"))
-        item = self.Rooms_info.item(1)
-        item.setText(_translate("list_rooms", "dtyjhn"))
+        # item = self.Rooms_info.item(0)
+        # item.setText(_translate("list_rooms", "addawd"))
+        # item = self.Rooms_info.item(1)
+        # item.setText(_translate("list_rooms", "dtyjhn"))
         self.Rooms_info.setSortingEnabled(__sortingEnabled)
 
 

@@ -13,6 +13,7 @@ import database as dbd
 
 class Ui_add_contract(object):
     def set_code(self):
+        print("hola")
         num = dbd.get_last_contract_num()
         self.code_line.setText("ОБ - " + str(num+1))
 

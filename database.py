@@ -25,37 +25,40 @@ def init_firebase():
 def add_dormitory(number, address):
     db = init_firebase()
     dormitoryData = {'number': number, 'rooms': {0: ''}, 'name': 'Общежитие ' + str(number), 'Адрес': address}
-    db.child("dormitories").child('dormitory' + str(number)).set(dormitoryData)
-    dorm_num = number
-    for number in range(100, 106):
-        capacity = random.randint(2, 3)
-        room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
-                     'residents': {}}
-        db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
-    for number in range(200, 206):
-        capacity = random.randint(2, 3)
-        room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
-                     'residents': {}}
-        db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+    check_num = db.child("dormitories").order_by_key().equal_to("dormitory"+str(number)).get().each()
+    if check_num == []:
+        db.child("dormitories").child('dormitory' + str(number)).set(dormitoryData)
+        dorm_num = number
+        for number in range(100, 106):
+            capacity = random.randint(2, 3)
+            room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
+                         'residents': {}}
+            db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
-    for number in range(300, 306):
-        capacity = random.randint(2, 3)
-        room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
-                     'residents': {}}
-        db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+        for number in range(200, 206):
+            capacity = random.randint(2, 3)
+            room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
+                         'residents': {}}
+            db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
-    for number in range(400, 406):
-        capacity = random.randint(2, 3)
-        room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
-                     'residents': {}}
-        db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+        for number in range(300, 306):
+            capacity = random.randint(2, 3)
+            room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
+                         'residents': {}}
+            db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
-    for number in range(500, 506):
-        capacity = random.randint(2, 3)
-        room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
-                     'residents': {}}
-        db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+        for number in range(400, 406):
+            capacity = random.randint(2, 3)
+            room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
+                         'residents': {}}
+            db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+
+        for number in range(500, 506):
+            capacity = random.randint(2, 3)
+            room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
+                         'residents': {}}
+            db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
 
 
 def list_of_dormitories():
@@ -222,12 +225,12 @@ def add_student(fio, phone, passport, address, educ_form, gender, dormitory = 0)
         db.child("dormitories").child("dormitory"+str(dormitory)).child("rooms").child("queue").child(key).set({"ФИО":fio})
     return key
 
-def add_student_buffer(student_id,fio, phone, passport, address, educ_form, gender, dormitory):
+def add_student_buffer(student_id,fio, phone, passport, address, educ_form, gender,room, dormitory):
     """Все поля строки"""
     db = init_firebase()
     '''добавление студента'''
     student_data = {'ФИО': fio, 'Телефон': phone, 'Паспорт': passport, 'Адрес регистрации': address,
-                    'Форма обучения': educ_form, 'Пол': gender, 'Комната': 'queue', 'Общежитие': dormitory, }
+                    'Форма обучения': educ_form, 'Пол': gender, 'Комната': room, 'Общежитие': dormitory, }
 
     # добавление в бд клиентов
     db.child("dormitories").child("buffer").child(student_id).set(student_data)
@@ -238,19 +241,27 @@ def edit_student(student_id,room, fio, phone, passport, address, educ_form, gend
     db = init_firebase()
   #  if fio:
     db.child("clients").child(student_id).update({"ФИО":fio})
+
   #  if phone:
     db.child("clients").child(student_id).update({"Телефон":phone})
  #   if passport:
     db.child("clients").child(student_id).update({"Паспорт":passport})
  #   if address:
     db.child("clients").child(student_id).update({"Адрес регистрации":address})
+
    # if educ_form:
     db.child("clients").child(student_id).update({"Форма обучения":educ_form})
   #  if gender:
     db.child("clients").child(student_id).update({"Пол":gender})
    # if hostel:
     db.child("clients").child(student_id).update({"Общежитие":hostel})
-    db.child("dormitories").child(room).child(student_id).remove()
+    if way !='':
+        db.child("dormitories").child(room).child(student_id).remove()
+    if hostel !='' and hostel !='queue':
+
+        db.child("dormitories").child("dormitory"+str(hostel)).child("rooms").child("queue").child(student_id).set({"ФИО":fio})
+    else:
+        db.child("dormitories").child("queue").child(student_id).set({"ФИО":fio})
 
 
 def delete_student(student_id, room):
@@ -263,8 +274,7 @@ def delete_student(student_id, room):
     db.child("clients").child(student_id).remove()
     db.child("dormitories").child(room).remove()
     # добавить удаление из комнаты
-    print(room_old)
-    if room_old !='queue' and '':
+    if room_old !='queue' and room_old != '':
         db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child("members").child(
         student_id).remove()
         update_room_occupied(dormitory, room_old)
@@ -373,8 +383,9 @@ def add_contract(student_id, date_start, date_end, room, cost, sex, code= None):
     db.child("clients").child(student_id).update({"Комната": room})
     db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
         student_id).set(True)
-    if room_old !="queue":
+    if room_old !="queue" and room_old !="":
         update_room_occupied(dormitory, room_old)
+        update_room_gender(dormitory, room_old)
     update_room_occupied(dormitory, room)
     update_room_gender(dormitory, room, sex)
     print(code[5:])
@@ -466,7 +477,9 @@ def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
             "members").child(student_id).remove()
         db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
             student_id).set(True)
-        update_room_occupied(dormitory, room_old)
+        if room_old != "queue" and room_old != "":
+            update_room_gender(dormitory,room_old)
+            update_room_occupied(dormitory, room_old)
         update_room_occupied(dormitory, room)
         update_room_gender(dormitory, room, sex)
     if cost:

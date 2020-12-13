@@ -23,8 +23,8 @@ class Ui_add_client(object):
 
 
     def openAdd_contract(self):
-        from add_contract import Ui_add_contract
         if self.hostel_line.text() !='':
+            from add_contract import Ui_add_contract
             self.add_client()
             add_client.close()
             self.window = QtWidgets.QMainWindow()
@@ -65,10 +65,12 @@ class Ui_add_client(object):
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
         hostel = self.hostel_line.text()
+        room = 'queue'
 
         if c == 0:
             key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
-            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex, hostel)
+            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,  hostel)
+            print('hei')
 
         else:
             from error import Ui_Error
