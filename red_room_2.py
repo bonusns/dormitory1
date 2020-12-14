@@ -33,6 +33,11 @@ class Ui_red_room_2(object):
         status = self.RoomTipeBox.currentText()
         capacity = int(self.RoomPlacesBox.currentText())
         db.child("dormitories").child("dormitory"+str(dorm_number)).child("rooms").child(room_number).update({"capacity":capacity,"status":status})
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def del_buffer(self):
         db = dbd.init_firebase()

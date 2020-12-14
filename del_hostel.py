@@ -47,7 +47,8 @@ class Ui_del_hostel(object):
                 self.Hostel_list.clear()
             else:
                 db.child("dormitories").child("dormitory" + str(dorm_number)).remove()
-
+                self.Number_line.clear()
+                self.Hostel_list.clear()
 
     def openHostel(self):
         from hostel import Ui_hostel

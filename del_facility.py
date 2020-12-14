@@ -17,6 +17,11 @@ class Ui_del_facility(object):
         item = self.NameBox.currentText()
         n = self.NameBox.currentIndex()
         dbd.remove_facility(item.split(" -")[0])
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
        #self.NameBox.
 
 

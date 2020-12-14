@@ -552,11 +552,9 @@ def edit_facility(name, cost = None):
     old_name = db.child("facilities").child("buffer").get()
     for names in old_name.each():
         old = names.key()
-        if cost:
-            db.child("facilities").child(name).update({"Стоимость":cost})
-        if name:
-            db.child("facilities").child(old).remove()
-            db.child("facilities").child(name).update({"Название":name})
+        db.child("facilities").child(old).remove()
+        db.child("facilities").child(name).update({"Название": name})
+        db.child("facilities").child(name).update({"Стоимость":cost})
     return old_name
 
 
@@ -593,6 +591,23 @@ def list_of_room_num(dormitory):
         room_mas.append(room.key())
     return room_mas
 
+def try_get_fio(fio):
+    try:
+        c = 0
+        mas = fio.split()
+        if 2 <= len(mas) <= 3:
+            for elem in mas:
+
+                for let in elem:
+                    if let in "1234567890":
+                        c = 1
+
+        else:
+            c = 1
+
+    except:
+        c = 1
+    return c
 
 
 if __name__ == '__main__':

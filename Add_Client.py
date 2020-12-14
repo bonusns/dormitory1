@@ -12,7 +12,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import add_contract
 import database
-import test
 
 
 class Ui_add_client(object):
@@ -53,7 +52,7 @@ class Ui_add_client(object):
 
         while c != 0:
             fio = self.FIO_line.text()
-            c= test.try_get_fio(fio)
+            c= database.try_get_fio(fio)
             if c == 1:
                 self.FIO_line.clear()
 

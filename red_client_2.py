@@ -10,7 +10,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
 import time
-import test
 
 class Ui_red_client_2(object):
 
@@ -43,8 +42,9 @@ class Ui_red_client_2(object):
             hostel_n = self.hostel_line.text()
             с = str(hostel_n)
             while d != 0:
+                import test as t
                 fio_n = self.FIO_line.text()
-                d = test.try_get_fio(fio_n)
+                d = dbd.try_get_fio(fio_n)
                 if d == 1:
                     self.FIO_line.clear()
 

@@ -18,6 +18,8 @@ class Ui_add_facility(object):
         name = self.Name_line.text()
         cost = self.discount_line.text()
         dbd.add_facility(name,cost)
+        self.Name_line.clear()
+        self.discount_line.clear()
 
 
     def openHelp(self):

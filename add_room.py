@@ -21,7 +21,11 @@ class Ui_add_room(object):
         if str(room_number) not in room_list:
             dbd.add_room(dorm_number,room_number,capacity)
         else:
-            print("Ошибочка")
+            from error_add_room import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
 
     def fill_dorm_data(self):
         dorm_mas = dbd.list_of_dormitories()

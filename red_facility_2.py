@@ -25,6 +25,11 @@ class Ui_red_facility_2(object):
         cost = self.discount_line.text()
         name = self.Name_line.text()
         dbd.edit_facility(name,cost)
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def del_buffer(self):
         db = dbd.init_firebase()
