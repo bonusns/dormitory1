@@ -9,9 +9,33 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import database as dbd
 
 
 class Ui_del_hostel(object):
+
+    def fill_list(self):
+        dorm_number = self.Number_line.text()
+        db = dbd.init_firebase()
+        dorm_mas = db.child("dormitories").order_by_key().equal_to("dormitory" + str(dorm_number)).get().each()
+        if dorm_mas == []:
+            self.Number_line.clear()
+        else:
+            dorm = dorm_mas[0].val()
+            self.Hostel_list.addItem(f"Название: {dorm['name']}\nАдрес: {dorm['Адрес']}")
+
+    def del_hostel(self):
+        db = dbd.init_firebase()
+        dorm_number = self.Number_line.text()
+        choosen_num = self.Hostel_list.currentRow()
+        if choosen_num == 0:
+            dorm_mas = db.child("dormitories").order_by_key().equal_to("dormitory" + str(dorm_number)).get().each()
+            if dorm_mas != []:
+                from error_del_hostel import Ui_Error
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_Error()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
     def openHostel(self):
         from hostel import Ui_hostel
@@ -267,7 +291,7 @@ class Ui_del_hostel(object):
         self.back_to_hostel_btn.setFont(font)
         self.back_to_hostel_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_hostel_btn.setObjectName("back_to_hostel_btn")
-
+        self.find_hostel_btn.clicked.connect(self.fill_list)
         self.back_to_hostel_btn.clicked.connect(self.openHostel)
         self.back_to_hostel_btn.clicked.connect(del_hostel.close)
 
@@ -329,6 +353,7 @@ class Ui_del_hostel(object):
         self.del_hostel_btn.setFont(font)
         self.del_hostel_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.del_hostel_btn.setObjectName("del_hostel_btn")
+        self.del_hostel_btn.clicked.connect(self.del_hostel)
         self.Hostel_list = QtWidgets.QListWidget(self.centralwidget)
         self.Hostel_list.setGeometry(QtCore.QRect(40, 220, 400, 60))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)

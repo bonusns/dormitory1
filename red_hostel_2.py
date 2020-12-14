@@ -9,11 +9,28 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_red_hostel_2(object):
 
+    def fill_line(self):
+        db = dbd.init_firebase()
+        buffer = db.child("dormitories").child("buffer1").get().val()
+        self.Number_line.setText(str(buffer["number"]))
+        self.Addres_line.setText(buffer["Адрес"])
+
+    def edit(self):
+        number = self.Number_line.text()
+        new_address = self.Addres_line.text()
+        db = dbd.init_firebase()
+        db.child("dormitories").child("dormitory"+str(number)).update({"Адрес":new_address})
+
+    def del_buffer(self):
+        db = dbd.init_firebase()
+        db.child("dormitories").child("buffer1").remove()
+
     def openRed(self):
+        self.del_buffer()
         from red_hostel import Ui_red_hostel
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_red_hostel()
@@ -267,7 +284,7 @@ class Ui_red_hostel_2(object):
         self.back_to_red_hostel_btn.setFont(font)
         self.back_to_red_hostel_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_red_hostel_btn.setObjectName("back_to_red_hostel_btn")
-
+        self.red_hostel_btn.clicked.connect(self.edit)
         self.back_to_red_hostel_btn.clicked.connect(self.openRed)
         self.back_to_red_hostel_btn.clicked.connect(red_hostel_2.close)
 
@@ -279,6 +296,7 @@ class Ui_red_hostel_2(object):
 
         self.retranslateUi(red_hostel_2)
         QtCore.QMetaObject.connectSlotsByName(red_hostel_2)
+        self.fill_line()
 
     def retranslateUi(self, red_hostel_2):
         _translate = QtCore.QCoreApplication.translate

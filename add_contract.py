@@ -14,8 +14,7 @@ import database as dbd
 class Ui_add_contract(object):
     def set_code(self):
         num = dbd.get_last_contract_num()
-        print(num)
-        self.code_line.setText("ОБ-" + str(num+1))
+        self.code_line.setText("ОБ - " + str(num+1))
 
     def del_buff(self):
         dbd.delete_buffer()
@@ -25,12 +24,13 @@ class Ui_add_contract(object):
         mas = dbd.buffer()
         for person in mas:
             key = person[0]
+            code_n =self.code_line.text()
             date_start = self.start_date_line.text()
             date_end =  self.end_date_line.text()
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
             sex = str(person[1]['Пол'])
-        dbd.add_contract(key, date_start, date_end, room, cost, sex)
+        dbd.add_contract(key, date_start, date_end, room, cost, sex,code= code_n)
 
     def openAdd_Client(self):
         from Add_Client import Ui_add_client
@@ -371,7 +371,7 @@ class Ui_add_contract(object):
         self.add_contract_btn.setObjectName("add_contract_btn")
 
         self.add_contract_btn.clicked.connect(self.take_student_id)
-        self.add_contract_btn.clicked.connect(self.del_buff)
+       # self.add_contract_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_add_client_btn = QtWidgets.QPushButton(self.layoutWidget)
@@ -422,6 +422,7 @@ class Ui_add_contract(object):
         self.back_to_add_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_add_client_btn.setObjectName("back_to_add_client_btn")
 
+        self.back_to_add_client_btn.clicked.connect(self.del_buff)
         self.back_to_add_client_btn.clicked.connect(self.openAdd_Client)
         self.back_to_add_client_btn.clicked.connect(add_contract.close)
 

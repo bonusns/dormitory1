@@ -44,10 +44,12 @@ class Ui_del_client(object):
         for person in mas:
             if i == n-1:
                 dic = person[0]
-                if person[1]['Общежитие'] != 0:
-                    way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + person[0])
+                if person[1]['Общежитие'] != "":
+                    way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
+                    print(way)
                 else:
                     way = "queue"+"/" + person[0]
+                    print(way)
                 break
             i = i+1
         dbd.delete_student(dic, way)

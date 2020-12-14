@@ -9,9 +9,37 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_red_contract_3(object):
+
+    def del_buff(self):
+        dbd.delete_contract_buffer()
+
+    def red(self):
+        # Вытаскивает из буфера и заполняет поля данными
+        mas = dbd.contract_buffer()
+        for person in mas:
+            self.start_date_line.setText(person[1]['Дата начала'])
+            self.end_date_line.setText(person[1]['Дата_конца'])
+            self.code_line.setText(person[1]['Шифр'])
+            self.CostBox.setCurrentText(person[1]['Стоимость'])
+            self.RoomBox.setCurrentText(person[1]['Комната'])
+
+    def take_student_id(self):
+        # Вытаскивает из буфера и заполняет поля данными
+        mas = dbd.contract_buffer()
+        for person in mas:
+            print(person)
+            key = person[0]
+            code_n = self.code_line.text()
+            date_start = self.start_date_line.text()
+            date_end = self.end_date_line.text()
+            room = self.RoomBox.currentText()
+            cost = self.CostBox.currentText()
+            sex = "Женский"
+        dbd.edit_contract(code_n, date_start=date_start, date_end=date_end, room=room, cost=cost)
+
 
     def openRedContract(self):
         from red_contract import Ui_red_contract
@@ -290,12 +318,10 @@ class Ui_red_contract_3(object):
         self.RoomBox.setStatusTip("")
         self.RoomBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.RoomBox.setEditable(False)
-        self.RoomBox.setMaxCount(2)
+        self.RoomBox.setMaxCount(30)
         self.RoomBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomBox.setModelColumn(0)
         self.RoomBox.setObjectName("RoomBox")
-        self.RoomBox.addItem("")
-        self.RoomBox.addItem("")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(120, 20, 431, 42))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -350,6 +376,10 @@ class Ui_red_contract_3(object):
         self.red_contract_btn.setFont(font)
         self.red_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_contract_btn.setObjectName("red_contract_btn")
+
+        self.red_contract_btn.clicked.connect(self.take_student_id)
+
+
         self.horizontalLayout.addWidget(self.red_contract_btn)
         self.back_to_red_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_red_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -398,6 +428,7 @@ class Ui_red_contract_3(object):
         self.back_to_red_contract_btn.setFont(font)
         self.back_to_red_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_red_contract_btn.setObjectName("back_to_red_contract_btn")
+        self.back_to_red_contract_btn.clicked.connect(self.del_buff)
 
         self.back_to_red_contract_btn.clicked.connect(self.openRedContract)
         self.back_to_red_contract_btn.clicked.connect(red_contract_3.close)
@@ -452,7 +483,6 @@ class Ui_red_contract_3(object):
         self.CostBox.setStatusTip("")
         self.CostBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.CostBox.setEditable(False)
-        self.CostBox.setMaxCount(2)
         self.CostBox.setIconSize(QtCore.QSize(16, 16))
         self.CostBox.setModelColumn(0)
         self.CostBox.setObjectName("CostBox")
@@ -468,6 +498,8 @@ class Ui_red_contract_3(object):
         self.CostBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(red_contract_3)
 
+        self.red()
+
     def retranslateUi(self, red_contract_3):
         _translate = QtCore.QCoreApplication.translate
         red_contract_3.setWindowTitle(_translate("red_contract_3", "Выбранный договор"))
@@ -476,12 +508,16 @@ class Ui_red_contract_3(object):
         self.label_3.setText(_translate("red_contract_3", "Дата окончания"))
         self.label_6.setText(_translate("red_contract_3", "Комната"))
         self.label_7.setText(_translate("red_contract_3", "Стоимость"))
-        self.RoomBox.setItemText(0, _translate("red_contract_3", "Бюджет"))
-        self.RoomBox.setItemText(1, _translate("red_contract_3", "Платное обучение"))
+        room_mas = dbd.list_of_empty_rooms_by_sex("Мужской")
+        i = 0
+        for fac in room_mas:
+            print(fac[1])
+            self.RoomBox.addItem(f"{fac[1]}")
+            i += 1
         self.red_contract_btn.setText(_translate("red_contract_3", "Отредактировать"))
         self.back_to_red_contract_btn.setText(_translate("red_contract_3", "Вернуться к поиску договора"))
-        self.CostBox.setItemText(0, _translate("red_contract_3", "Бюджет"))
-        self.CostBox.setItemText(1, _translate("red_contract_3", "Платное обучение"))
+        self.CostBox.setItemText(0, _translate("red_contract_3", "500"))
+        self.CostBox.setItemText(1, _translate("red_contract_3", "300"))
 
 
 if __name__ == "__main__":

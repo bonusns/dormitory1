@@ -9,9 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_list_cost(object):
+
+    def fill_facility_list(self):
+        fac_mas = dbd.list_of_facilities()
+        i = 0
+        for fac in fac_mas:
+            item = self.Cost_info.item(i)
+            item.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
+            i += 1
 
     def openCost(self):
         from cost import Ui_Cost
@@ -162,6 +170,7 @@ class Ui_list_cost(object):
 
         self.retranslateUi(list_cost)
         QtCore.QMetaObject.connectSlotsByName(list_cost)
+        self.fill_facility_list()
 
     def retranslateUi(self, list_cost):
         _translate = QtCore.QCoreApplication.translate
@@ -170,22 +179,22 @@ class Ui_list_cost(object):
         self.back_to_cost_btn.setText(_translate("list_cost", "Вернуться в меню стоимостей"))
         __sortingEnabled = self.Cost_info.isSortingEnabled()
         self.Cost_info.setSortingEnabled(False)
-        item = self.Cost_info.item(0)
-        item.setText(_translate("list_cost", "Стоимость: 560 р; Льготы: Без льгот"))
-        item = self.Cost_info.item(1)
-        item.setText(_translate("list_cost", "Стоимость: 600 р; Льготы: Без льгот"))
-        item = self.Cost_info.item(2)
-        item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Инвалид"))
-        item = self.Cost_info.item(3)
-        item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Сирота"))
-        item = self.Cost_info.item(4)
-        item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: ЧАЭС"))
-        item = self.Cost_info.item(5)
-        item.setText(_translate("list_cost", "Стоимость: 280 р; Льготы: Без льгот"))
-        item = self.Cost_info.item(6)
-        item.setText(_translate("list_cost", "Стоимость: 300 р; Льготы: Без льгот"))
-        item = self.Cost_info.item(7)
-        item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Инвалид, Сирота"))
+        # item = self.Cost_info.item(0)
+        # item.setText(_translate("list_cost", "Стоимость: 560 р; Льготы: Без льгот"))
+        # item = self.Cost_info.item(1)
+        # item.setText(_translate("list_cost", "Стоимость: 600 р; Льготы: Без льгот"))
+        # item = self.Cost_info.item(2)
+        # item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Инвалид"))
+        # item = self.Cost_info.item(3)
+        # item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Сирота"))
+        # item = self.Cost_info.item(4)
+        # item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: ЧАЭС"))
+        # item = self.Cost_info.item(5)
+        # item.setText(_translate("list_cost", "Стоимость: 280 р; Льготы: Без льгот"))
+        # item = self.Cost_info.item(6)
+        # item.setText(_translate("list_cost", "Стоимость: 300 р; Льготы: Без льгот"))
+        # item = self.Cost_info.item(7)
+        # item.setText(_translate("list_cost", "Стоимость: 0 р; Льготы: Инвалид, Сирота"))
         self.Cost_info.setSortingEnabled(__sortingEnabled)
 
 

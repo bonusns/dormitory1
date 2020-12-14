@@ -351,8 +351,8 @@ class Ui_Facilities(object):
 
     def retranslateUi(self, Facilities):
         _translate = QtCore.QCoreApplication.translate
-        Facilities.setWindowTitle(_translate("Facilities", "Льготы"))
-        self.label.setText(_translate("Facilities", "Льготы"))
+        Facilities.setWindowTitle(_translate("Facilities", "Стоимости и льготы"))
+        self.label.setText(_translate("Facilities", "Стоимости и льготы"))
         self.add_facility_btn.setText(_translate("Facilities", "Добавить новую"))
         self.red_facility_btn.setText(_translate("Facilities", "Редактировать"))
         self.del_facility_btn.setText(_translate("Facilities", "Удалить"))

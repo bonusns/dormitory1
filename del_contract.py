@@ -9,9 +9,24 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_del_contract(object):
+
+    def fill_list(self):
+        '''заполняет список'''
+        self.Contract_list.clear()
+        fio = self.FIO_line.text()
+        mas = dbd.search_student_by_fio(fio)
+        i = 1
+        for person in mas:
+            print(person)
+            print(person[1]['Договор']['Шифр'])
+            self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
+                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                     + 'Комната: ' + str(person[1]['Комната']) \
+                                     + '    Пол: ' + str(person[1]['Пол']) + '\n')
 
     def openContract(self):
         from contract import Ui_contract

@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import add_hostel, red_hostel, rooms, del_hostel, list_hostel
 
 class Ui_hostel(object):
+
     def openRoom(self):
         from rooms import Ui_Rooms
         self.window = QtWidgets.QMainWindow()

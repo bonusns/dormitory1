@@ -9,9 +9,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_add_cost(object):
+
+    def add_facility(self):
+        name = self.Facilities_line.text()
+        cost = self.Cost_line.text()
+        dbd.add_facility(name,cost)
 
     def openCost(self):
         from cost import Ui_Cost
@@ -213,6 +218,7 @@ class Ui_add_cost(object):
         self.add_cost_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_cost_btn.setObjectName("add_cost_btn")
         self.horizontalLayout.addWidget(self.add_cost_btn)
+        self.add_cost_btn.clicked.connect(self.add_facility)
         self.back_to_cost_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_cost_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
@@ -275,7 +281,6 @@ class Ui_add_cost(object):
         add_cost.setWindowTitle(_translate("add_cost", "Добавление стоимости"))
         self.label.setText(_translate("add_cost", "Стоимость"))
         self.label_2.setText(_translate("add_cost", "Льготы"))
-        self.Facilities_line.setText(_translate("add_cost", "Инвалид, потеря кормильца, сирота"))
         self.add_cost_btn.setText(_translate("add_cost", "Добавить"))
         self.back_to_cost_btn.setText(_translate("add_cost", "Вернуться в меню стоимостей"))
 

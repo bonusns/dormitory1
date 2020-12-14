@@ -10,11 +10,35 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import red_hostel_2
+import database as dbd
 
 class Ui_red_hostel(object):
 
+    def fill_list(self):
+        dorm_number = self.Number_line.text()
+        db = dbd.init_firebase()
+        dorm_mas = db.child("dormitories").order_by_key().equal_to("dormitory" + str(dorm_number)).get().each()
+        if dorm_mas == []:
+            self.Number_line.clear()
+        else:
+            dorm = dorm_mas[0].val()
+            self.Hostel_list.addItem(f"Название: {dorm['name']}\nАдрес: {dorm['Адрес']}")
+
+    def edit_hostel(self):
+        db = dbd.init_firebase()
+        dorm_number = self.Number_line.text()
+        choosen_num = self.Hostel_list.currentRow()
+        if choosen_num == 0:
+            dorm_mas = db.child("dormitories").order_by_key().equal_to("dormitory" + str(dorm_number)).get().each()
+            if dorm_mas != []:
+                dorm = dorm_mas[0].val()
+                buffer_mas = {"number":dorm["number"],"Адрес":dorm["Адрес"]}
+                db.child("dormitories").child("buffer1").set(buffer_mas)
+
+
     def openRed(self):
         from red_hostel_2 import Ui_red_hostel_2
+        self.edit_hostel()
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_red_hostel_2()
         self.ui.setupUi(self.window)
@@ -226,6 +250,8 @@ class Ui_red_hostel(object):
         self.find_hostel_btn.setFont(font)
         self.find_hostel_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.find_hostel_btn.setObjectName("find_hostel_btn")
+
+        self.find_hostel_btn.clicked.connect(self.fill_list)
 
 
 
