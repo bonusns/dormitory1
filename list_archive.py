@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'list_facilities.ui'
+# Form implementation generated from reading ui file 'list_contract.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -11,33 +11,33 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
 
-class Ui_list_facilities(object):
+class Ui_list_contract(object):
 
-    def fill_facility_list(self):
-        fac_mas = dbd.list_of_facilities()
-        i = 0
-        fac_mas =fac_mas[0]
-        for fac in fac_mas:
-            item = QtWidgets.QListWidgetItem()
-            self.Facilities_info.addItem(item)
-            pole = self.Facilities_info.item(i)
-            pole.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
-            i += 1
+    def fill_list(self):
+        '''заполняет список'''
+        mas = dbd.list_of_contracts()
 
+        i = 1
+        for person in mas:
+            key = dbd.search_student_by_id(person[0])
+            self.Contract_info.addItem(str(i) + '. ФИО: ' + key[1]['ФИО'] +";" + '   Договор: ' +str(person[2]['Шифр']) +";" +'\n'
+                                     + 'Дата начала: ' + str(person[2]['Дата начала']) +";" + \
+                                     '  Дата конца: ' + str(person[2]['Дата конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
+            i = i + 1
 
-    def openHelp(self):
-        from facilities import Ui_Facilities
+    def openContract(self):
+        from contract import Ui_contract
         self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Facilities()
+        self.ui = Ui_contract()
         self.ui.setupUi(self.window)
         self.window.show()
 
-    def setupUi(self, list_facilities):
-        list_facilities.setObjectName("list_facilities")
-        list_facilities.resize(480, 291)
-        list_facilities.setMinimumSize(QtCore.QSize(300, 291))
-        list_facilities.setMaximumSize(QtCore.QSize(1000, 500))
-        self.centralwidget = QtWidgets.QWidget(list_facilities)
+    def setupUi(self, list_contract):
+        list_contract.setObjectName("list_contract")
+        list_contract.resize(480, 491)
+        list_contract.setMinimumSize(QtCore.QSize(300, 300))
+        list_contract.setMaximumSize(QtCore.QSize(1000, 500))
+        self.centralwidget = QtWidgets.QWidget(list_contract)
         self.centralwidget.setObjectName("centralwidget")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(20, 20, 452, 42))
@@ -46,9 +46,9 @@ class Ui_list_facilities(object):
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(17)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.import_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
-        self.import_facilities_btn.setMinimumSize(QtCore.QSize(213, 40))
-        self.import_facilities_btn.setMaximumSize(QtCore.QSize(213, 16777215))
+        self.import_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
+        self.import_contract_btn.setMinimumSize(QtCore.QSize(213, 40))
+        self.import_contract_btn.setMaximumSize(QtCore.QSize(213, 16777215))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -86,18 +86,18 @@ class Ui_list_facilities(object):
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.import_facilities_btn.setPalette(palette)
+        self.import_contract_btn.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.import_facilities_btn.setFont(font)
-        self.import_facilities_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
-        self.import_facilities_btn.setObjectName("import_facilities_btn")
-        self.horizontalLayout.addWidget(self.import_facilities_btn)
-        self.back_to_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
-        self.back_to_facilities_btn.setMinimumSize(QtCore.QSize(220, 40))
-        self.back_to_facilities_btn.setMaximumSize(QtCore.QSize(220, 16777215))
+        self.import_contract_btn.setFont(font)
+        self.import_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
+        self.import_contract_btn.setObjectName("import_contract_btn")
+        self.horizontalLayout.addWidget(self.import_contract_btn)
+        self.back_to_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
+        self.back_to_contract_btn.setMinimumSize(QtCore.QSize(220, 40))
+        self.back_to_contract_btn.setMaximumSize(QtCore.QSize(220, 16777215))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -135,65 +135,49 @@ class Ui_list_facilities(object):
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.back_to_facilities_btn.setPalette(palette)
+        self.back_to_contract_btn.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.back_to_facilities_btn.setFont(font)
-        self.back_to_facilities_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
-        self.back_to_facilities_btn.setObjectName("back_to_facilities_btn")
+        self.back_to_contract_btn.setFont(font)
+        self.back_to_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
+        self.back_to_contract_btn.setObjectName("back_to_contract_btn")
 
-        self.back_to_facilities_btn.clicked.connect(self.openHelp)
-        self.back_to_facilities_btn.clicked.connect(list_facilities.close)
+        self.back_to_contract_btn.clicked.connect(self.openContract)
+        self.back_to_contract_btn.clicked.connect(list_contract.close)
 
-        self.horizontalLayout.addWidget(self.back_to_facilities_btn)
-        self.Facilities_info = QtWidgets.QListWidget(self.centralwidget)
-        self.Facilities_info.setGeometry(QtCore.QRect(20, 89, 440, 171))
-        self.Facilities_info.setAutoFillBackground(False)
-        self.Facilities_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
+        self.horizontalLayout.addWidget(self.back_to_contract_btn)
+        self.Contract_info = QtWidgets.QListWidget(self.centralwidget)
+        self.Contract_info.setGeometry(QtCore.QRect(20, 89, 440, 371))
+        self.Contract_info.setAutoFillBackground(False)
+        self.Contract_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "selection-color: rgb(85, 170, 255);")
-        self.Facilities_info.setObjectName("Facilities_info")
-        # item = QtWidgets.QListWidgetItem()
-        # self.Facilities_info.addItem(item)
-        # item = QtWidgets.QListWidgetItem()
-        # self.Facilities_info.addItem(item)
-        # item = QtWidgets.QListWidgetItem()
-        # self.Facilities_info.addItem(item)
-        # item = QtWidgets.QListWidgetItem()
-        # self.Facilities_info.addItem(item)
-        # item = QtWidgets.QListWidgetItem()
-        # self.Facilities_info.addItem(item)
-        list_facilities.setCentralWidget(self.centralwidget)
-        self.retranslateUi(list_facilities)
-        QtCore.QMetaObject.connectSlotsByName(list_facilities)
-        self.fill_facility_list()
+        self.Contract_info.setObjectName("Contract_info")
 
-    def retranslateUi(self, list_facilities):
+        list_contract.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(list_contract)
+        self.statusbar.setObjectName("statusbar")
+        list_contract.setStatusBar(self.statusbar)
+
+        self.retranslateUi(list_contract)
+        QtCore.QMetaObject.connectSlotsByName(list_contract)
+     #   self.fill_list()
+    def retranslateUi(self, list_contract):
         _translate = QtCore.QCoreApplication.translate
-        list_facilities.setWindowTitle(_translate("list_facilities", "Список льгот"))
-        self.import_facilities_btn.setText(_translate("list_facilities", "Экспортировать в Excel"))
-        self.back_to_facilities_btn.setText(_translate("list_facilities", "Вернуться в меню льгот"))
-        __sortingEnabled = self.Facilities_info.isSortingEnabled()
-        self.Facilities_info.setSortingEnabled(False)
-        # item = self.Facilities_info.item(0)
-        # item.setText(_translate("list_facilities", "Наименование: Без льгот; Размер скидки: 0%"))
-        # item = self.Facilities_info.item(1)
-        # item.setText(_translate("list_facilities", "Наименование: Инвалид; Размер скидки: 100%"))
-        # item = self.Facilities_info.item(2)
-        # item.setText(_translate("list_facilities", "Наименование: Сирота; Размер скидки: 100%"))
-        # item = self.Facilities_info.item(3)
-        # item.setText(_translate("list_facilities", "Наименование: ЧАЭС; Размер скидки: 100%"))
-        # item = self.Facilities_info.item(4)
-        # item.setText(_translate("list_facilities", "Наименование: Потеря кормильца; Размер скидки: 50%"))
-        self.Facilities_info.setSortingEnabled(__sortingEnabled)
+        list_contract.setWindowTitle(_translate("list_contract", "Архив"))
+        self.import_contract_btn.setText(_translate("list_contract", "Экспортировать в Excel"))
+        self.back_to_contract_btn.setText(_translate("list_contract", "Вернуться в меню договора"))
+        __sortingEnabled = self.Contract_info.isSortingEnabled()
+        self.Contract_info.setSortingEnabled(False)
+        self.Contract_info.setSortingEnabled(__sortingEnabled)
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    list_facilities = QtWidgets.QMainWindow()
-    ui = Ui_list_facilities()
-    ui.setupUi(list_facilities)
-    list_facilities.show()
+    list_contract = QtWidgets.QMainWindow()
+    ui = Ui_list_contract()
+    ui.setupUi(list_contract)
+    list_contract.show()
     sys.exit(app.exec_())

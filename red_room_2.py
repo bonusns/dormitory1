@@ -33,6 +33,11 @@ class Ui_red_room_2(object):
         status = self.RoomTipeBox.currentText()
         capacity = int(self.RoomPlacesBox.currentText())
         db.child("dormitories").child("dormitory"+str(dorm_number)).child("rooms").child(room_number).update({"capacity":capacity,"status":status})
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def del_buffer(self):
         db = dbd.init_firebase()
@@ -298,6 +303,10 @@ class Ui_red_room_2(object):
         self.RoomPlacesBox.addItem("")
         self.room_number_line = QtWidgets.QLineEdit(self.centralwidget)
         self.room_number_line.setGeometry(QtCore.QRect(220, 80, 300, 30))
+
+        self.room_number_line.setReadOnly(True)
+
+
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)

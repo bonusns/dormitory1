@@ -34,6 +34,7 @@ class Ui_del_room(object):
             i += 1
 
     def search_room(self):
+        self.Room_list.clear()
         room_number = self.RoomNumber.currentText()
         dorm_number = self.HostelNumber.currentText()
         room_data = dbd.search_room(dorm_number,room_number)
@@ -52,7 +53,11 @@ class Ui_del_room(object):
             if "members" not in room_data:
                 dbd.remove_room(dorm_number,room_number)
             else:
-                print("Вы не можете удалить пока комната не пуста!")
+                from Error_room import Ui_Error
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_Error()
+                self.ui.setupUi(self.window)
+                self.window.show()
             self.Room_list.clear()
             self.RoomNumber.clear()
 
@@ -66,9 +71,9 @@ class Ui_del_room(object):
 
     def setupUi(self, del_room):
         del_room.setObjectName("del_room")
-        del_room.resize(630, 300)
-        del_room.setMinimumSize(QtCore.QSize(630, 300))
-        del_room.setMaximumSize(QtCore.QSize(630, 300))
+        del_room.resize(660, 320)
+        del_room.setMinimumSize(QtCore.QSize(630, 320))
+        del_room.setMaximumSize(QtCore.QSize(700, 320))
         self.centralwidget = QtWidgets.QWidget(del_room)
         self.centralwidget.setObjectName("centralwidget")
         self.label_room = QtWidgets.QLabel(self.centralwidget)
@@ -209,7 +214,7 @@ class Ui_del_room(object):
         self.label_FIO_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_FIO_2.setObjectName("label_FIO_2")
         self.del_room_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.del_room_btn.setGeometry(QtCore.QRect(370, 210, 195, 40))
+        self.del_room_btn.setGeometry(QtCore.QRect(390, 220, 195, 40))
         self.del_room_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
@@ -257,14 +262,14 @@ class Ui_del_room(object):
         self.del_room_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.del_room_btn.setObjectName("del_room_btn")
         self.Room_list = QtWidgets.QListWidget(self.centralwidget)
-        self.Room_list.setGeometry(QtCore.QRect(60, 200, 240, 60))
+        self.Room_list.setGeometry(QtCore.QRect(60, 190, 300, 120))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Room_list.sizePolicy().hasHeightForWidth())
         self.Room_list.setSizePolicy(sizePolicy)
         self.Room_list.setMinimumSize(QtCore.QSize(240, 30))
-        self.Room_list.setMaximumSize(QtCore.QSize(240, 60))
+        self.Room_list.setMaximumSize(QtCore.QSize(400, 200))
         self.Room_list.setSizeIncrement(QtCore.QSize(0, 30))
         self.Room_list.setBaseSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
@@ -325,7 +330,7 @@ class Ui_del_room(object):
         self.RoomNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
 "")
         self.RoomNumber.setEditable(False)
-        self.RoomNumber.setMaxCount(10)
+        self.RoomNumber.setMaxCount(100)
         self.RoomNumber.setIconSize(QtCore.QSize(16, 16))
         self.RoomNumber.setModelColumn(0)
         self.RoomNumber.setObjectName("RoomNumber")

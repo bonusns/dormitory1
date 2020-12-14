@@ -18,7 +18,11 @@ class Ui_red_client(object):
         '''заполняет список'''
         self.Client_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio !="":
+            mas = dbd.search_student_by_fio(fio)
+        if code !="":
+            mas =dbd.search_student_by_code(code)
         i = 1
         for person in mas:
             self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
@@ -26,11 +30,16 @@ class Ui_red_client(object):
                                      + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                      + 'Комната: ' + str(person[1]['Комната']) \
                                      + '    Пол: ' + str(person[1]['Пол']) + '\n')
+            i = i + 1
 
     def redaction(self):
         # добавляет в буфер студента, который будет редактироваться, в red_client_2 из буфера забираются данные и буфер удаляется
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Client_list.currentRow()
         i = -1
         for person in mas:
@@ -43,9 +52,14 @@ class Ui_red_client(object):
                 address = person[1]['Адрес регистрации']
                 educ_form = person[1]['Форма обучения']
                 sex = person[1]['Пол']
+                if 'Комната' in person[1]:
+                    room = person[1]['Комната']
+                else:
+                    room = ''
             i = i + 1
-        dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex, hostel)
+        dbd.add_student_buffer(dic,fio, phone, passport, address, educ_form, sex,room, hostel)
         self.FIO_line.clear()
+        self.Contract_number_line.clear()
         self.Client_list.clear()
 
     def openClient(self):

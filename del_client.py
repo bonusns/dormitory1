@@ -25,35 +25,44 @@ class Ui_del_client(object):
         '''заполняет список'''
         self.Client_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
             self.Client_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
-                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n'  \
+                                     + 'Общежитие: ' + str(person[1]['Общежитие']) + '\n' \
                                      + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                      + 'Комната: ' + str(person[1]['Комната']) \
                                      + '    Пол: ' + str(person[1]['Пол']) + '\n')
             i = i + 1
 
-
     def delete_one(self):
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Client_list.currentRow()
         i = -1
         for person in mas:
             if i == n-1:
                 dic = person[0]
-                if person[1]['Общежитие'] != "":
-                    way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
-                    print(way)
+                if person[1]['Общежитие'] != '':
+                    if person[1]['Комната'] != 'queue' and '':
+                        way = "dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
+                    else:
+                        way = "dormitory"+str(person[1]['Общежитие']) + "/"+ "rooms"+"/" + "queue"+"/" + person[0]
                 else:
                     way = "queue"+"/" + person[0]
-                    print(way)
                 break
             i = i+1
         dbd.delete_student(dic, way)
         self.FIO_line.clear()
+        self.Contract_number_line.clear()
         self.Client_list.clear()
 
 

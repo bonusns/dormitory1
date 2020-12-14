@@ -16,8 +16,12 @@ class Ui_del_facility(object):
     def del_facility(self):
         item = self.NameBox.currentText()
         n = self.NameBox.currentIndex()
-        print(n)
-        dbd.remove_facility(item)
+        dbd.remove_facility(item.split(" -")[0])
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
        #self.NameBox.
 
 
@@ -25,7 +29,6 @@ class Ui_del_facility(object):
         fac_mas = dbd.list_of_facilities()
         i = 0
         for fac in fac_mas:
-            print(fac)
             self.NameBox.setItemText(i,f"{fac[0]} – {fac[1]}")
             i += 1
 
@@ -45,7 +48,7 @@ class Ui_del_facility(object):
         self.centralwidget = QtWidgets.QWidget(del_facility)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(60, 80, 140, 30))
+        self.label.setGeometry(QtCore.QRect(60, 80, 146, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -229,10 +232,10 @@ class Ui_del_facility(object):
         self.back_to_facilities_btn.setText(_translate("del_facility", "Вернуться в меню"))
         fac_mas = dbd.list_of_facilities()
         i = 0
-        for fac in fac_mas:
-            self.NameBox.addItem(f"{fac[0]}")
+        for i in range(dbd.list_of_facilities()[1]):
+            self.NameBox.addItem(f"{fac_mas[0][i][0]} - {fac_mas[0][i][1]}")
             # self.NameBox.setItemText(i, _translate("del_facility", f"{fac[0]} – {fac[1]}"))
-            i += 1
+
 
 
 

@@ -175,7 +175,7 @@ class Ui_list_cost(object):
     def retranslateUi(self, list_cost):
         _translate = QtCore.QCoreApplication.translate
         list_cost.setWindowTitle(_translate("list_cost", "Список стоимостей"))
-        self.import_cost_btn.setText(_translate("list_cost", "Импортировать в Excel"))
+        self.import_cost_btn.setText(_translate("list_cost", "Экспортировать в Excel"))
         self.back_to_cost_btn.setText(_translate("list_cost", "Вернуться в меню стоимостей"))
         __sortingEnabled = self.Cost_info.isSortingEnabled()
         self.Cost_info.setSortingEnabled(False)

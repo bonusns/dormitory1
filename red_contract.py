@@ -9,42 +9,62 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import red_contract_3
 import database as dbd
 
 class Ui_red_contract(object):
+
+    def del_buff(self):
+        dbd.delete_contract_buffer()
 
     def fill_list(self):
         '''заполняет список'''
         self.Contract_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
-            print(person)
-            print(person[1]['Договор']['Шифр'])
-            self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
-                                     + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
-                                     + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
-                                     + 'Комната: ' + str(person[1]['Комната']) \
-                                     + '    Пол: ' + str(person[1]['Пол']) + '\n')
+            if "Договор" in person[1].keys():
+                self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                        + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
+                                        + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                        + 'Комната: ' + str(person[1]['Комната']) \
+                                        + '    Пол: ' + str(person[1]['Пол']) + '\n')
+            else:
+                self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                           + 'Общежитие: ' + str(person[1]['Общежитие']) + '    Договор: ' + str('') + \
+                                           '\n' + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                           + 'Комната: ' + str(person[1]['Комната']) \
+                                           + '    Пол: ' + str(person[1]['Пол']) + '\n')
 
     def redaction(self):
         # добавляет в буфер студента, который будет редактироваться, в red_contract_3 из буфера забираются данные и буфер удаляется
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         n = self.Contract_list.currentRow()
         i = -1
         for person in mas:
             if i == n - 1:
                 dic = person[0]
                 fio = str(person[1]['ФИО'])
-                code = str(person[1]['Договор']['Шифр'])
-                start_date = str(person[1]['Договор']['Дата начала'])
-                end_date = str(person[1]['Договор']['Дата_конца'])
-                cost = str(person[1]['Договор']['Стоимость'])
+                if "Договор" in person[1].keys():
+                    code = str(person[1]['Договор']['Шифр'])
+                    start_date = str(person[1]['Договор']['Дата начала'])
+                    end_date = str(person[1]['Договор']['Дата конца'])
+                    cost = str(person[1]['Договор']['Стоимость'])
+                else:
+                    code = ''
+                    start_date = ''
+                    end_date = ''
+                    cost = ''
                 room = str(person[1]['Комната'])
-                print(fio)
 
             i = i + 1
         dbd.add_contract_buffer(dic,fio,start_date,end_date,room,cost, code)

@@ -70,9 +70,9 @@ class Ui_red_room(object):
 
     def setupUi(self, red_room):
         red_room.setObjectName("red_room")
-        red_room.resize(630, 300)
+        red_room.resize(660, 320)
         red_room.setMinimumSize(QtCore.QSize(630, 300))
-        red_room.setMaximumSize(QtCore.QSize(630, 300))
+        red_room.setMaximumSize(QtCore.QSize(700, 400))
         self.centralwidget = QtWidgets.QWidget(red_room)
         self.centralwidget.setObjectName("centralwidget")
         self.label_room = QtWidgets.QLabel(self.centralwidget)
@@ -210,7 +210,7 @@ class Ui_red_room(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.red_room_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.red_room_btn.setGeometry(QtCore.QRect(370, 210, 195, 40))
+        self.red_room_btn.setGeometry(QtCore.QRect(390, 220, 195, 40))
         self.red_room_btn.setMinimumSize(QtCore.QSize(150, 40))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
@@ -261,17 +261,17 @@ class Ui_red_room(object):
         self.red_room_btn.clicked.connect(self.red_room)
         self.find_room_btn.clicked.connect(self.search_room)
         self.red_room_btn.clicked.connect(red_room.close)
-        
+
 
         self.Room_list = QtWidgets.QListWidget(self.centralwidget)
-        self.Room_list.setGeometry(QtCore.QRect(60, 200, 240, 60))
+        self.Room_list.setGeometry(QtCore.QRect(60, 190, 300, 120))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Room_list.sizePolicy().hasHeightForWidth())
         self.Room_list.setSizePolicy(sizePolicy)
-        self.Room_list.setMinimumSize(QtCore.QSize(240, 30))
-        self.Room_list.setMaximumSize(QtCore.QSize(240, 60))
+        self.Room_list.setMinimumSize(QtCore.QSize(300, 30))
+        self.Room_list.setMaximumSize(QtCore.QSize(310, 120))
         self.Room_list.setSizeIncrement(QtCore.QSize(0, 30))
         self.Room_list.setBaseSize(QtCore.QSize(0, 30))
         font = QtGui.QFont()
@@ -332,7 +332,7 @@ class Ui_red_room(object):
         self.RoomNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
 "")
         self.RoomNumber.setEditable(False)
-        self.RoomNumber.setMaxCount(10)
+        self.RoomNumber.setMaxCount(100)
         self.RoomNumber.setIconSize(QtCore.QSize(16, 16))
         self.RoomNumber.setModelColumn(0)
         self.RoomNumber.setObjectName("RoomNumber")
@@ -386,7 +386,7 @@ class Ui_red_room(object):
         self.HostelNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
 "")
         self.HostelNumber.setEditable(False)
-        self.HostelNumber.setMaxCount(10)
+        self.HostelNumber.setMaxCount(100)
         self.HostelNumber.setIconSize(QtCore.QSize(16, 16))
         self.HostelNumber.setModelColumn(0)
         self.HostelNumber.setObjectName("HostelNumber")

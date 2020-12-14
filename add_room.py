@@ -17,7 +17,15 @@ class Ui_add_room(object):
         room_number = self.room_number_line.text()
         dorm_number = int(self.RoomHostelNumber.currentText())
         capacity = int(self.RoomPlacesBox.currentText())
-        dbd.add_room(dorm_number,room_number,capacity)
+        room_list = dbd.list_of_room_num(dorm_number)
+        if str(room_number) not in room_list:
+            dbd.add_room(dorm_number,room_number,capacity)
+        else:
+            from error_add_room import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
 
     def fill_dorm_data(self):
         dorm_mas = dbd.list_of_dormitories()
@@ -268,8 +276,6 @@ class Ui_add_room(object):
         self.RoomPlacesBox.addItem("")
         self.RoomPlacesBox.addItem("")
         self.RoomPlacesBox.addItem("")
-        self.RoomPlacesBox.addItem("")
-        self.RoomPlacesBox.addItem("")
         self.room_number_line = QtWidgets.QLineEdit(self.centralwidget)
         self.room_number_line.setGeometry(QtCore.QRect(220, 80, 300, 30))
         palette = QtGui.QPalette()
@@ -410,8 +416,6 @@ class Ui_add_room(object):
         self.RoomPlacesBox.setItemText(0, _translate("add_room", "1"))
         self.RoomPlacesBox.setItemText(1, _translate("add_room", "2"))
         self.RoomPlacesBox.setItemText(2, _translate("add_room", "3"))
-        self.RoomPlacesBox.setItemText(3, _translate("add_room", "4"))
-        self.RoomPlacesBox.setItemText(4, _translate("add_room", "5"))
         self.room_number_line.setInputMask(_translate("add_room", "000"))
         self.label_4.setText(_translate("add_room", "Номер комнаты"))
 

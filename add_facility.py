@@ -18,6 +18,8 @@ class Ui_add_facility(object):
         name = self.Name_line.text()
         cost = self.discount_line.text()
         dbd.add_facility(name,cost)
+        self.Name_line.clear()
+        self.discount_line.clear()
 
 
     def openHelp(self):
@@ -35,7 +37,7 @@ class Ui_add_facility(object):
         self.centralwidget = QtWidgets.QWidget(add_facility)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(60, 80, 140, 30))
+        self.label.setGeometry(QtCore.QRect(60, 80, 146, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)

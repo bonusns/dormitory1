@@ -9,9 +9,21 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import database as dbd
 
 class Ui_list_contract(object):
+
+    def fill_list(self):
+        '''заполняет список'''
+        mas = dbd.list_of_contracts()
+
+        i = 1
+        for person in mas:
+            key = dbd.search_student_by_id(person[0])
+            self.Contract_info.addItem(str(i) + '. ФИО: ' + key[1]['ФИО'] +";" + '   Договор: ' +str(person[2]['Шифр']) +";" +'\n'
+                                     + 'Дата начала: ' + str(person[2]['Дата начала']) +";" + \
+                                     '  Дата конца: ' + str(person[2]['Дата конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
+            i = i + 1
 
     def openContract(self):
         from contract import Ui_contract
@@ -142,10 +154,7 @@ class Ui_list_contract(object):
         self.Contract_info.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "selection-color: rgb(85, 170, 255);")
         self.Contract_info.setObjectName("Contract_info")
-        item = QtWidgets.QListWidgetItem()
-        self.Contract_info.addItem(item)
-        item = QtWidgets.QListWidgetItem()
-        self.Contract_info.addItem(item)
+
         list_contract.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(list_contract)
         self.statusbar.setObjectName("statusbar")
@@ -153,18 +162,14 @@ class Ui_list_contract(object):
 
         self.retranslateUi(list_contract)
         QtCore.QMetaObject.connectSlotsByName(list_contract)
-
+        self.fill_list()
     def retranslateUi(self, list_contract):
         _translate = QtCore.QCoreApplication.translate
         list_contract.setWindowTitle(_translate("list_contract", "Список договоров"))
-        self.import_contract_btn.setText(_translate("list_contract", "Импортировать в Excel"))
+        self.import_contract_btn.setText(_translate("list_contract", "Экспортировать в Excel"))
         self.back_to_contract_btn.setText(_translate("list_contract", "Вернуться в меню договора"))
         __sortingEnabled = self.Contract_info.isSortingEnabled()
         self.Contract_info.setSortingEnabled(False)
-        item = self.Contract_info.item(0)
-        item.setText(_translate("list_contract", "addawd"))
-        item = self.Contract_info.item(1)
-        item.setText(_translate("list_contract", "dtyjhn"))
         self.Contract_info.setSortingEnabled(__sortingEnabled)
 
 

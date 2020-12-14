@@ -18,9 +18,10 @@ class Ui_list_hostel(object):
         mas = dbd.list_of_dormitories()
         i = 1
         for person in mas:
-            self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
-                                     + 'Адрес: ' + person[1]['Адрес'] + '\n')
-            i = i + 1
+            if 'name' in person[1]:
+                self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
+                                         + 'Адрес: ' + person[1]['Адрес'] + '\n')
+                i = i + 1
 
     def openHostel(self):
         from hostel import Ui_hostel
@@ -164,7 +165,7 @@ class Ui_list_hostel(object):
     def retranslateUi(self, list_hostel):
         _translate = QtCore.QCoreApplication.translate
         list_hostel.setWindowTitle(_translate("list_hostel", "Список общежитий"))
-        self.import_hostel_btn.setText(_translate("list_hostel", "Импортировать в Excel"))
+        self.import_hostel_btn.setText(_translate("list_hostel", "Экспортировать в Excel"))
         self.back_to_hostel_btn.setText(_translate("list_hostel", "Вернуться в меню общежитий"))
         __sortingEnabled = self.hostel_info.isSortingEnabled()
         self.hostel_info.setSortingEnabled(False)

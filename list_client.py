@@ -180,7 +180,7 @@ class Ui_list_client(object):
     def retranslateUi(self, list_client):
         _translate = QtCore.QCoreApplication.translate
         list_client.setWindowTitle(_translate("list_client", "Список клиентов"))
-        self.import_client_btn.setText(_translate("list_client", "Импортировать в Excel"))
+        self.import_client_btn.setText(_translate("list_client", "Экспортировать в Excel"))
         self.back_to_client_btn.setText(_translate("list_client", "Вернуться в меню клиента"))
         __sortingEnabled = self.Client_info.isSortingEnabled()
         self.Client_info.setSortingEnabled(False)

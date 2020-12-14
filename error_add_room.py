@@ -72,7 +72,7 @@ class Ui_Error(object):
         self.add_client_btn.clicked.connect(Error.close)
 
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(80, 20, 270, 40))
+        self.label.setGeometry(QtCore.QRect(127, 10, 240, 45))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
@@ -86,9 +86,9 @@ class Ui_Error(object):
 
     def retranslateUi(self, Error):
         _translate = QtCore.QCoreApplication.translate
-        Error.setWindowTitle(_translate("Error", "Ошибка"))
+        Error.setWindowTitle(_translate("Error", "Выполнено"))
         self.add_client_btn.setText(_translate("Error", "ОК"))
-        self.label.setText(_translate("Error", "             Выселите студентов\n перед удалением общежития!"))
+        self.label.setText(_translate("Error", "           Ошибка!\n Комната существует."))
 
 
 if __name__ == "__main__":

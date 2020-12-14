@@ -17,16 +17,50 @@ class Ui_del_contract(object):
         '''заполняет список'''
         self.Contract_list.clear()
         fio = self.FIO_line.text()
-        mas = dbd.search_student_by_fio(fio)
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
         i = 1
         for person in mas:
-            print(person)
-            print(person[1]['Договор']['Шифр'])
-            self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+            if "Договор" in person[1].keys():
+                self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
                                      + 'Общежитие: ' + str(person[1]['Общежитие'])+'    Договор: '+str(person[1]['Договор']['Шифр'])+'\n'  \
                                      + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
                                      + 'Комната: ' + str(person[1]['Комната']) \
                                      + '    Пол: ' + str(person[1]['Пол']) + '\n')
+            else:
+                self.Contract_list.addItem(str(i) + '. ФИО: ' + person[1]['ФИО'] + '\n' \
+                                           + 'Общежитие: ' + str(person[1]['Общежитие']) + '    Договор: ' + str('') + \
+                                           '\n' + 'Адрес прописки: ' + str(person[1]['Адрес регистрации']) + '\n' \
+                                           + 'Комната: ' + str(person[1]['Комната']) \
+                                           + '    Пол: ' + str(person[1]['Пол']) + '\n')
+
+    def delete_one(self):
+        fio = self.FIO_line.text()
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
+        n = self.Contract_list.currentRow()
+        i = -1
+        for person in mas:
+            if i == n-1:
+                dic = person[0]
+         #       if person[1]['Общежитие'] != "":
+          #          way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
+           #         print(way)
+            #    else:
+             #       way = "queue"+"/" + person[0]
+              #      print(way)
+               # break
+         #   i = i+1
+        dbd.delite_contract(dic)
+        self.FIO_line.clear()
+        self.Contract_number_line.clear()
+        self.Contract_list.clear()
 
     def openContract(self):
         from contract import Ui_contract
@@ -227,6 +261,9 @@ class Ui_del_contract(object):
         self.find_contract_btn.setFont(font)
         self.find_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.find_contract_btn.setObjectName("find_contract_btn")
+
+        self.find_contract_btn.clicked.connect(self.fill_list)
+
         self.horizontalLayout.addWidget(self.find_contract_btn)
         self.back_to_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -290,8 +327,8 @@ class Ui_del_contract(object):
         self.label_FIO_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_FIO_2.setObjectName("label_FIO_2")
         self.del_contract_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.del_contract_btn.setGeometry(QtCore.QRect(480, 210, 195, 40))
-        self.del_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
+        self.del_contract_btn.setGeometry(QtCore.QRect(500, 195, 175, 40))
+        self.del_contract_btn.setMinimumSize(QtCore.QSize(150, 30))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -337,17 +374,69 @@ class Ui_del_contract(object):
         self.del_contract_btn.setFont(font)
         self.del_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.del_contract_btn.setObjectName("del_contract_btn")
+
+        self.del_contract_btn.clicked.connect(self.delete_one)
+
+        self.arch_contract_btn = QtWidgets.QPushButton(self.centralwidget)
+        self.arch_contract_btn.setGeometry(QtCore.QRect(500, 240, 175, 40))
+        self.arch_contract_btn.setMinimumSize(QtCore.QSize(150, 30))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        self.arch_contract_btn.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.arch_contract_btn.setFont(font)
+        self.arch_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
+        self.arch_contract_btn.setObjectName("arch_contract_btn")
+
         self.Contract_list = QtWidgets.QListWidget(self.centralwidget)
-        self.Contract_list.setGeometry(QtCore.QRect(60, 200, 400, 60))
+        self.Contract_list.setGeometry(QtCore.QRect(60, 195, 420, 85))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(21)
         sizePolicy.setHeightForWidth(self.Contract_list.sizePolicy().hasHeightForWidth())
         self.Contract_list.setSizePolicy(sizePolicy)
         self.Contract_list.setMinimumSize(QtCore.QSize(400, 30))
-        self.Contract_list.setMaximumSize(QtCore.QSize(400, 60))
-        self.Contract_list.setSizeIncrement(QtCore.QSize(0, 30))
-        self.Contract_list.setBaseSize(QtCore.QSize(0, 30))
+        self.Contract_list.setMaximumSize(QtCore.QSize(420, 85))
+        self.Contract_list.setSizeIncrement(QtCore.QSize(0, 85))
+        self.Contract_list.setBaseSize(QtCore.QSize(0, 85))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(11)
@@ -370,6 +459,8 @@ class Ui_del_contract(object):
         self.back_to_contract_btn.setText(_translate("del_contract", "Вернуться в меню договора"))
         self.label_FIO_2.setText(_translate("del_contract", "или"))
         self.del_contract_btn.setText(_translate("del_contract", "Удалить"))
+        self.arch_contract_btn.setText(_translate("del_contract", "Архивировать"))
+
 
 
 if __name__ == "__main__":

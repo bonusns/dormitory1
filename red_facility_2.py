@@ -17,13 +17,19 @@ class Ui_red_facility_2(object):
         db = dbd.init_firebase()
         data_fac = db.child("facilities").child("buffer").get()
         for data in data_fac.each():
-            self.discount_line.setText(data.val())
+
+            self.discount_line.setText(str(data.val()))
             self.Name_line.setText(data.key())
 
     def get_and_update(self):
         cost = self.discount_line.text()
         name = self.Name_line.text()
         dbd.edit_facility(name,cost)
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def del_buffer(self):
         db = dbd.init_firebase()
@@ -45,7 +51,7 @@ class Ui_red_facility_2(object):
         self.centralwidget = QtWidgets.QWidget(red_facility_2)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(60, 80, 140, 30))
+        self.label.setGeometry(QtCore.QRect(60, 80, 146, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -229,10 +235,12 @@ class Ui_red_facility_2(object):
         self.red_facility_btn.setFont(font)
         self.red_facility_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.red_facility_btn.setObjectName("red_facility_btn")
+
+        self.red_facility_btn.clicked.connect(self.get_and_update)
+
         self.horizontalLayout.addWidget(self.red_facility_btn)
         self.back_to_red_facilities_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.back_to_red_facilities_btn.setMinimumSize(QtCore.QSize(150, 40))
-        self.red_facility_btn.clicked.connect(self.get_and_update)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -281,7 +289,6 @@ class Ui_red_facility_2(object):
 
         self.back_to_red_facilities_btn.clicked.connect(self.openRed)
         self.back_to_red_facilities_btn.clicked.connect(red_facility_2.close)
-
         self.horizontalLayout.addWidget(self.back_to_red_facilities_btn)
         red_facility_2.setCentralWidget(self.centralwidget)
 

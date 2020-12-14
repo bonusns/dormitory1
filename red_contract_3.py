@@ -21,7 +21,7 @@ class Ui_red_contract_3(object):
         mas = dbd.contract_buffer()
         for person in mas:
             self.start_date_line.setText(person[1]['Дата начала'])
-            self.end_date_line.setText(person[1]['Дата_конца'])
+            self.end_date_line.setText(person[1]['Дата конца'])
             self.code_line.setText(person[1]['Шифр'])
             self.CostBox.setCurrentText(person[1]['Стоимость'])
             self.RoomBox.setCurrentText(person[1]['Комната'])
@@ -30,15 +30,18 @@ class Ui_red_contract_3(object):
         # Вытаскивает из буфера и заполняет поля данными
         mas = dbd.contract_buffer()
         for person in mas:
-            print(person)
             key = person[0]
             code_n = self.code_line.text()
             date_start = self.start_date_line.text()
             date_end = self.end_date_line.text()
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText()
-            sex = "Женский"
         dbd.edit_contract(code_n, date_start=date_start, date_end=date_end, room=room, cost=cost)
+        from success import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 
     def openRedContract(self):
@@ -121,6 +124,10 @@ class Ui_red_contract_3(object):
         self.code_line.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.code_line.setText("")
         self.code_line.setObjectName("code_line")
+
+        self.code_line.setReadOnly(True)
+
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(60, 140, 130, 30))
         font = QtGui.QFont()
@@ -318,7 +325,7 @@ class Ui_red_contract_3(object):
         self.RoomBox.setStatusTip("")
         self.RoomBox.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.RoomBox.setEditable(False)
-        self.RoomBox.setMaxCount(30)
+        self.RoomBox.setMaxCount(100)
         self.RoomBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomBox.setModelColumn(0)
         self.RoomBox.setObjectName("RoomBox")
@@ -486,8 +493,6 @@ class Ui_red_contract_3(object):
         self.CostBox.setIconSize(QtCore.QSize(16, 16))
         self.CostBox.setModelColumn(0)
         self.CostBox.setObjectName("CostBox")
-        self.CostBox.addItem("")
-        self.CostBox.addItem("")
         red_contract_3.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(red_contract_3)
         self.statusbar.setObjectName("statusbar")
@@ -506,19 +511,21 @@ class Ui_red_contract_3(object):
         self.label.setText(_translate("red_contract_3", "Шифр договора"))
         self.label_2.setText(_translate("red_contract_3", "Дата начала"))
         self.label_3.setText(_translate("red_contract_3", "Дата окончания"))
+        self.start_date_line.setInputMask(_translate("red_contract_3", "00.00.0000"))
+        self.end_date_line.setInputMask(_translate("red_contract_3", "00.00.0000"))
         self.label_6.setText(_translate("red_contract_3", "Комната"))
         self.label_7.setText(_translate("red_contract_3", "Стоимость"))
-        room_mas = dbd.list_of_empty_rooms_by_sex("Мужской")
+        mas = dbd.contract_buffer()
+        room_mas = dbd.list_of_empty_rooms_by_sex(dbd.search_student_by_id(mas[0][0])[1]['Пол'], dbd.search_student_by_id(mas[0][0])[1]['Общежитие'])
         i = 0
         for fac in room_mas:
-            print(fac[1])
             self.RoomBox.addItem(f"{fac[1]}")
             i += 1
         self.red_contract_btn.setText(_translate("red_contract_3", "Отредактировать"))
         self.back_to_red_contract_btn.setText(_translate("red_contract_3", "Вернуться к поиску договора"))
-        self.CostBox.setItemText(0, _translate("red_contract_3", "500"))
-        self.CostBox.setItemText(1, _translate("red_contract_3", "300"))
-
+        i = dbd.list_of_facilities()[1]
+        for j in range(0, i):
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
 
 if __name__ == "__main__":
     import sys
