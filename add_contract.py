@@ -13,9 +13,11 @@ import database as dbd
 
 class Ui_add_contract(object):
     def set_code(self):
-         self.code_line.setReadOnly(False)
-         num = dbd.get_last_contract_num()
-         self.code_line.setText("ОБ - " + str(num+1))
+        print('pojaluista')
+        self.code_line.setReadOnly(False)
+        num = dbd.get_last_contract_num()
+        self.code_line.setText("ОБ - " + str(num+1))
+        print('code')
 
     def del_buff(self):
         dbd.delete_buffer()
@@ -41,6 +43,12 @@ class Ui_add_contract(object):
             facility = self.CostBox.currentText().split(" -")[0]
             sex = str(person[1]['Пол'])
         dbd.add_contract(key, date_start, date_end, room, cost, facility, sex,code= code_n)
+        # self.code_line.clear()
+        # self.start_date_line.clear()
+        # self.end_date_line.clear()
+        # self.RoomBox.setCurrentIndex(0)
+        # self.CostBox.setCurrentIndex(0)
+
         from success import Ui_Error
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()
@@ -508,6 +516,7 @@ class Ui_add_contract(object):
         QtCore.QMetaObject.connectSlotsByName(add_contract)
         self.set_code()
         self.code_line.setReadOnly(True)
+        print('rabotai')
 
 
     def retranslateUi(self, add_contract):

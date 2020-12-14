@@ -610,6 +610,16 @@ def try_get_fio(fio):
         c = 1
     return c
 
+def try_get_hostel(hostel):
+
+    if hostel != '':
+        d = 0
+    else:
+        d = 1
+
+
+    return d
+
 """Функции архива"""
 
 def list_of_archive():
@@ -627,6 +637,19 @@ def add_to_archive(fio,code, date_start, date_end):
     db = init_firebase()
     archive_data = {"ФИО":fio,"Дата начала":date_start,"Дата конца":date_end,"Шифр":code}
     db.child("archive").child(code).set(archive_data)
+
+def check_facility(fac_name):
+    """Возвращает True если можно удалить"""
+    db = init_firebase()
+    contract_mas = list_of_contracts()
+    can_delete = True
+    if contract_mas != []:
+        for contract in contract_mas:
+            contract_data = contract[2]
+            if contract_data["Льгота"] == fac_name:
+                can_delete = False
+                break
+    return can_delete
 
 
 if __name__ == '__main__':

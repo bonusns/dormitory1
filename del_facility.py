@@ -15,13 +15,25 @@ class Ui_del_facility(object):
 
     def del_facility(self):
         item = self.NameBox.currentText()
+        fac_name = item.split(" -")[0]
         n = self.NameBox.currentIndex()
-        dbd.remove_facility(item.split(" -")[0])
-        from success_action import Ui_Error
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Error()
-        self.ui.setupUi(self.window)
-        self.window.show()
+
+        # Проверяем наличие выбранной льготы
+        can_delete = dbd.check_facility(fac_name)
+        if can_delete:
+            dbd.remove_facility(fac_name)
+            from success_action import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+        else:
+            from error_del_facility import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
        #self.NameBox.
 
 

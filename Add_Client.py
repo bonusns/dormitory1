@@ -22,24 +22,24 @@ class Ui_add_client(object):
 
 
     def openAdd_contract(self):
-        if self.hostel_line.text() !='':
+    #  #   if self.hostel_line.text() !='':
+    #
+        self.Add_client()
+        from add_contract import Ui_add_contract
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_add_contract()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        #add_client.close()
+    #     else:
+    # from error_hostel import Ui_Error
+    # self.window = QtWidgets.QMainWindow()
+    # self.ui = Ui_Error()
+    # self.ui.setupUi(self.window)
+    # self.window.show()
 
-            self.Add_client()
-            from add_contract import Ui_add_contract
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_add_contract()
-            self.ui.setupUi(self.window)
-            self.window.show()
-           # add_client.close()
 
 
-
-        else:
-            from error_hostel import Ui_Error
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_Error()
-            self.ui.setupUi(self.window)
-            self.window.show()
 
 
     def openClient(self):
@@ -53,25 +53,46 @@ class Ui_add_client(object):
 
     def Add_client(self):
         c = 1
-
+        d = 1
+        print("hello")
         while c != 0:
             fio = self.FIO_line.text()
-            c= database.try_get_fio(fio)
+            c = database.try_get_fio(fio)
             if c == 1:
                 self.FIO_line.clear()
 
                 break
+        print(c)
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
-        hostel = self.hostel_line.text()
+        while d != 0:
+            hostel = self.hostel_line.text()
+            d = database.try_get_hostel(hostel)
+            if d == 1:
+                self.hostel_line.clear()
+
+                break
+        print(d)
         room = 'queue'
 
         if c == 0:
             key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
-            database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,hostel)
+            if d == 0:
+                database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,hostel)
+                # from add_contract import Ui_add_contract
+                # self.window = QtWidgets.QMainWindow()
+                # self.ui = Ui_add_contract()
+                # self.ui.setupUi(self.window)
+                # self.window.show()
+            else:
+                from error_hostel import Ui_Error
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_Error()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
         else:
             from error import Ui_Error
@@ -735,6 +756,7 @@ class Ui_add_client(object):
         self.add_contract_btn.setObjectName("add_contract_btn")
         self.add_contract_btn.clicked.connect(self.openAdd_contract)
         self.add_contract_btn.clicked.connect(add_client.close)
+
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
         self.back_to_client_btn = QtWidgets.QPushButton(self.layoutWidget)
