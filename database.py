@@ -398,18 +398,18 @@ def add_contract(student_id, date_start, date_end, room, cost, facility, sex, co
     if code[5:] == str(last_num+1):
         update_last_contract_num(last_num + 1)
 
-def add_contract_buffer(student_id,fio,date_start, date_end, room, cost, code = None):
+def add_contract_buffer(student_id,fio,date_start, date_end, room, cost,facility, code = None):
     db = init_firebase()
     last_num = get_last_contract_num()
 
     if code != '':
 
-        contract_data = {"ФИО": fio,"Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost,"Комната": room}
+        contract_data = {"ФИО": fio,"Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost, "Льгота": facility, "Комната": room}
         db.child("dormitories").child("contract_buffer").child(student_id).set(contract_data)
     else:
         code = add_empty_contract(student_id)
         contract_data = {"ФИО": fio, "Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost,
-                         "Комната": room}
+                         "Льгота": facility, "Комната": room}
         db.child("dormitories").child("contract_buffer").child(student_id).set(contract_data)
 
 
@@ -464,7 +464,7 @@ def delete_contract_buffer():
     db.child("dormitories").child("contract_buffer").remove()
 
 
-def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
+def edit_contract(code, date_start=None, date_end=None, room=None, cost=None, facility = None):
     db = init_firebase()
     last_num = get_last_contract_num()
     contract = search_contract_by_code(code)
@@ -474,22 +474,21 @@ def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
     room_old = student[1]["Комната"]
     sex = student[1]["Пол"]
 
+
     if date_start:
         db.child("clients").child(student_id).child("Договор").update({"Дата начала": date_start})
     if date_end:
         db.child("clients").child(student_id).child("Договор").update({"Дата конца": date_end})
     if room:
         db.child("clients").child(student_id).update({"Комната": room})
-        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child(
-            "members").child(student_id).remove()
-        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
-            student_id).set(True)
         if room_old == "queue":
             # удаляем человека из очереди
             remove_student_from_queue(student_id)
         else:
             db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child(
                 "members").child(student_id).remove()
+        db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
+            student_id).set(True)
 
 
         if room_old != "queue" and room_old != "":
@@ -499,6 +498,8 @@ def edit_contract(code, date_start=None, date_end=None, room=None, cost=None):
         update_room_gender(dormitory, room, sex)
     if cost:
         db.child("clients").child(student_id).child("Договор").update({"Стоимость": str(cost)})
+    if facility:
+        db.child("clients").child(student_id).child("Договор").update({"Льгота":str(facility)})
     if code[5:] == str(last_num+1):
         update_last_contract_num(last_num + 1)
 

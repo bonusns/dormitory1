@@ -85,6 +85,8 @@ class Ui_del_contract(object):
         #   i = i+1
         if code == "":
             code = person_data["Договор"]["Шифр"]
+        if fio == "":
+            fio = person_data["ФИО"]
         dbd.add_to_archive(fio,code,person_data["Договор"]["Дата начала"],person_data["Договор"]["Дата конца"])
         dbd.delite_contract(dic)
         self.FIO_line.clear()

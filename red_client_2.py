@@ -9,7 +9,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
-import time
 
 class Ui_red_client_2(object):
 

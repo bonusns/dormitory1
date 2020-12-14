@@ -30,7 +30,7 @@ class Ui_add_client(object):
             self.ui = Ui_add_contract()
             self.ui.setupUi(self.window)
             self.window.show()
-            add_client.close()
+           # add_client.close()
 
 
 

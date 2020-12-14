@@ -59,15 +59,17 @@ class Ui_red_contract(object):
                     start_date = str(person[1]['Договор']['Дата начала'])
                     end_date = str(person[1]['Договор']['Дата конца'])
                     cost = str(person[1]['Договор']['Стоимость'])
+                    facility = str(person[1]['Договор']['Льгота'])
                 else:
                     code = ''
                     start_date = ''
                     end_date = ''
                     cost = ''
+                    facility = ''
                 room = str(person[1]['Комната'])
 
             i = i + 1
-        dbd.add_contract_buffer(dic,fio,start_date,end_date,room,cost, code)
+        dbd.add_contract_buffer(dic,fio,start_date,end_date,room,cost,facility, code)
         self.FIO_line.clear()
         self.Contract_list.clear()
 

@@ -23,7 +23,7 @@ class Ui_red_contract_3(object):
             self.start_date_line.setText(person[1]['Дата начала'])
             self.end_date_line.setText(person[1]['Дата конца'])
             self.code_line.setText(person[1]['Шифр'])
-            self.CostBox.setCurrentText(person[1]['Стоимость'])
+            self.CostBox.setCurrentText("hello")
             self.RoomBox.setCurrentText(person[1]['Комната'])
 
     def take_student_id(self):
@@ -37,7 +37,7 @@ class Ui_red_contract_3(object):
             room = self.RoomBox.currentText()
             cost = self.CostBox.currentText().split("- ")[1]
             facility = self.CostBox.currentText().split(" -")[0]
-        dbd.edit_contract(code_n, date_start=date_start, date_end=date_end, room=room, cost=cost)
+        dbd.edit_contract(code_n, date_start=date_start, date_end=date_end, room=room, cost=cost, facility=facility)
         from success import Ui_Error
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()
@@ -526,7 +526,7 @@ class Ui_red_contract_3(object):
         self.back_to_red_contract_btn.setText(_translate("red_contract_3", "Вернуться к поиску договора"))
         i = dbd.list_of_facilities()[1]
         for j in range(0, i):
-            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]} - {dbd.list_of_facilities()[0][j][1]}")
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][0]} - {dbd.list_of_facilities()[0][j][1]}")
 
 if __name__ == "__main__":
     import sys

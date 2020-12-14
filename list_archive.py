@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
 
+
 class Ui_list_contract(object):
 
     def fill_list(self):
@@ -23,6 +24,14 @@ class Ui_list_contract(object):
                                      + 'Дата начала: ' + str(person[1]) +";" + \
                                      '  Дата конца: ' + str(person[2]) +";" + '\n')
             i = i + 1
+            print(str(person[1]))
+            from docxtpl import DocxTemplate
+            doc = DocxTemplate("шаблон.docx")
+            context = {'fio': person[0], 'date_start': str(person[1]),
+                       'date_end': str(person[2]),
+                       'code': str(person[3])}
+            doc.render(context)
+            doc.save("шаблон-final.docx")
 
     def openContract(self):
         from contract import Ui_contract
