@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import database as dbd
+import database
 
 
 class Ui_add_hostel(object):
@@ -24,7 +24,7 @@ class Ui_add_hostel(object):
     def add_hostel(self):
         number = self.Number_line.text()
         address = self.Addres_line.text()
-        dbd.add_dormitory(number, address)
+        database.add_dormitory(number, address)
         self.Addres_line.clear()
         self.Number_line.clear()
 

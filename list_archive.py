@@ -15,14 +15,13 @@ class Ui_list_contract(object):
 
     def fill_list(self):
         '''заполняет список'''
-        mas = dbd.list_of_contracts()
+        mas = dbd.list_of_archive()
 
         i = 1
         for person in mas:
-            key = dbd.search_student_by_id(person[0])
-            self.Contract_info.addItem(str(i) + '. ФИО: ' + key[1]['ФИО'] +";" + '   Договор: ' +str(person[2]['Шифр']) +";" +'\n'
-                                     + 'Дата начала: ' + str(person[2]['Дата начала']) +";" + \
-                                     '  Дата конца: ' + str(person[2]['Дата конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
+            self.Contract_info.addItem(str(i) + '. ФИО: ' + str(person[0]) +";" + '   Договор: ' +str(person[3]) +";" +'\n'
+                                     + 'Дата начала: ' + str(person[1]) +";" + \
+                                     '  Дата конца: ' + str(person[2]) +";" + '\n')
             i = i + 1
 
     def openContract(self):
@@ -162,7 +161,7 @@ class Ui_list_contract(object):
 
         self.retranslateUi(list_contract)
         QtCore.QMetaObject.connectSlotsByName(list_contract)
-     #   self.fill_list()
+        self.fill_list()
     def retranslateUi(self, list_contract):
         _translate = QtCore.QCoreApplication.translate
         list_contract.setWindowTitle(_translate("list_contract", "Архив"))

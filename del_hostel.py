@@ -50,6 +50,8 @@ class Ui_del_hostel(object):
                 self.Number_line.clear()
                 self.Hostel_list.clear()
 
+
+
     def openHostel(self):
         from hostel import Ui_hostel
         self.window = QtWidgets.QMainWindow()

@@ -368,11 +368,11 @@ def add_empty_contract(student_id):
 
 
 
-def add_contract(student_id, date_start, date_end, room, cost, sex, code= None):
+def add_contract(student_id, date_start, date_end, room, cost, facility, sex, code= None):
     db = init_firebase()
     last_num = get_last_contract_num()
 
-    contract_data = {"Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost}
+    contract_data = {"Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost, "Льгота":facility}
     db.child("clients").child(student_id).child("Договор").set(contract_data)
 
     dormitory = search_student_by_id(student_id)[1]["Общежитие"]
@@ -608,6 +608,24 @@ def try_get_fio(fio):
     except:
         c = 1
     return c
+
+"""Функции архива"""
+
+def list_of_archive():
+    """[('ФИО', 'Дата начала', 'Дата конца', 'Код'), ('ФИО', 'Дата начала', 'Дата конца', 'Код')]"""
+    db = init_firebase()
+    archive_mas = []
+    archive_data = db.child("archive").get()
+    if archive_data.val():
+        for code in archive_data.each():
+            archive_mas.append((code.val()["ФИО"],code.val()["Дата начала"],code.val()["Дата конца"],code.val()["Шифр"]))
+    return archive_mas
+
+
+def add_to_archive(fio,code, date_start, date_end):
+    db = init_firebase()
+    archive_data = {"ФИО":fio,"Дата начала":date_start,"Дата конца":date_end,"Шифр":code}
+    db.child("archive").child(code).set(archive_data)
 
 
 if __name__ == '__main__':

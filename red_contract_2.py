@@ -34,9 +34,10 @@ class Ui_red_contract_2(object):
             date_start = self.start_date_line.text()
             date_end = self.end_date_line.text()
             room = self.RoomBox.currentText()
-            cost = self.CostBox.currentText()
+            cost = self.CostBox.currentText().split("- ")[1]
+            facility = self.CostBox.currentText().split(" -")[0]
             sex = str(person[1]['Пол'])
-        dbd.add_contract(key, date_start, date_end, room, cost, sex,code=code_n)
+        dbd.add_contract(key, date_start, date_end, room, cost, facility, sex,code=code_n)
         from success import Ui_Error
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()
@@ -527,7 +528,7 @@ class Ui_red_contract_2(object):
         self.back_to_red_client_btn.setText(_translate("red_contract_2", "Вернуться к поиску клиента"))
         i = dbd.list_of_facilities()[1]
         for j in range(0, i):
-            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][1]}")
+            self.CostBox.addItem(f"{dbd.list_of_facilities()[0][j][0]} - {dbd.list_of_facilities()[0][j][1]}")
 
 
 

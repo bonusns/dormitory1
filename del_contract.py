@@ -62,6 +62,36 @@ class Ui_del_contract(object):
         self.Contract_number_line.clear()
         self.Contract_list.clear()
 
+    def add_to_archive(self):
+        fio = self.FIO_line.text()
+        code = self.Contract_number_line.text()
+        if fio != "":
+            mas = dbd.search_student_by_fio(fio)
+        if code != "":
+            mas = dbd.search_student_by_code(code)
+        n = self.Contract_list.currentRow()
+        i = -1
+        for person in mas:
+            if i == n - 1:
+                dic = person[0]
+                person_data = person[1]
+        #       if person[1]['Общежитие'] != "":
+        #          way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
+        #         print(way)
+        #    else:
+        #       way = "queue"+"/" + person[0]
+        #      print(way)
+        # break
+        #   i = i+1
+        if code == "":
+            code = person_data["Договор"]["Шифр"]
+        dbd.add_to_archive(fio,code,person_data["Договор"]["Дата начала"],person_data["Договор"]["Дата конца"])
+        dbd.delite_contract(dic)
+        self.FIO_line.clear()
+        self.Contract_number_line.clear()
+        self.Contract_list.clear()
+
+
     def openContract(self):
         from contract import Ui_contract
         self.window = QtWidgets.QMainWindow()
@@ -425,6 +455,7 @@ class Ui_del_contract(object):
         self.arch_contract_btn.setFont(font)
         self.arch_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.arch_contract_btn.setObjectName("arch_contract_btn")
+        self.arch_contract_btn.clicked.connect(self.add_to_archive)
 
         self.Contract_list = QtWidgets.QListWidget(self.centralwidget)
         self.Contract_list.setGeometry(QtCore.QRect(60, 195, 420, 85))
