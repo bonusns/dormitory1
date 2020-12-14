@@ -34,6 +34,13 @@ class Ui_contract(object):
         self.ui.setupUi(self.window)
         self.window.show()
 
+    def openArch(self):
+        from list_archive import Ui_list_contract
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_list_contract()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
     def openDel(self):
         from del_contract import Ui_del_contract
         self.window = QtWidgets.QMainWindow()
@@ -352,8 +359,60 @@ class Ui_contract(object):
 
         self.del_contract_btn.clicked.connect(self.openDel)
         self.del_contract_btn.clicked.connect(contract.close)
-
         self.gridLayout.addWidget(self.del_contract_btn, 1, 0, 1, 1)
+
+        self.arch_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
+        self.arch_contract_btn.setMinimumSize(QtCore.QSize(150, 40))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
+        brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        self.arch_contract_btn.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.arch_contract_btn.setFont(font)
+        self.arch_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
+        self.arch_contract_btn.setObjectName("arch_contract_btn")
+
+        self.arch_contract_btn.clicked.connect(self.openArch)
+        self.arch_contract_btn.clicked.connect(contract.close)
+
+        self.gridLayout.addWidget(self.arch_contract_btn, 1, 2, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
         contract.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(contract)
@@ -372,6 +431,7 @@ class Ui_contract(object):
         self.cost_btn.setText(_translate("contract", "Стоимости"))
         self.red_contract_btn.setText(_translate("contract", "Редактировать"))
         self.del_contract_btn.setText(_translate("contract", "Удалить"))
+        self.arch_contract_btn.setText(_translate("contract", "Архив"))
 
 
 if __name__ == "__main__":

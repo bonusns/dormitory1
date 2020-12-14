@@ -166,7 +166,7 @@ class Ui_list_contract(object):
     def retranslateUi(self, list_contract):
         _translate = QtCore.QCoreApplication.translate
         list_contract.setWindowTitle(_translate("list_contract", "Список договоров"))
-        self.import_contract_btn.setText(_translate("list_contract", "Импортировать в Excel"))
+        self.import_contract_btn.setText(_translate("list_contract", "Экспортировать в Excel"))
         self.back_to_contract_btn.setText(_translate("list_contract", "Вернуться в меню договора"))
         __sortingEnabled = self.Contract_info.isSortingEnabled()
         self.Contract_info.setSortingEnabled(False)

@@ -23,12 +23,16 @@ class Ui_add_client(object):
 
     def openAdd_contract(self):
         if self.hostel_line.text() !='':
+
+            self.Add_client()
             from add_contract import Ui_add_contract
-            self.add_client()
             self.window = QtWidgets.QMainWindow()
             self.ui = Ui_add_contract()
             self.ui.setupUi(self.window)
             self.window.show()
+            add_client.close()
+
+
 
         else:
             from error_hostel import Ui_Error
@@ -47,7 +51,7 @@ class Ui_add_client(object):
 
 
 
-    def add_client(self):
+    def Add_client(self):
         c = 1
 
         while c != 0:
@@ -678,7 +682,7 @@ class Ui_add_client(object):
         self.add_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_client_btn.setObjectName("add_client_btn")
 
-        self.add_client_btn.clicked.connect(self.add_client)
+        self.add_client_btn.clicked.connect(self.Add_client)
         self.add_client_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.add_client_btn)
@@ -729,7 +733,6 @@ class Ui_add_client(object):
         self.add_contract_btn.setFont(font)
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
-
         self.add_contract_btn.clicked.connect(self.openAdd_contract)
         self.add_contract_btn.clicked.connect(add_client.close)
 

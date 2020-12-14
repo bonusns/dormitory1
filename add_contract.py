@@ -13,6 +13,7 @@ import database as dbd
 
 class Ui_add_contract(object):
     def set_code(self):
+         self.code_line.setReadOnly(False)
          num = dbd.get_last_contract_num()
          self.code_line.setText("ОБ - " + str(num+1))
 
@@ -126,7 +127,6 @@ class Ui_add_contract(object):
         self.code_line.setText("")
         self.code_line.setObjectName("code_line")
 
-        self.code_line.setReadOnly(True)
 
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(60, 140, 130, 30))
@@ -506,6 +506,8 @@ class Ui_add_contract(object):
         self.CostBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(add_contract)
         self.set_code()
+        self.code_line.setReadOnly(True)
+
 
     def retranslateUi(self, add_contract):
         _translate = QtCore.QCoreApplication.translate

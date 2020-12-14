@@ -168,7 +168,7 @@ class Ui_list_rooms(object):
     def retranslateUi(self, list_rooms):
         _translate = QtCore.QCoreApplication.translate
         list_rooms.setWindowTitle(_translate("list_rooms", "Список комнат"))
-        self.import_rooms_btn.setText(_translate("list_rooms", "Импортировать в Excel"))
+        self.import_rooms_btn.setText(_translate("list_rooms", "Экспортировать в Excel"))
         self.back_to_rooms_btn.setText(_translate("list_rooms", "Вернуться в меню комнат"))
         __sortingEnabled = self.Rooms_info.isSortingEnabled()
         self.Rooms_info.setSortingEnabled(False)
