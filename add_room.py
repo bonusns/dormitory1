@@ -31,9 +31,12 @@ class Ui_add_room(object):
         dorm_mas = dbd.list_of_dormitories()
         i = 0
         for dorm in dorm_mas:
-            self.RoomHostelNumber.addItem("")
-            self.RoomHostelNumber.setItemText(i, f"{dorm[1]['number']}")
-            i += 1
+            print(dorm[0])
+            if dorm[0] != 'queue':
+                print(dorm[1])
+                self.RoomHostelNumber.addItem("")
+                self.RoomHostelNumber.setItemText(i, f"{dorm[1]['number']}")
+                i += 1
 
     def openRoom(self):
         from rooms import Ui_Rooms

@@ -18,10 +18,9 @@ class Ui_list_hostel(object):
         mas = dbd.list_of_dormitories()
         i = 1
         for person in mas:
-            if 'name' in person[1]:
-                self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
-                                         + 'Адрес: ' + person[1]['Адрес'] + '\n')
-                i = i + 1
+            self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
+                                     + 'Адрес: ' + person[1]['Адрес'] + '\n')
+            i = i + 1
 
     def openHostel(self):
         from hostel import Ui_hostel

@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['Main.py', 'Client.py', 'hostel.py', 'contract.py', 'reference.py', 'Add_Client.py', 'add_contract.py', 'add_cost.py', 'add_facility.py', 'add_hostel.py', 'add_room.py', 'cost.py', 'database.py', 'del_client.py', 'del_contract.py', 'del_cost.py', 'del_facility.py', 'del_hostel.py', 'del_room.py', 'facilities.py', 'list_client.py', 'list_contract.py', 'list_cost.py', 'list_facilities.py', 'list_hostel.py', 'list_rooms.py', 'red_client.py', 'red_client_2.py', 'red_contract.py', 'red_contract_2.py', 'red_contract_3.py', 'red_cost.py', 'red_cost_2.py', 'red_facility.py', 'red_facility_2.py', 'red_hostel.py', 'red_hostel_2.py', 'red_room.py', 'red_room_2.py', 'rooms.py', 'success.py', 'error.py', 'error_del_hostel.py', 'error_hostel.py', 'Error_room.py'],
+a = Analysis(['Main.py', 'Client.py', 'hostel.py', 'contract.py', 'reference.py', 'Add_Client.py', 'add_contract.py', 'add_facility.py', 'add_hostel.py', 'add_room.py', 'database.py', 'del_client.py', 'del_contract.py', 'del_facility.py', 'del_hostel.py', 'del_room.py', 'facilities.py', 'list_client.py', 'list_contract.py', 'list_facilities.py', 'list_hostel.py', 'list_rooms.py', 'red_client.py', 'red_client_2.py', 'red_contract.py', 'red_contract_2.py', 'red_contract_3.py', 'red_facility.py', 'red_facility_2.py', 'red_hostel.py', 'red_hostel_2.py', 'red_room.py', 'red_room_2.py', 'rooms.py', 'success.py', 'test.py', 'error.py', 'error_del_hostel.py', 'error_hostel.py', 'Error_room.py', 'success_action.py', 'error_add_room.py', 'list_archive.py', 'error_del_facility.py'],
              pathex=['C:\\Users\\zausailovsasha\\Desktop\\Курсач\\test\\dormitory1'],
              binaries=[],
              datas=[],

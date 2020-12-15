@@ -1,6 +1,8 @@
 # coding=utf-8
 import pyrebase
 import random
+import xlwt
+import xlrd
 
 
 def noquote(s):
@@ -67,7 +69,7 @@ def list_of_dormitories():
     db = init_firebase()
     dormitories_data = db.child("dormitories").get()
     for dormitory in dormitories_data.each():
-        if "buffer" not in dormitory.val():
+        if "buffer" not in dormitory.key() and "contract_buffer" not in dormitory.key() and "queue" not in dormitory.key():
             dormitory_mas.append((dormitory.key(), dormitory.val()))
     return dormitory_mas
 
@@ -651,9 +653,21 @@ def check_facility(fac_name):
                 break
     return can_delete
 
+def export_to_exel(hat_data,data_mas,file):
+    export_file = xlwt.Workbook()
+    sheet = export_file.add_sheet(file[:-5])
+    i,j = 0,0
+    for elem in hat_data:
+        sheet.write(i,j,elem)
+        j += 1
+
+    export_file.save("../exports/" + file)
+
 
 if __name__ == '__main__':
     db = init_firebase()
+    export_to_exel(["uno", "dos", "tres", "quatro"], [1, 2, 3, 4], "test.xls")
+
     #get_students_contract_num("-MOG-7AtIksBbmtkcNPN")
     # add_student("Романенко Владимир Юрьевич","94239423","423423","fdgfdgdf","mgkfdg","male","1")
     # st = db.child("clients").order_by_key().equal_to("-MO2ZXoFYxIRHsaST1G6").get()
@@ -665,3 +679,4 @@ if __name__ == '__main__':
     # print(list_of_all_rooms())
    # delite_contract
    # print(search_student_by_code("ОБ - 1"))
+

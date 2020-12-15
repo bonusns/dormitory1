@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import list_contract, del_contract, red_contract, cost, facilities
+import list_contract, del_contract, red_contract, facilities
 
 class Ui_contract(object):
 
@@ -20,12 +20,6 @@ class Ui_contract(object):
         self.ui.setupUi(self.window)
         self.window.show()
 
-    def openCost(self):
-        from cost import Ui_Cost
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Cost()
-        self.ui.setupUi(self.window)
-        self.window.show()
 
     def openList(self):
         from list_contract import Ui_list_contract

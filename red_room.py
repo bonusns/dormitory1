@@ -22,22 +22,28 @@ class Ui_red_room(object):
             dorm_num = room[0]
             if str(dorm_num) == choose_dorm_number:
                 room_number = room[1]
-                self.RoomNumber.addItem("")
-                self.RoomNumber.setItemText(i, f"{room_number}")
-                i += 1
+                if room_number !='queue':
+                    self.RoomNumber.addItem("")
+                    self.RoomNumber.setItemText(i, f"{room_number}")
+                    i += 1
+
 
     def fill_dorm_data(self):
         dorm_mas = dbd.list_of_dormitories()
         i = 0
         for dorm in dorm_mas:
-            self.HostelNumber.addItem("")
-            self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
-            i += 1
+            print(dorm[0])
+            if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
+                print(dorm[1]['number'])
+                self.HostelNumber.addItem("")
+                self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
+                i += 1
 
     def search_room(self):
         room_number = self.RoomNumber.currentText()
         dorm_number = self.HostelNumber.currentText()
         room_data = dbd.search_room(dorm_number, room_number)
+        print(room_data)
 
         str_student_fio = ""
         if "members" in room_data:

@@ -21,9 +21,10 @@ class Ui_del_room(object):
             dorm_num = room[0]
             if str(dorm_num) == choose_dorm_number:
                 room_number = room[1]
-                self.RoomNumber.addItem("")
-                self.RoomNumber.setItemText(i, f"{room_number}")
-                i += 1
+                if room_number != 'queue':
+                    self.RoomNumber.addItem("")
+                    self.RoomNumber.setItemText(i, f"{room_number}")
+                    i += 1
 
     def fill_dorm_data(self):
         dorm_mas = dbd.list_of_dormitories()
