@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
 
 class Ui_Main(object):
+
     def openClient(self):
         from Client import Ui_Client
         self.window = QtWidgets.QMainWindow()
@@ -134,7 +135,7 @@ class Ui_Main(object):
         self.client_btn.setObjectName("client_btn")
 
         self.client_btn.clicked.connect(self.openClient)
-        self.client_btn.clicked.connect(Main.close)
+        #self.client_btn.clicked.connect(Main.close)
 
         self.verticalLayout.addWidget(self.client_btn)
         self.dogovor_btn = QtWidgets.QPushButton(self.centralwidget)
@@ -422,6 +423,7 @@ class Ui_Main(object):
 
         self.retranslateUi(Main)
         QtCore.QMetaObject.connectSlotsByName(Main)
+
 
     def retranslateUi(self, Main):
         _translate = QtCore.QCoreApplication.translate

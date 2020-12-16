@@ -10,6 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
+import xlwt
+import os
+
 
 
 class Ui_list_client(object):
@@ -26,6 +29,62 @@ class Ui_list_client(object):
                                      + 'Комната: ' + str(person[1]['Комната']) + '\n' \
                                      + 'Пол: ' + person[1]['Пол'] + '\n')
             i = i + 1
+
+
+    def export_to_exel(self):
+        hat_data = ["ФИО","Общежитие","Комната","Пол","Адрес регистрации","Телефон","Серия и номер паспорта","Форма обучения","Шифр Договора","Дата начала","Дата конца","Льгота","Стоимость"]
+        students_mas = dbd.list_off_all_students()
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Клиенты")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+
+        i, j = 1, 0
+        for student in students_mas:
+            sheet.write(i, j, student[1]["ФИО"])
+            if student[1]["Общежитие"] != "":
+                sheet.write(i, j + 1, student[1]["Общежитие"])
+            else:
+                sheet.write(i, j + 1, "-")
+
+            if student[1]["Комната"] != "":
+                sheet.write(i, j + 2, student[1]["Комната"])
+            else:
+                sheet.write(i, j + 2, "-")
+            sheet.write(i, j + 3, student[1]["Пол"])
+            sheet.write(i, j + 4, student[1]["Адрес регистрации"])
+            sheet.write(i, j + 5, student[1]["Телефон"])
+            sheet.write(i, j + 6, student[1]["Паспорт"])
+            sheet.write(i, j + 7, student[1]["Форма обучения"])
+
+            contract_code = dbd.get_students_contract_num2(student[0])
+            if contract_code != "":
+                contract = dbd.search_contract_by_code(contract_code)
+                sheet.write(i, j+8, contract[2]["Шифр"])
+                sheet.write(i, j+9, contract[2]["Дата начала"])
+                sheet.write(i, j+10, contract[2]["Дата конца"])
+                sheet.write(i, j+11, contract[2]["Льгота"])
+                sheet.write(i, j+12, int(contract[2]["Стоимость"]))
+            else:
+                sheet.write(i, j + 8, "-")
+                sheet.write(i, j + 9, "-")
+                sheet.write(i, j + 10, "-")
+                sheet.write(i, j + 11, "-")
+                sheet.write(i, j + 12, "-")
+            i += 1
+
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Клиенты.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def openClient(self):
         from Client import Ui_Client
@@ -151,6 +210,7 @@ class Ui_list_client(object):
         self.back_to_client_btn.setObjectName("back_to_client_btn")
 
         self.back_to_client_btn.clicked.connect(self.openClient)
+        self.import_client_btn.clicked.connect(self.export_to_exel)
         self.back_to_client_btn.clicked.connect(list_client.close)
 
         self.horizontalLayout.addWidget(self.back_to_client_btn)

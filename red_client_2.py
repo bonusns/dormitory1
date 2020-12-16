@@ -41,7 +41,6 @@ class Ui_red_client_2(object):
             hostel_n = self.hostel_line.text()
             с = str(hostel_n)
             while d != 0:
-                import test as t
                 fio_n = self.FIO_line.text()
                 d = dbd.try_get_fio(fio_n)
                 if d == 1:
@@ -71,6 +70,20 @@ class Ui_red_client_2(object):
             self.ui.setupUi(self.window)
             self.window.show()
 
+        from success_action  import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        # self.FIO_line.clear()
+        # self.serial_line.clear()
+        # self.number_line.clear()
+        # self.addres_line.clear()
+        # self.phone_line.clear()
+        # self.hostel_line.clear()
+        # self.Form_box.setCurrentIndex(-1)
+        # self.SexBox.setCurrentIndex(-1)
+
 
     def red_client(self):
         dbd.delete_buffer()
@@ -78,23 +91,21 @@ class Ui_red_client_2(object):
 
 
     def openRedContract(self):
-        if self.hostel_line.text() !='':
-            from red_contract_2 import Ui_red_contract_2
 
-            self.edit()
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_red_contract_2()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        from red_contract_2 import Ui_red_contract_2
+        self.edit()
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_red_contract_2()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
-
-
-        else:
-            from error_hostel import Ui_Error
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_Error()
-            self.ui.setupUi(self.window)
-            self.window.show()
+            #
+            #
+            # from error_hostel import Ui_Error
+            # self.window = QtWidgets.QMainWindow()
+            # self.ui = Ui_Error()
+            # self.ui.setupUi(self.window)
+            # self.window.show()
 
 
     def openRed_Client(self):

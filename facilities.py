@@ -357,7 +357,7 @@ class Ui_Facilities(object):
         self.red_facility_btn.setText(_translate("Facilities", "Редактировать"))
         self.del_facility_btn.setText(_translate("Facilities", "Удалить"))
         self.back_to_contract_btn.setText(_translate("Facilities", "К меню договора"))
-        self.list_facilities_btn.setText(_translate("Facilities", "Список льгот"))
+        self.list_facilities_btn.setText(_translate("Facilities", "Список стоимостей"))
 
 
 if __name__ == "__main__":

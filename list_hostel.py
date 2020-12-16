@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
+import xlwt
+import os
 
 class Ui_list_hostel(object):
     def fill_list(self):
@@ -18,9 +20,37 @@ class Ui_list_hostel(object):
         mas = dbd.list_of_dormitories()
         i = 1
         for person in mas:
-            self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
-                                     + 'Адрес: ' + person[1]['Адрес'] + '\n')
-            i = i + 1
+            if 'name' in person[1]:
+                self.hostel_info.addItem(str(i) + '. Название: ' + person[1]['name'] + '\n' \
+                                         + 'Адрес: ' + person[1]['Адрес'] + '\n')
+                i = i + 1
+
+
+    def export_to_exel(self):
+        hat_data = ["Название","Адрес"]
+        dorm_mas = dbd.list_of_dormitories()
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Общежития")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+        i,j = 1,0
+        for dorm in dorm_mas:
+            sheet.write(i,j,dorm[1]["name"])
+            sheet.write(i,j+1,dorm[1]["Адрес"])
+            i += 1
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Общежития.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
 
     def openHostel(self):
         from hostel import Ui_hostel
@@ -142,6 +172,7 @@ class Ui_list_hostel(object):
         self.back_to_hostel_btn.setObjectName("back_to_hostel_btn")
 
         self.back_to_hostel_btn.clicked.connect(self.openHostel)
+        self.import_hostel_btn.clicked.connect(self.export_to_exel)
         self.back_to_hostel_btn.clicked.connect(list_hostel.close)
 
         self.horizontalLayout.addWidget(self.back_to_hostel_btn)

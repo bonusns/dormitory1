@@ -10,6 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
+import xlwt
+import os
+
 
 class Ui_list_facilities(object):
 
@@ -23,6 +26,34 @@ class Ui_list_facilities(object):
             pole = self.Facilities_info.item(i)
             pole.setText("Наименование: " + str(fac[0]) + "; Стоимость " + str(fac[1]))
             i += 1
+
+    def export_to_exel(self):
+        hat_data = ["Название","Стоимость"]
+        fac_mas = dbd.list_of_facilities()[0]
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Льготы и стоимости")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+        i,j = 1,0
+        for fac in fac_mas:
+            print(fac)
+            sheet.write(i,j,fac[0])
+            sheet.write(i,j+1,int(fac[1]))
+            i += 1
+
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Стоимости.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
 
 
     def openHelp(self):
@@ -145,6 +176,7 @@ class Ui_list_facilities(object):
         self.back_to_facilities_btn.setObjectName("back_to_facilities_btn")
 
         self.back_to_facilities_btn.clicked.connect(self.openHelp)
+        self.import_facilities_btn.clicked.connect(self.export_to_exel)
         self.back_to_facilities_btn.clicked.connect(list_facilities.close)
 
         self.horizontalLayout.addWidget(self.back_to_facilities_btn)
@@ -171,7 +203,7 @@ class Ui_list_facilities(object):
 
     def retranslateUi(self, list_facilities):
         _translate = QtCore.QCoreApplication.translate
-        list_facilities.setWindowTitle(_translate("list_facilities", "Список льгот"))
+        list_facilities.setWindowTitle(_translate("list_facilities", "Список стоимостей"))
         self.import_facilities_btn.setText(_translate("list_facilities", "Экспортировать в Excel"))
         self.back_to_facilities_btn.setText(_translate("list_facilities", "Вернуться в меню льгот"))
         __sortingEnabled = self.Facilities_info.isSortingEnabled()

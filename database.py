@@ -520,13 +520,14 @@ def search_contract_by_code(code):
 def get_students_contract_num(student_id):
     code = []
     db = init_firebase()
+    code = ""
     student = search_student_by_id(student_id)
-    if "Договор" in student[1]:
-        code = student[1]["Договор"]["Шифр"]
-    else:
-        code = "ОБ - " + str(get_last_contract_num() + 1)
+    if student != [] and student != "":
+        if "Договор" in student[1]:
+            code = student[1]["Договор"]["Шифр"]
+        else:
+            code = "ОБ - " + str(get_last_contract_num() + 1)
     return code
-
 def list_of_contracts():
     """возвращает данные формата [(id_студента, номер общаги, {данные договора}),(id_студента, номер общаги, {данные договора})] """
     last_num = get_last_contract_num()
@@ -662,6 +663,18 @@ def export_to_exel(hat_data,data_mas,file):
         j += 1
 
     export_file.save("../exports/" + file)
+
+def get_students_contract_num2(student_id):
+    code = []
+    db = init_firebase()
+    code = ""
+    student = search_student_by_id(student_id)
+    if student != [] and student != "":
+        if "Договор" in student[1]:
+            code = student[1]["Договор"]["Шифр"]
+        else:
+            code = ""
+    return code
 
 
 if __name__ == '__main__':

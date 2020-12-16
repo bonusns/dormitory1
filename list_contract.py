@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
+import xlwt
+import os
 
 class Ui_list_contract(object):
 
@@ -24,6 +26,43 @@ class Ui_list_contract(object):
                                      + 'Дата начала: ' + str(person[2]['Дата начала']) +";" + \
                                      '  Дата конца: ' + str(person[2]['Дата конца']) +";" + '    Цена: ' + str(person[2]['Стоимость'])+"."+'\n')
             i = i + 1
+
+    def export_to_exel(self):
+        hat_data = ["Шифр","ФИО","Общежитие","Комната","Дата начала","Дата конца","Льгота","Стоимость",]
+        contract_mas = dbd.list_of_contracts()
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Договоры")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+
+        i, j = 1, 0
+        for contract in contract_mas:
+            print(contract)
+            print(str(contract[0]))
+            student = dbd.search_student_by_id(contract[0])
+            print(student)
+            sheet.write(i, j, contract[2]["Шифр"])
+            sheet.write(i, j+1, student[1]["ФИО"])
+            sheet.write(i, j+2, contract[1])
+            sheet.write(i, j+3, student[1]["Комната"])
+            sheet.write(i, j+4, contract[2]["Дата начала"])
+            sheet.write(i, j+5, contract[2]["Дата конца"])
+            sheet.write(i, j+6, contract[2]["Льгота"])
+            sheet.write(i, j+7, int(contract[2]["Стоимость"]))
+            i += 1
+
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Договоры.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def openContract(self):
         from contract import Ui_contract
@@ -145,6 +184,8 @@ class Ui_list_contract(object):
         self.back_to_contract_btn.setObjectName("back_to_contract_btn")
 
         self.back_to_contract_btn.clicked.connect(self.openContract)
+        self.import_contract_btn.clicked.connect(self.export_to_exel)
+
         self.back_to_contract_btn.clicked.connect(list_contract.close)
 
         self.horizontalLayout.addWidget(self.back_to_contract_btn)

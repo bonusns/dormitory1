@@ -11,7 +11,17 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
 
+
 class Ui_add_contract(object):
+
+    def close(self):
+        from Add_Client import Ui_add_client
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_add_client()
+        self.ui.setupUi(self.window)
+        self.window.close()
+
+
     def set_code(self):
         print('pojaluista')
         self.code_line.setReadOnly(False)
@@ -50,6 +60,7 @@ class Ui_add_contract(object):
         # self.CostBox.setCurrentIndex(0)
 
         from success import Ui_Error
+        print("Error")
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()
         self.ui.setupUi(self.window)
@@ -517,6 +528,7 @@ class Ui_add_contract(object):
         self.set_code()
         self.code_line.setReadOnly(True)
         print('rabotai')
+        self.close()
 
 
     def retranslateUi(self, add_contract):

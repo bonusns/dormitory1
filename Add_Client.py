@@ -12,9 +12,35 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import add_contract
 import database
-
+import time
 
 class Ui_add_client(object):
+
+
+    def fill_dorm_data(self):
+        dorm_mas = database.list_of_dormitories()
+        i = 1
+        self.HostelNumber.addItem("")
+        self.HostelNumber.setItemText(0, '')
+        for dorm in dorm_mas:
+            print(dorm[0])
+            if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
+                print(dorm[1]['number'])
+                self.HostelNumber.addItem("")
+                self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
+                i += 1
+
+
+    def check_dorm_num(self,dorm_num):
+        if dorm_num == "1" or dorm_num == "2" or dorm_num == "3":
+            print('ley')
+
+            self.add_contract_btn.clicked.connect(self.Add_client_contract)
+            print('hopa')
+         # self.add_contract_btn.clicked.connect(add_client.close)
+            print('hey')
+        else:
+            print('opa')
 
     def del_buff(self):
         database.delete_buffer()
@@ -23,14 +49,13 @@ class Ui_add_client(object):
 
     def openAdd_contract(self):
     #  #   if self.hostel_line.text() !='':
-    #
-        self.Add_client()
+        # self.Add_client()
         from add_contract import Ui_add_contract
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_add_contract()
         self.ui.setupUi(self.window)
         self.window.show()
-        #add_client.close()
+       # add_client.close()
     #     else:
     # from error_hostel import Ui_Error
     # self.window = QtWidgets.QMainWindow()
@@ -68,20 +93,76 @@ class Ui_add_client(object):
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
+        #hostel = self.hostel_line.text()
+        hostel = self.HostelNumber.currentText()
+        room = 'queue'
+
+        if c == 0:
+            database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
+            # if d == 0:
+            #     database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,hostel)
+            #     # from add_contract import Ui_add_contract
+            #     # self.window = QtWidgets.QMainWindow()
+            #     # self.ui = Ui_add_contract()
+            #     # self.ui.setupUi(self.window)
+            #     # self.window.show()
+            # else:
+            #     from error_hostel import Ui_Error
+            #     self.window = QtWidgets.QMainWindow()
+            #     self.ui = Ui_Error()
+            #     self.ui.setupUi(self.window)
+            #     self.window.show()
+
+        else:
+            from error import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+
+        self.FIO_line.clear()
+        self.serial_line.clear()
+        self.number_line.clear()
+        self.addres_line.clear()
+        self.phone_line.clear()
+        self.HostelNumber.setCurrentIndex(0)
+        self.FormBox.setCurrentIndex(-1)
+        self.SexBox.setCurrentIndex(-1)
+
+    def Add_client_contract(self):
+        c = 1
+        d = 1
+        print("hello")
+        while c != 0:
+            fio = self.FIO_line.text()
+            c = database.try_get_fio(fio)
+            if c == 1:
+                self.FIO_line.clear()
+
+                break
+        print(c)
+        passport = self.serial_line.text() + self.number_line.text()
+        address = self.addres_line.text()
+        phone = self.phone_line.text()
+        educ_form = self.FormBox.currentText()
+        sex = self.SexBox.currentText()
         while d != 0:
-            hostel = self.hostel_line.text()
+            hostel = self.HostelNumber.currentText()
             d = database.try_get_hostel(hostel)
             if d == 1:
-                self.hostel_line.clear()
+                self.HostelNumber.setCurrentIndex(0)
 
                 break
         print(d)
         room = 'queue'
 
         if c == 0:
-            key = database.add_student(fio,phone,passport,address,educ_form,sex,hostel)
             if d == 0:
-                database.add_student_buffer(key,fio, phone, passport, address, educ_form, sex,room,hostel)
+                key = database.add_student(fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(hostel))
+                database.add_student_buffer(key, fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(room), str(hostel))
+                self.openAdd_contract()
+                #add_client.close()
                 # from add_contract import Ui_add_contract
                 # self.window = QtWidgets.QMainWindow()
                 # self.ui = Ui_add_contract()
@@ -101,15 +182,16 @@ class Ui_add_client(object):
             self.ui.setupUi(self.window)
             self.window.show()
 
+        # self.FIO_line.clear()
+        # self.serial_line.clear()
+        # self.number_line.clear()
+        # self.addres_line.clear()
+        # self.phone_line.clear()
+        # self.hostel_line.clear()
+        # self.FormBox.setCurrentIndex(-1)
+        # self.SexBox.setCurrentIndex(-1)
 
-        self.FIO_line.clear()
-        self.serial_line.clear()
-        self.number_line.clear()
-        self.addres_line.clear()
-        self.phone_line.clear()
-        self.hostel_line.clear()
-        self.FormBox.setCurrentIndex(-1)
-        self.SexBox.setCurrentIndex(-1)
+
 
 
 
@@ -591,8 +673,8 @@ class Ui_add_client(object):
         self.label_9.setFont(font)
         self.label_9.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.label_9.setObjectName("label_9")
-        self.hostel_line = QtWidgets.QLineEdit(self.centralwidget)
-        self.hostel_line.setGeometry(QtCore.QRect(220, 500, 400, 30))
+        self.HostelNumber = QtWidgets.QComboBox(self.centralwidget)
+        self.HostelNumber.setGeometry(QtCore.QRect(220, 500, 400, 30))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -600,9 +682,6 @@ class Ui_add_client(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
@@ -615,9 +694,6 @@ class Ui_add_client(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
@@ -630,23 +706,27 @@ class Ui_add_client(object):
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.hostel_line.setPalette(palette)
-        font = QtGui.QFont("Segoe UI")
+        self.HostelNumber.setPalette(palette)
+        font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.hostel_line.setFont(font)
-        self.hostel_line.setStyleSheet("background-color: rgb(135, 206, 235);")
-        self.hostel_line.setObjectName("number_line")
+        self.HostelNumber.setFont(font)
+        self.HostelNumber.setToolTip("")
+        self.HostelNumber.setStatusTip("")
+        self.HostelNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
+                                        "")
+        self.HostelNumber.setEditable(False)
+        self.HostelNumber.setMaxCount(100)
+        self.HostelNumber.setIconSize(QtCore.QSize(16, 16))
+        self.HostelNumber.setModelColumn(0)
+        self.HostelNumber.setObjectName("HostelNumber")
 
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.layoutWidget.setGeometry(QtCore.QRect(60, 20, 561, 42))
@@ -704,7 +784,7 @@ class Ui_add_client(object):
         self.add_client_btn.setObjectName("add_client_btn")
 
         self.add_client_btn.clicked.connect(self.Add_client)
-        self.add_client_btn.clicked.connect(self.del_buff)
+        # self.add_client_btn.clicked.connect(self.del_buff)
 
         self.horizontalLayout.addWidget(self.add_client_btn)
         self.add_contract_btn = QtWidgets.QPushButton(self.layoutWidget)
@@ -754,7 +834,11 @@ class Ui_add_client(object):
         self.add_contract_btn.setFont(font)
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
-        self.add_contract_btn.clicked.connect(self.openAdd_contract)
+
+        self.HostelNumber.activated[str].connect(self.check_dorm_num)
+
+        #self.add_contract_btn.clicked.connect(self.Add_client_contract)
+       # self.add_contract_btn.clicked.connect(self.openAdd_contract)
         self.add_contract_btn.clicked.connect(add_client.close)
 
 
@@ -813,11 +897,13 @@ class Ui_add_client(object):
         self.horizontalLayout.addWidget(self.back_to_client_btn)
 
         self.retranslateUi(add_client)
+        self.fill_dorm_data()
         self.FormBox.setCurrentIndex(-1)
         self.SexBox.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(add_client)
 
     def retranslateUi(self, add_client):
+        print('hol')
         _translate = QtCore.QCoreApplication.translate
         add_client.setWindowTitle(_translate("add_client", "Добавление клиента"))
         self.label.setText(_translate("add_client", "ФИО"))
@@ -842,6 +928,9 @@ class Ui_add_client(object):
         self.SexBox.setCurrentText(_translate("add_client", ""))
         self.SexBox.setItemText(0, _translate("add_client", "Мужской"))
         self.SexBox.setItemText(1, _translate("add_client", "Женский"))
+
+
+
 
 
 if __name__ == "__main__":

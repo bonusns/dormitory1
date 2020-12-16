@@ -10,7 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
-
+import xlwt
+import os
 
 class Ui_list_rooms(object):
 
@@ -25,6 +26,46 @@ class Ui_list_rooms(object):
                 pole = self.Rooms_info.item(i)
                 pole.setText(f"Общежитие: {room[0]}; Номер: {room[1]}\nВместимость: {room_data['capacity']}\nЗанято: {room_data['occupied']}\nСтатус – {room_data['status']}\n")
                 i += 1
+
+    def export_to_exel(self):
+        hat_data = ["Общежитие","Комната","Жильцы"]
+        room_mas = dbd.list_of_all_rooms()
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Комнаты")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+
+        i,j = 1,0
+        for room in room_mas:
+            if room[1] != "queue":
+                sheet.write(i,j,room[0])
+                sheet.write(i,j+1,int(room[1]))
+                if "members" in room[2]:
+                    if len(room[2]["members"]) > 1:
+                        k = 0
+                        for member in room[2]["members"]:
+                            fio = dbd.search_student_by_id(member)[1]["ФИО"]
+                            sheet.write(i + k,j+2,fio)
+                            k+=1
+                    if len(room[2]["members"]) == 1:
+                        for member in room[2]["members"]:
+                            fio = dbd.search_student_by_id(member)[1]["ФИО"]
+                            sheet.write(i, j + 2, fio)
+                else:
+                    sheet.write(i, j + 2, "-")
+                i += 1
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Комнаты.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def openRoom(self):
         from rooms import Ui_Rooms
@@ -146,6 +187,7 @@ class Ui_list_rooms(object):
         self.back_to_rooms_btn.setObjectName("back_to_rooms_btn")
 
         self.back_to_rooms_btn.clicked.connect(self.openRoom)
+        self.import_rooms_btn.clicked.connect(self.export_to_exel)
         self.back_to_rooms_btn.clicked.connect(list_rooms.close)
 
         self.horizontalLayout.addWidget(self.back_to_rooms_btn)

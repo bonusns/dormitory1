@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import database as dbd
+import xlwt
+import os
 
 
 class Ui_list_contract(object):
@@ -25,13 +27,36 @@ class Ui_list_contract(object):
                                      '  Дата конца: ' + str(person[2]) +";" + '\n')
             i = i + 1
             print(str(person[1]))
-            from docxtpl import DocxTemplate
-            doc = DocxTemplate("шаблон.docx")
-            context = {'fio': person[0], 'date_start': str(person[1]),
-                       'date_end': str(person[2]),
-                       'code': str(person[3])}
-            doc.render(context)
-            doc.save("шаблон-final.docx")
+
+    def export_to_exel(self):
+        hat_data = ["ФИО","Дата начала","Дата конца","Шифр"]
+        archive_mas = dbd.list_of_archive()
+        export_file = xlwt.Workbook()
+        sheet = export_file.add_sheet("Архив")
+        i, j = 0, 0
+        for elem in hat_data:
+            sheet.write(i, j, elem)
+            j += 1
+        i,j = 1,0
+        for archive in archive_mas:
+            for elem in archive:
+                sheet.write(i,j,elem)
+                j += 1
+            i += 1
+
+        try:
+            os.mkdir("exports")
+        except:
+            pass
+        export_file.save("exports/Архив.xls")
+
+        export_file.save("exports/Клиенты.xls")
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
 
     def openContract(self):
         from contract import Ui_contract
@@ -153,6 +178,7 @@ class Ui_list_contract(object):
         self.back_to_contract_btn.setObjectName("back_to_contract_btn")
 
         self.back_to_contract_btn.clicked.connect(self.openContract)
+        self.import_contract_btn.clicked.connect(self.export_to_exel)
         self.back_to_contract_btn.clicked.connect(list_contract.close)
 
         self.horizontalLayout.addWidget(self.back_to_contract_btn)
