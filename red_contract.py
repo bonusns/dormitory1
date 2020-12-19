@@ -430,7 +430,7 @@ class Ui_red_contract(object):
         self.find_contract_btn.setText(_translate("red_contract", "Найти"))
         self.back_to_contract_btn.setText(_translate("red_contract", "Вернуться в меню договора"))
         self.label_FIO_2.setText(_translate("red_contract", "или"))
-        self.red_contract_btn.setText(_translate("red_contract", "Редактировать"))
+        self.red_contract_btn.setText(_translate("red_contract", "Редактирование"))
 
 
 if __name__ == "__main__":

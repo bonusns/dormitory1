@@ -20,6 +20,11 @@ class Ui_add_room(object):
         room_list = dbd.list_of_room_num(dorm_number)
         if str(room_number) not in room_list:
             dbd.add_room(dorm_number,room_number,capacity)
+            from success_action import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
         else:
             from error_add_room import Ui_Error
             self.window = QtWidgets.QMainWindow()
@@ -31,9 +36,7 @@ class Ui_add_room(object):
         dorm_mas = dbd.list_of_dormitories()
         i = 0
         for dorm in dorm_mas:
-            print(dorm[0])
             if dorm[0] != 'queue':
-                print(dorm[1])
                 self.RoomHostelNumber.addItem("")
                 self.RoomHostelNumber.setItemText(i, f"{dorm[1]['number']}")
                 i += 1
@@ -404,7 +407,7 @@ class Ui_add_room(object):
         add_room.setStatusBar(self.statusbar)
 
         self.retranslateUi(add_room)
-        self.RoomPlacesBox.setCurrentIndex(-1)
+        self.RoomPlacesBox.setCurrentIndex(0)
         self.RoomHostelNumber.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(add_room)
         self.fill_dorm_data()

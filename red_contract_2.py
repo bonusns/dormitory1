@@ -437,7 +437,7 @@ class Ui_red_contract_2(object):
         self.back_to_red_client_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_red_client_btn.setObjectName("back_to_red_client_btn")
 
-        self.back_to_red_client_btn.clicked.connect(self.openRed_client_2)
+       # self.back_to_red_client_btn.clicked.connect(self.openRed_client_2)
         self.back_to_red_client_btn.clicked.connect(red_contract_2.close)
        # self.back_to_red_client_btn.clicked.connect(self.del_buff)
 
@@ -506,6 +506,7 @@ class Ui_red_contract_2(object):
         self.CostBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(red_contract_2)
         self.set_code()
+        self.code_line.setReadOnly(True)
 
 
     def retranslateUi(self, red_contract_2):

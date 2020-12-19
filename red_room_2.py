@@ -429,7 +429,7 @@ class Ui_red_room_2(object):
         red_room_2.setWindowTitle(_translate("red_room_2", "Редактирование комнаты"))
         self.label_2.setText(_translate("red_room_2", "Число мест"))
         self.label_3.setText(_translate("red_room_2", "Статус комнаты"))
-        self.red_room_2_btn.setText(_translate("red_room_2", "Редактировать"))
+        self.red_room_2_btn.setText(_translate("red_room_2", "Отредактировать"))
         self.back_to_red_rooms_btn.setText(_translate("red_room_2", "Вернуться к выбору комнаты"))
         self.RoomTipeBox.setItemText(0, _translate("red_room_2", "свободна"))
         self.RoomTipeBox.setItemText(1, _translate("red_room_2", "занята"))

@@ -14,12 +14,7 @@ import database as dbd
 
 class Ui_add_contract(object):
 
-    def close(self):
-        from Add_Client import Ui_add_client
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_add_client()
-        self.ui.setupUi(self.window)
-        self.window.close()
+
 
 
     def set_code(self):
@@ -457,7 +452,7 @@ class Ui_add_contract(object):
         self.back_to_add_client_btn.setObjectName("back_to_add_client_btn")
 
 
-        self.back_to_add_client_btn.clicked.connect(self.openAdd_Client)
+        #self.back_to_add_client_btn.clicked.connect(self.openAdd_Client)
         self.back_to_add_client_btn.clicked.connect(add_contract.close)
         self.back_to_add_client_btn.clicked.connect(self.del_buff)
 
@@ -527,8 +522,7 @@ class Ui_add_contract(object):
         QtCore.QMetaObject.connectSlotsByName(add_contract)
         self.set_code()
         self.code_line.setReadOnly(True)
-        print('rabotai')
-        self.close()
+
 
 
     def retranslateUi(self, add_contract):

@@ -402,13 +402,13 @@ class Ui_red_room(object):
         # self.HostelNumber.addItem("")
         # self.HostelNumber.addItem("")
         red_room.setCentralWidget(self.centralwidget)
-
+        self.fill_dorm_data()
         self.retranslateUi(red_room)
         self.RoomNumber.setCurrentIndex(-1)
         self.HostelNumber.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(red_room)
         self.HostelNumber.activated[str].connect(self.fill_room_data)
-        self.fill_dorm_data()
+
 
     def retranslateUi(self, red_room):
         _translate = QtCore.QCoreApplication.translate
@@ -418,7 +418,7 @@ class Ui_red_room(object):
         self.find_room_btn.setText(_translate("red_room", "Найти"))
         self.back_to_rooms_btn.setText(_translate("red_room", "Вернуться в меню комнат"))
         self.label.setText(_translate("red_room", "и"))
-        self.red_room_btn.setText(_translate("red_room", "Редактировать"))
+        self.red_room_btn.setText(_translate("red_room", "Редактирование"))
         # self.RoomNumber.setItemText(0, _translate("red_room", "1"))
         # self.RoomNumber.setItemText(1, _translate("red_room", "2"))
         # self.RoomNumber.setItemText(2, _translate("red_room", "3"))

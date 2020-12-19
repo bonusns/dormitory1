@@ -135,7 +135,7 @@ class Ui_Main(object):
         self.client_btn.setObjectName("client_btn")
 
         self.client_btn.clicked.connect(self.openClient)
-        #self.client_btn.clicked.connect(Main.close)
+        self.client_btn.clicked.connect(Main.close)
 
         self.verticalLayout.addWidget(self.client_btn)
         self.dogovor_btn = QtWidgets.QPushButton(self.centralwidget)
@@ -430,7 +430,7 @@ class Ui_Main(object):
         self.label.setText(_translate("Main", "Рабочий стол"))
         self.client_btn.setText(_translate("Main", "Клиент"))
         self.dogovor_btn.setText(_translate("Main", "Договор"))
-        self.ob_btn.setText(_translate("Main", "Общежитие"))
+        self.ob_btn.setText(_translate("Main", "Общежития"))
         self.help_btn.setText(_translate("Main", "Справка"))
         self.exit_btn.setText(_translate("Main", "Выход"))
 

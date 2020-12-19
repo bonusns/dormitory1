@@ -301,7 +301,7 @@ class Ui_red_facility_2(object):
         red_facility_2.setWindowTitle(_translate("red_facility_2", "Выбранная стоимость/льгота"))
         self.label.setText(_translate("red_facility_2", "Название \nстоимости/льготы"))
         self.label_2.setText(_translate("red_facility_2", "Стоимость"))
-        self.red_facility_btn.setText(_translate("red_facility_2", "Редактировать"))
+        self.red_facility_btn.setText(_translate("red_facility_2", "Отредактировать"))
         self.back_to_red_facilities_btn.setText(_translate("red_facility_2", "Вернуться к выбору"))
 
 

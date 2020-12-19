@@ -412,7 +412,7 @@ class Ui_hostel(object):
         _translate = QtCore.QCoreApplication.translate
         hostel.setWindowTitle(_translate("hostel", "Общежития"))
         self.label.setText(_translate("hostel", "Общежития"))
-        self.add_hostel_btn.setText(_translate("hostel", "Добавить новую"))
+        self.add_hostel_btn.setText(_translate("hostel", "Добавить новое"))
         self.red_hostel_btn.setText(_translate("hostel", "Редактировать"))
         self.del_hostel_btn.setText(_translate("hostel", "Удалить"))
         self.main_hostel_btn.setText(_translate("hostel", "Рабочий стол"))

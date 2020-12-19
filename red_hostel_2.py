@@ -113,6 +113,10 @@ class Ui_red_hostel_2(object):
         self.Number_line.setMaxLength(2)
         self.Number_line.setCursorPosition(0)
         self.Number_line.setObjectName("Number_line")
+
+        self.Number_line.setReadOnly(True)
+
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(40, 155, 150, 30))
         font = QtGui.QFont()

@@ -15,6 +15,8 @@ import database as dbd
 class Ui_red_hostel(object):
 
     def fill_list(self):
+
+        self.Hostel_list.clear()
         dorm_number = self.Number_line.text()
         db = dbd.init_firebase()
         dorm_mas = db.child("dormitories").order_by_key().equal_to("dormitory" + str(dorm_number)).get().each()
@@ -327,7 +329,7 @@ class Ui_red_hostel(object):
         self.Number_line.setInputMask(_translate("red_hostel", "09"))
         self.find_hostel_btn.setText(_translate("red_hostel", "Найти"))
         self.back_to_hostel_btn.setText(_translate("red_hostel", "Вернуться в меню общежитий"))
-        self.red_hostel_btn.setText(_translate("red_hostel", "Редактировать"))
+        self.red_hostel_btn.setText(_translate("red_hostel", "Редактирование"))
 
 
 if __name__ == "__main__":

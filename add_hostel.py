@@ -24,7 +24,13 @@ class Ui_add_hostel(object):
     def add_hostel(self):
         number = self.Number_line.text()
         address = self.Addres_line.text()
-        database.add_dormitory(number, address)
+        c = database.add_dormitory(number, address)
+        if c == 0:
+            from error_add_hostel import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
         self.Addres_line.clear()
         self.Number_line.clear()
 

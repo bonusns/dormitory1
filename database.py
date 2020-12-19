@@ -3,7 +3,7 @@ import pyrebase
 import random
 import xlwt
 import xlrd
-
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 def noquote(s):
     return s
@@ -29,7 +29,7 @@ def add_dormitory(number, address):
     dormitoryData = {'number': number, 'rooms': {}, 'name': 'Общежитие ' + str(number), 'Адрес': address}
 
     check_num = db.child("dormitories").order_by_key().equal_to("dormitory" + str(number)).get().each()
-    if check_num == []:
+    if check_num == [] and check_num != '' and check_num != '0':
         db.child("dormitories").child('dormitory' + str(number)).set(dormitoryData)
         dorm_num = number
         for number in range(100, 106):
@@ -61,6 +61,10 @@ def add_dormitory(number, address):
             room_data = {'capacity': capacity, 'occupied': 0, 'number': number, 'status': 'свободна', 'gender': '',
                          'residents': {}}
             db.child('dormitories').child('dormitory' + str(dorm_num)).child('rooms').child(number).set(room_data)
+    else:
+        c = 0
+        return c
+
 
 
 def list_of_dormitories():
@@ -247,6 +251,7 @@ def add_student_buffer(student_id,fio, phone, passport, address, educ_form, gend
 def edit_student(student_id,room, fio, phone, passport, address, educ_form, gender, hostel):
     """Ecли какой-то параметр меняется его передаешь в формате fio = изменения, если нет то не указываешь"""
     db = init_firebase()
+    hostel_old =db.child("clients").child(student_id).child('Общежитие').get().val()
   #  if fio:
     db.child("clients").child(student_id).update({"ФИО":fio})
 
@@ -262,15 +267,23 @@ def edit_student(student_id,room, fio, phone, passport, address, educ_form, gend
   #  if gender:
     db.child("clients").child(student_id).update({"Пол":gender})
    # if hostel:
-    db.child("clients").child(student_id).update({"Общежитие":hostel})
-    if room !='' and room !="dormitory" + str(hostel) + "/" + "rooms" + "/" + "queue":
-        db.child("dormitories").child(room).child(student_id).remove()
+    # if room !='' and room !="dormitory" + str(hostel) + "/" + "rooms" + "/" + "queue":
+    #     db.child("dormitories").child(room).child(student_id).remove()
+    if hostel_old != '' and hostel != 'queue':
+        print('hola')
+        print(hostel_old)
+        db.child("dormitories").child("dormitory" + str(hostel_old)).child("rooms").child("queue").child(
+            student_id).remove()
+    else:
+        print('hopa')
+        db.child("dormitories").child("queue").child(student_id).remove()
     if hostel !='' and hostel !='queue':
-
+        print('hol')
         db.child("dormitories").child("dormitory"+str(hostel)).child("rooms").child("queue").child(student_id).set({"ФИО":fio})
     else:
+        print('hop')
         db.child("dormitories").child("queue").child(student_id).set({"ФИО":fio})
-
+    db.child("clients").child(student_id).update({"Общежитие": hostel})
 
 def delete_student(student_id, room):
     '''удаление студента'''
@@ -374,6 +387,7 @@ def add_contract(student_id, date_start, date_end, room, cost, facility, sex, co
     db = init_firebase()
     last_num = get_last_contract_num()
 
+
     contract_data = {"Шифр": code, "Дата начала": date_start, "Дата конца": date_end, "Стоимость": cost, "Льгота":facility}
     db.child("clients").child(student_id).child("Договор").set(contract_data)
 
@@ -382,12 +396,13 @@ def add_contract(student_id, date_start, date_end, room, cost, facility, sex, co
     # удаляем человека из очереди или старой комнаты
     student = search_student_by_id(student_id)
     room_old = student[1]["Комната"]
-    if room_old == "queue":
+    if room_old == "queue" or  room_old == "":
         # удаляем человека из очереди
         remove_student_from_queue(student_id)
     else:
         db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room_old).child(
             "members").child(student_id).remove()
+        remove_student_from_queue(student_id)
     # Обновляем комнаты
     db.child("clients").child(student_id).update({"Комната": room})
     db.child("dormitories").child("dormitory" + str(dormitory)).child("rooms").child(room).child("members").child(
@@ -679,8 +694,8 @@ def get_students_contract_num2(student_id):
 
 if __name__ == '__main__':
     db = init_firebase()
-    export_to_exel(["uno", "dos", "tres", "quatro"], [1, 2, 3, 4], "test.xls")
-
+    hostel_old = db.child("clients").child("-MOpptAoc91YlHHD4YI0").child("Общежитие").get()
+    print(hostel_old.val())
     #get_students_contract_num("-MOG-7AtIksBbmtkcNPN")
     # add_student("Романенко Владимир Юрьевич","94239423","423423","fdgfdgdf","mgkfdg","male","1")
     # st = db.child("clients").order_by_key().equal_to("-MO2ZXoFYxIRHsaST1G6").get()

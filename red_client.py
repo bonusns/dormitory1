@@ -419,7 +419,7 @@ class Ui_red_client(object):
         self.find_client_btn.setText(_translate("red_client", "Найти"))
         self.back_to_client_btn.setText(_translate("red_client", "Вернуться в меню клиента"))
         self.label_FIO_2.setText(_translate("red_client", "или"))
-        self.red_client_btn.setText(_translate("red_client", "Редактировать"))
+        self.red_client_btn.setText(_translate("red_client", "Редактирование"))
 
 
 if __name__ == "__main__":

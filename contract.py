@@ -423,7 +423,7 @@ class Ui_contract(object):
         self.list_contract_btn.setText(_translate("contract", "Список договоров"))
         self.main_contract_btn.setText(_translate("contract", "Рабочий стол"))
         self.cost_btn.setText(_translate("contract", "Стоимости/Льготы"))
-        self.red_contract_btn.setText(_translate("contract", "Редактировать"))
+        self.red_contract_btn.setText(_translate("contract", "Редактирование"))
         self.del_contract_btn.setText(_translate("contract", "Удалить"))
         self.arch_contract_btn.setText(_translate("contract", "Архив"))
 

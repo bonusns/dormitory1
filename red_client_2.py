@@ -12,10 +12,25 @@ import database as dbd
 
 class Ui_red_client_2(object):
 
+    def fill_dorm_data(self):
+        dorm_mas = dbd.list_of_dormitories()
+        i = 1
+        self.HostelNumber.addItem("")
+        self.HostelNumber.setItemText(0, '')
+        for dorm in dorm_mas:
+            print(dorm[0])
+            if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
+                print(dorm[1]['number'])
+                self.HostelNumber.addItem("")
+                self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
+                i += 1
+
+
     def red(self):
         # Вытаскивает из буфера и заполняет поля данными
         mas = dbd.buffer()
         for person in mas:
+            print(person[1]["Комната"])
             self.FIO_line.setText(person[1]["ФИО"])
             self.serial_line.setText(person[1]["Паспорт"][:4])
             self.number_line.setText(person[1]["Паспорт"][4:])
@@ -23,7 +38,12 @@ class Ui_red_client_2(object):
             self.phone_line.setText(person[1]["Телефон"])
             self.Form_box.setCurrentText(person[1]["Форма обучения"])
             self.SexBox.setCurrentText(person[1]["Пол"])
-            self.hostel_line.setText(person[1]["Общежитие"])
+            self.HostelNumber.setCurrentText(person[1]["Общежитие"])
+            if person[1]["Комната"] != '' and person[1]["Комната"] != 'queue':
+                print('10')
+                self.SexBox.setEnabled(False)
+                self.HostelNumber.setEnabled(False)
+
 
     def edit(self):
         # Мне тоже больно что addres с двумя d, но исправлять больнее
@@ -38,8 +58,8 @@ class Ui_red_client_2(object):
             phone_n = self.phone_line.text()
             educ_form_n = self.Form_box.currentText()
             sex_n = self.SexBox.currentText()
-            hostel_n = self.hostel_line.text()
-            с = str(hostel_n)
+            hostel_n = self.HostelNumber.currentText()
+
             while d != 0:
                 fio_n = self.FIO_line.text()
                 d = dbd.try_get_fio(fio_n)
@@ -63,6 +83,12 @@ class Ui_red_client_2(object):
             room = 'queue'
             dbd.add_student_buffer(person[0], fio_n, phone_n, serial_n + number_n, addres_n, educ_form_n, sex_n, room, hostel_n)
             dbd.edit_student(person[0],way,fio_n,phone_n,serial_n + number_n,addres_n,educ_form_n,sex_n, str(hostel_n))
+            from success_action import Ui_Error
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_Error()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
         else:
             from error import Ui_Error
             self.window = QtWidgets.QMainWindow()
@@ -70,11 +96,91 @@ class Ui_red_client_2(object):
             self.ui.setupUi(self.window)
             self.window.show()
 
-        from success_action  import Ui_Error
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Error()
-        self.ui.setupUi(self.window)
-        self.window.show()
+    def edit_contract(self):
+        # Мне тоже больно что addres с двумя d, но исправлять больнее
+        # Функция редактирования
+        mas = dbd.buffer()
+        for person in mas:
+            d = 1
+            c = 1
+            serial_n = self.serial_line.text()
+            number_n = self.number_line.text()
+            addres_n = self.addres_line.text()
+            phone_n = self.phone_line.text()
+            educ_form_n = self.Form_box.currentText()
+            sex_n = self.SexBox.currentText()
+            hostel_n = self.HostelNumber.currentText()
+            с = str(hostel_n)
+            while c != 0:
+                fio_n = self.FIO_line.text()
+                c = dbd.try_get_fio(fio_n)
+                if c == 1:
+                    self.FIO_line.clear()
+
+                    break
+            while d != 0:
+                hostel = self.HostelNumber.currentText()
+                d = dbd.try_get_hostel(hostel)
+                if d == 1:
+                    self.HostelNumber.setCurrentIndex(0)
+
+                    break
+
+            if person[1]['Общежитие'] != '':
+                if person[1]['Комната'] != '' and person[1]['Комната'] != 'queue':
+                    room = person[1]['Комната']
+                    way = room
+
+                    # way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + str(
+                    #   person[1]['Комната']) + "/" + "members"
+                else:
+                    way = "dormitory" + str(person[1]['Общежитие']) + "/" + "rooms" + "/" + "queue"
+                    room = 'queue'
+
+            else:
+                way = "queue"
+                room = 'queue'
+
+                break
+            print(way,'awd')
+            print(c)
+            print(d)
+            print(sex_n)
+            if c == 0:
+                if d == 0:
+                    if sex_n == "Мужской" or sex_n == "Женский":
+                        print('hey')
+                        print(person[0])
+                        print(phone_n)
+                        print(serial_n)
+                        print(number_n)
+                        print(addres_n)
+                        print(educ_form_n)
+                        print(sex_n)
+                        print(room)
+                        print(hostel_n)
+                        print(fio_n)
+
+
+                        dbd.add_student_buffer(person[0], fio_n, phone_n, serial_n + number_n, addres_n, educ_form_n, sex_n,
+                                               room, hostel_n)
+                        dbd.edit_student(person[0], way, fio_n, phone_n, serial_n + number_n, addres_n, educ_form_n, sex_n,
+                                         str(hostel_n))
+                        from red_contract_2 import Ui_red_contract_2
+                        self.window = QtWidgets.QMainWindow()
+                        self.ui = Ui_red_contract_2()
+                        self.ui.setupUi(self.window)
+                        self.window.show()
+
+
+            else:
+                from error import Ui_Error
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_Error()
+                self.ui.setupUi(self.window)
+                self.window.show()
+
+
         # self.FIO_line.clear()
         # self.serial_line.clear()
         # self.number_line.clear()
@@ -90,14 +196,14 @@ class Ui_red_client_2(object):
 
 
 
-    def openRedContract(self):
-
-        from red_contract_2 import Ui_red_contract_2
-        self.edit()
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_red_contract_2()
-        self.ui.setupUi(self.window)
-        self.window.show()
+    # def openRedContract(self):
+    #     self.edit_contract()
+    #
+    #     from red_contract_2 import Ui_red_contract_2
+    #     self.window = QtWidgets.QMainWindow()
+    #     self.ui = Ui_red_contract_2()
+    #     self.ui.setupUi(self.window)
+    #     self.window.show()
 
             #
             #
@@ -603,8 +709,8 @@ class Ui_red_client_2(object):
         self.label_9.setFont(font)
         self.label_9.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
         self.label_9.setObjectName("label_9")
-        self.hostel_line = QtWidgets.QLineEdit(self.centralwidget)
-        self.hostel_line.setGeometry(QtCore.QRect(220, 500, 400, 30))
+        self.HostelNumber = QtWidgets.QComboBox(self.centralwidget)
+        self.HostelNumber.setGeometry(QtCore.QRect(220, 500, 400, 30))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -612,9 +718,6 @@ class Ui_red_client_2(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
@@ -627,9 +730,6 @@ class Ui_red_client_2(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
@@ -642,23 +742,27 @@ class Ui_red_client_2(object):
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
         brush = QtGui.QBrush(QtGui.QColor(135, 206, 235))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.hostel_line.setPalette(palette)
+        self.HostelNumber.setPalette(palette)
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
-        self.hostel_line.setFont(font)
-        self.hostel_line.setStyleSheet("background-color: rgb(135, 206, 235);")
-        self.hostel_line.setObjectName("number_line")
+        self.HostelNumber.setFont(font)
+        self.HostelNumber.setToolTip("")
+        self.HostelNumber.setStatusTip("")
+        self.HostelNumber.setStyleSheet("background-color: rgb(135, 206, 235);\n"
+                                        "")
+        self.HostelNumber.setEditable(False)
+        self.HostelNumber.setMaxCount(100)
+        self.HostelNumber.setIconSize(QtCore.QSize(16, 16))
+        self.HostelNumber.setModelColumn(0)
+        self.HostelNumber.setObjectName("HostelNumber")
 
         self.red_client_btn = QtWidgets.QPushButton(self.layoutWidget)
         self.red_client_btn.setMinimumSize(QtCore.QSize(150, 40))
@@ -760,8 +864,8 @@ class Ui_red_client_2(object):
         self.red_contract_btn.setObjectName("red_contract_btn")
 
         #self.red_contract_btn.clicked.connect(self.edit)
-        self.red_contract_btn.clicked.connect(self.openRedContract)
-        self.red_contract_btn.clicked.connect(red_client_2.close)
+        self.red_contract_btn.clicked.connect(self.edit_contract)
+       # self.red_contract_btn.clicked.connect(red_client_2.close)
 
         self.horizontalLayout.addWidget(self.red_contract_btn)
         self.back_to_red_btn = QtWidgets.QPushButton(self.layoutWidget)
@@ -812,11 +916,12 @@ class Ui_red_client_2(object):
         self.back_to_red_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.back_to_red_btn.setObjectName("back_to_red_btn")
 
-        self.back_to_red_btn.clicked.connect(self.red_client)
         self.back_to_red_btn.clicked.connect(self.openRed_Client)
+        self.back_to_red_btn.clicked.connect(self.red_client)
         self.back_to_red_btn.clicked.connect(red_client_2.close)
         self.horizontalLayout.addWidget(self.back_to_red_btn)
 
+        self.fill_dorm_data()
 
         self.retranslateUi(red_client_2)
         self.Form_box.setCurrentIndex(-1)
@@ -845,7 +950,7 @@ class Ui_red_client_2(object):
         self.label_9.setText(_translate("red_client_2", "Общежитие"))
         self.Form_box.setItemText(0, _translate("red_client_2", "Бюджет"))
         self.Form_box.setItemText(1, _translate("red_client_2", "Платное обучение"))
-        self.red_client_btn.setText(_translate("red_client_2", "Редактировать"))
+        self.red_client_btn.setText(_translate("red_client_2", "Отредактировать"))
         self.red_contract_btn.setText(_translate("red_client_2", "Редактировать договор"))
         self.back_to_red_btn.setText(_translate("red_client_2", "Вернуться к поиску клиента"))
         self.SexBox.setItemText(0, _translate("red_client_2", "Мужской"))

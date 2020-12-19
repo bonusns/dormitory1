@@ -31,16 +31,7 @@ class Ui_add_client(object):
                 i += 1
 
 
-    def check_dorm_num(self,dorm_num):
-        if dorm_num == "1" or dorm_num == "2" or dorm_num == "3":
-            print('ley')
 
-            self.add_contract_btn.clicked.connect(self.Add_client_contract)
-            print('hopa')
-         # self.add_contract_btn.clicked.connect(add_client.close)
-            print('hey')
-        else:
-            print('opa')
 
     def del_buff(self):
         database.delete_buffer()
@@ -147,6 +138,7 @@ class Ui_add_client(object):
         phone = self.phone_line.text()
         educ_form = self.FormBox.currentText()
         sex = self.SexBox.currentText()
+
         while d != 0:
             hostel = self.HostelNumber.currentText()
             d = database.try_get_hostel(hostel)
@@ -159,15 +151,31 @@ class Ui_add_client(object):
 
         if c == 0:
             if d == 0:
-                key = database.add_student(fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(hostel))
-                database.add_student_buffer(key, fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(room), str(hostel))
-                self.openAdd_contract()
-                #add_client.close()
-                # from add_contract import Ui_add_contract
-                # self.window = QtWidgets.QMainWindow()
-                # self.ui = Ui_add_contract()
-                # self.ui.setupUi(self.window)
-                # self.window.show()
+                if sex == "Мужской" or sex == "Женский":
+
+                    key = database.add_student(fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(hostel))
+                    database.add_student_buffer(key, fio, str(phone), str(passport), str(address), str(educ_form), str(sex), str(room), str(hostel))
+                    self.openAdd_contract()
+                    #add_client.close()
+                    # from add_contract import Ui_add_contract
+                    # self.window = QtWidgets.QMainWindow()
+                    # self.ui = Ui_add_contract()
+                    # self.ui.setupUi(self.window)
+                    # self.window.show()
+                    self.FIO_line.clear()
+                    self.serial_line.clear()
+                    self.number_line.clear()
+                    self.addres_line.clear()
+                    self.phone_line.clear()
+                    self.HostelNumber.setCurrentIndex(0)
+                    self.FormBox.setCurrentIndex(-1)
+                    self.SexBox.setCurrentIndex(-1)
+                else:
+                    from error_hostel import Ui_Error
+                    self.window = QtWidgets.QMainWindow()
+                    self.ui = Ui_Error()
+                    self.ui.setupUi(self.window)
+                    self.window.show()
             else:
                 from error_hostel import Ui_Error
                 self.window = QtWidgets.QMainWindow()
@@ -835,11 +843,10 @@ class Ui_add_client(object):
         self.add_contract_btn.setStyleSheet("background-color: rgb(135, 206, 235);")
         self.add_contract_btn.setObjectName("add_contract_btn")
 
-        self.HostelNumber.activated[str].connect(self.check_dorm_num)
-
+        self.add_contract_btn.clicked.connect(self.Add_client_contract)
         #self.add_contract_btn.clicked.connect(self.Add_client_contract)
        # self.add_contract_btn.clicked.connect(self.openAdd_contract)
-        self.add_contract_btn.clicked.connect(add_client.close)
+       # self.add_contract_btn.clicked.connect(add_client.close)
 
 
         self.horizontalLayout.addWidget(self.add_contract_btn)
@@ -903,7 +910,6 @@ class Ui_add_client(object):
         QtCore.QMetaObject.connectSlotsByName(add_client)
 
     def retranslateUi(self, add_client):
-        print('hol')
         _translate = QtCore.QCoreApplication.translate
         add_client.setWindowTitle(_translate("add_client", "Добавление клиента"))
         self.label.setText(_translate("add_client", "ФИО"))
@@ -918,7 +924,7 @@ class Ui_add_client(object):
         self.label_5.setText(_translate("add_client", "Телефон"))
         self.label_6.setText(_translate("add_client", "Форма обучения"))
         self.label_7.setText(_translate("add_client", "Пол"))
-        self.label_9.setText(_translate("add_client", "Общежитие"))
+        self.label_9.setText(_translate("add_client", "Общежития"))
         self.FormBox.setCurrentText(_translate("add_client", ""))
         self.FormBox.setItemText(0, _translate("add_client", "Бюджет"))
         self.FormBox.setItemText(1, _translate("add_client", "Платное обучение"))
