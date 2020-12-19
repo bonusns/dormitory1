@@ -164,7 +164,7 @@ class Ui_add_client(object):
                     self.FormBox.setCurrentIndex(-1)
                     self.SexBox.setCurrentIndex(-1)
                 else:
-                    from error_hostel import Ui_Error
+                    from error_add_sex import Ui_Error
                     self.window = QtWidgets.QMainWindow()
                     self.ui = Ui_Error()
                     self.ui.setupUi(self.window)
