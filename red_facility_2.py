@@ -25,6 +25,14 @@ class Ui_red_facility_2(object):
         cost = self.discount_line.text()
         name = self.Name_line.text()
         dbd.edit_facility(name,cost)
+
+        #Получаем старое имя
+        db = dbd.init_firebase()
+        data_fac = db.child("facilities").child("buffer").get()
+        for data in data_fac.each():
+            old_name = data.key()
+        dbd.update_facility_data(old_name,name,cost)
+
         from success_action import Ui_Error
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()

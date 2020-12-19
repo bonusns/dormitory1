@@ -32,18 +32,16 @@ class Ui_red_room(object):
         dorm_mas = dbd.list_of_dormitories()
         i = 0
         for dorm in dorm_mas:
-            print(dorm[0])
             if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
-                print(dorm[1]['number'])
                 self.HostelNumber.addItem("")
                 self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
                 i += 1
 
     def search_room(self):
+        self.Room_list.clear()
         room_number = self.RoomNumber.currentText()
         dorm_number = self.HostelNumber.currentText()
         room_data = dbd.search_room(dorm_number, room_number)
-        print(room_data)
 
         str_student_fio = ""
         if "members" in room_data:
@@ -58,7 +56,7 @@ class Ui_red_room(object):
         dorm_number = self.HostelNumber.currentText()
         if self.Room_list.currentRow() != -1:
             room_data = dbd.search_room(dorm_number, room_number)
-            room_mas = {"dorm":dorm_number,"number":int(room_number),"capacity":room_data["capacity"],"status":room_data["status"]}
+            room_mas = {"dorm":dorm_number,"number":int(room_number),"capacity":room_data["capacity"],"status":room_data["status"],"occupied":room_data["occupied"]}
             db.child("dormitories").child("buffer_room").set(room_mas)
             from red_room_2 import Ui_red_room_2
             self.window = QtWidgets.QMainWindow()

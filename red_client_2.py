@@ -18,9 +18,7 @@ class Ui_red_client_2(object):
         self.HostelNumber.addItem("")
         self.HostelNumber.setItemText(0, '')
         for dorm in dorm_mas:
-            print(dorm[0])
             if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
-                print(dorm[1]['number'])
                 self.HostelNumber.addItem("")
                 self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
                 i += 1
@@ -30,7 +28,6 @@ class Ui_red_client_2(object):
         # Вытаскивает из буфера и заполняет поля данными
         mas = dbd.buffer()
         for person in mas:
-            print(person[1]["Комната"])
             self.FIO_line.setText(person[1]["ФИО"])
             self.serial_line.setText(person[1]["Паспорт"][:4])
             self.number_line.setText(person[1]["Паспорт"][4:])
@@ -40,7 +37,6 @@ class Ui_red_client_2(object):
             self.SexBox.setCurrentText(person[1]["Пол"])
             self.HostelNumber.setCurrentText(person[1]["Общежитие"])
             if person[1]["Комната"] != '' and person[1]["Комната"] != 'queue':
-                print('10')
                 self.SexBox.setEnabled(False)
                 self.HostelNumber.setEnabled(False)
 
@@ -142,24 +138,9 @@ class Ui_red_client_2(object):
                 room = 'queue'
 
                 break
-            print(way,'awd')
-            print(c)
-            print(d)
-            print(sex_n)
             if c == 0:
                 if d == 0:
                     if sex_n == "Мужской" or sex_n == "Женский":
-                        print('hey')
-                        print(person[0])
-                        print(phone_n)
-                        print(serial_n)
-                        print(number_n)
-                        print(addres_n)
-                        print(educ_form_n)
-                        print(sex_n)
-                        print(room)
-                        print(hostel_n)
-                        print(fio_n)
 
 
                         dbd.add_student_buffer(person[0], fio_n, phone_n, serial_n + number_n, addres_n, educ_form_n, sex_n,

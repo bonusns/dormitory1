@@ -38,7 +38,6 @@ class Ui_list_facilities(object):
             j += 1
         i,j = 1,0
         for fac in fac_mas:
-            print(fac)
             sheet.write(i,j,fac[0])
             sheet.write(i,j+1,int(fac[1]))
             i += 1

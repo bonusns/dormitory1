@@ -24,6 +24,11 @@ class Ui_red_hostel_2(object):
         new_address = self.Addres_line.text()
         db = dbd.init_firebase()
         db.child("dormitories").child("dormitory"+str(number)).update({"Адрес":new_address})
+        from success_action import Ui_Error
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Error()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def del_buffer(self):
         db = dbd.init_firebase()

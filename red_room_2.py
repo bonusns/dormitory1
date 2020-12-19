@@ -21,9 +21,14 @@ class Ui_red_room_2(object):
         dorm_number = room.val()["dorm"]
         status = room.val()["status"]
         capacity = room.val()["capacity"]
+        occupied = room.val()["occupied"]
+        for i in range(int(occupied),4):
+            self.RoomPlacesBox.addItem(f"{i}")
+
         self.room_number_line.setText(str(room_number))
         self.RoomTipeBox.setCurrentText(status)
         self.RoomPlacesBox.setCurrentText(str(capacity))
+
 
     def red(self):
         db = dbd.init_firebase()
@@ -298,9 +303,6 @@ class Ui_red_room_2(object):
         self.RoomPlacesBox.setIconSize(QtCore.QSize(16, 16))
         self.RoomPlacesBox.setModelColumn(0)
         self.RoomPlacesBox.setObjectName("RoomPlacesBox")
-        self.RoomPlacesBox.addItem("")
-        self.RoomPlacesBox.addItem("")
-        self.RoomPlacesBox.addItem("")
         self.room_number_line = QtWidgets.QLineEdit(self.centralwidget)
         self.room_number_line.setGeometry(QtCore.QRect(220, 80, 300, 30))
 
@@ -433,9 +435,6 @@ class Ui_red_room_2(object):
         self.back_to_red_rooms_btn.setText(_translate("red_room_2", "Вернуться к выбору комнаты"))
         self.RoomTipeBox.setItemText(0, _translate("red_room_2", "свободна"))
         self.RoomTipeBox.setItemText(1, _translate("red_room_2", "занята"))
-        self.RoomPlacesBox.setItemText(0, _translate("red_room_2", "1"))
-        self.RoomPlacesBox.setItemText(1, _translate("red_room_2", "2"))
-        self.RoomPlacesBox.setItemText(2, _translate("red_room_2", "3"))
         self.room_number_line.setInputMask(_translate("red_room_2", "000"))
         self.label_4.setText(_translate("red_room_2", "Номер комнаты"))
 

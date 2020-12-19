@@ -49,14 +49,7 @@ class Ui_del_contract(object):
         for person in mas:
             if i == n-1:
                 dic = person[0]
-         #       if person[1]['Общежитие'] != "":
-          #          way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
-           #         print(way)
-            #    else:
-             #       way = "queue"+"/" + person[0]
-              #      print(way)
-               # break
-         #   i = i+1
+
         dbd.delite_contract(dic)
         self.FIO_line.clear()
         self.Contract_number_line.clear()
@@ -75,14 +68,7 @@ class Ui_del_contract(object):
             if i == n - 1:
                 dic = person[0]
                 person_data = person[1]
-        #       if person[1]['Общежитие'] != "":
-        #          way ="dormitory"+str(person[1]['Общежитие']) + "/" + "rooms"+"/" + str(person[1]['Комната']+"/" + "members"+"/" + person[0])
-        #         print(way)
-        #    else:
-        #       way = "queue"+"/" + person[0]
-        #      print(way)
-        # break
-        #   i = i+1
+
         if code == "":
             code = person_data["Договор"]["Шифр"]
         if fio == "":

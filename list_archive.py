@@ -26,7 +26,6 @@ class Ui_list_contract(object):
                                      + 'Дата начала: ' + str(person[1]) +";" + \
                                      '  Дата конца: ' + str(person[2]) +";" + '\n')
             i = i + 1
-            print(str(person[1]))
 
     def export_to_exel(self):
         hat_data = ["ФИО","Дата начала","Дата конца","Шифр"]

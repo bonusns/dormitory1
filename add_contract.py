@@ -18,11 +18,9 @@ class Ui_add_contract(object):
 
 
     def set_code(self):
-        print('pojaluista')
         self.code_line.setReadOnly(False)
         num = dbd.get_last_contract_num()
         self.code_line.setText("ОБ - " + str(num+1))
-        print('code')
 
     def del_buff(self):
         dbd.delete_buffer()
@@ -55,7 +53,6 @@ class Ui_add_contract(object):
         # self.CostBox.setCurrentIndex(0)
 
         from success import Ui_Error
-        print("Error")
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Error()
         self.ui.setupUi(self.window)

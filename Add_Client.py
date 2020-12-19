@@ -23,9 +23,7 @@ class Ui_add_client(object):
         self.HostelNumber.addItem("")
         self.HostelNumber.setItemText(0, '')
         for dorm in dorm_mas:
-            print(dorm[0])
             if dorm[0] != 'queue' and dorm[0] != 'buffer' and dorm[0] != 'contract_buffer':
-                print(dorm[1]['number'])
                 self.HostelNumber.addItem("")
                 self.HostelNumber.setItemText(i, f"{dorm[1]['number']}")
                 i += 1
@@ -70,7 +68,6 @@ class Ui_add_client(object):
     def Add_client(self):
         c = 1
         d = 1
-        print("hello")
         while c != 0:
             fio = self.FIO_line.text()
             c = database.try_get_fio(fio)
@@ -78,7 +75,6 @@ class Ui_add_client(object):
                 self.FIO_line.clear()
 
                 break
-        print(c)
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
@@ -124,7 +120,6 @@ class Ui_add_client(object):
     def Add_client_contract(self):
         c = 1
         d = 1
-        print("hello")
         while c != 0:
             fio = self.FIO_line.text()
             c = database.try_get_fio(fio)
@@ -132,7 +127,6 @@ class Ui_add_client(object):
                 self.FIO_line.clear()
 
                 break
-        print(c)
         passport = self.serial_line.text() + self.number_line.text()
         address = self.addres_line.text()
         phone = self.phone_line.text()
@@ -146,7 +140,6 @@ class Ui_add_client(object):
                 self.HostelNumber.setCurrentIndex(0)
 
                 break
-        print(d)
         room = 'queue'
 
         if c == 0:

@@ -39,10 +39,7 @@ class Ui_list_contract(object):
 
         i, j = 1, 0
         for contract in contract_mas:
-            print(contract)
-            print(str(contract[0]))
             student = dbd.search_student_by_id(contract[0])
-            print(student)
             sheet.write(i, j, contract[2]["Шифр"])
             sheet.write(i, j+1, student[1]["ФИО"])
             sheet.write(i, j+2, contract[1])
